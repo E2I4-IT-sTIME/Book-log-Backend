@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.dto.LoginRequestDto;
-import com.dormammu.BooklogWeb.model.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +16,14 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Date;
 
 // 스프링 시큐리티에서 UsernamePasswordAuthenticationFilter 라는 필터가 있음
 // /login 요청이 들어오면, username과 password를 post로 전송하면
 // UsernamePasswordAuthenticationFilter가 동작한다
+import java.io.IOException;
+import java.util.Date;
+
+// 인증
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -41,31 +41,32 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try{
             loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);  // User 객체에 있는 값을 담아준다
 
-
             System.out.println("JwtAuthenticationFilter : "+loginRequestDto);
         } catch(IOException e){
             e.printStackTrace();
         }
 
-            // 토큰 만들기
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-            System.out.println("JwtAuthenticationFilter : 토큰생성완료");
+        System.out.println("JwtAuthenticationFilter의 attemptAuthentication() : "+loginRequestDto);
+
+        // 토큰 만들기
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        System.out.println("JwtAuthenticationFilter : 토큰생성완료");
 
 
-            // PrincipalDetailsService의 loadUserByUsername()함수가 실행된다
-            // authentication에 내가 로그인한 정보가 담긴다
-            // DB에 있는 username과 password가 일치한다
-            Authentication authentication =
-                    authenticationManager.authenticate(authenticationToken);  // 토큰을 날려준다
+        // PrincipalDetailsService의 loadUserByUsername()함수가 실행된다
+        // authentication에 내가 로그인한 정보가 담긴다
+        // DB에 있는 username과 password가 일치한다
+        Authentication authentication =
+                authenticationManager.authenticate(authenticationToken);  // 토큰을 날려준다
 
-            // authentication객체가 session영역에 저장된다. => 로그인이 되었음
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-            System.out.println("로그인 완료됨 : " + principalDetails.getUser().getUsername());  // 로그인이 정상적으로 되었음
+        // authentication객체가 session영역에 저장된다. => 로그인이 되었음
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println("로그인 완료됨 : " + principalDetails.getUser().getUsername());  // 로그인이 정상적으로 되었음
 
-            // 리턴의 이유는 권한관리를sercuriy가 대신 해주기에 편함.
-            // 굳이 JWT 토큰을 사용하면서 세션을 만들 필요가 없지만, 권한처리의 문제때문에 session에 넣어준다.
-            return authentication;
+        // 리턴의 이유는 권한관리를sercuriy가 대신 해주기에 편함.
+        // 굳이 JWT 토큰을 사용하면서 세션을 만들 필요가 없지만, 권한처리의 문제때문에 session에 넣어준다.
+        return authentication;
     }
 
     // attemptAuthentication 실행 후, 인증이 정상적으로 되었으면 successfulAuthentication함수가 실행된다
@@ -73,7 +74,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-//        System.out.println("successfulAuthentication 실행됨 : 인증이 완료되었음");
+        System.out.println("successfulAuthentication 실행됨 : 인증이 완료되었음");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         // RSA방식X. Hash암호방식

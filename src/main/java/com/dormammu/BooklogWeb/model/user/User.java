@@ -27,13 +27,13 @@ public class User {
     // @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     // private UserInfo userInfo;
 
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private String username;
 
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    //@Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     //@Column(nullable = false)
@@ -42,10 +42,10 @@ public class User {
     private String imgHome;
     private String imgPath;
 
-    //@DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
-    //@Column(nullable = true)
+    @Column(nullable = true)
     private String job;
 
     //@Column(nullable = false)
@@ -67,5 +67,4 @@ public class User {
         }
         return new ArrayList<>();
     }
-
 }
