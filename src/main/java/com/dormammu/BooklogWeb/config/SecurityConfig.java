@@ -2,7 +2,7 @@ package com.dormammu.BooklogWeb.config;
 
 import com.dormammu.BooklogWeb.config.jwt.JwtAuthenticationFilter;
 import com.dormammu.BooklogWeb.config.jwt.JwtAuthorizationFilter;
-import com.dormammu.BooklogWeb.model.user.UserRepository;
+import com.dormammu.BooklogWeb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,14 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class);
+        //http.addFilterAfter(new MyFilter3(), SecurityContextPersistenceFilter.class);
         http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-                .addFilter(corsFilter)
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션 사용X
+        .and()
+                .addFilter(corsFilter)  // 시큐리티 필터에 등록 인증
                 .formLogin().disable()
                 .httpBasic().disable()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))  // AuthenticationManager
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 .authorizeRequests()
                 .antMatchers("/api/v1/user/**")

@@ -54,17 +54,17 @@ public class User {
     //@Column(nullable = false)
     private boolean active;
 
-    // @Enumerated(EnumType.STRING)
-    private String role;
-
-    public List<String> getRoleList() {
-        if (this.role.length() > 0) {
-            return Arrays.asList(this.role.split(","));
-        }
-        return new ArrayList<>();
-    }
-
+    //@Enumerated(EnumType.STRING)
+    private String roles;  // USER, ADMIN
+    // private RoleType role;
     @CreationTimestamp
     private Timestamp createDate;
 
+    // 강의에서 추가한 내용
+    public List<String> getRoleList(){
+        if(this.roles.length() > 0){
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
 }

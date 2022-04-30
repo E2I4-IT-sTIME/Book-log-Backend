@@ -1,13 +1,9 @@
 package com.dormammu.BooklogWeb.controller;
 
-import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.model.user.User;
-import com.dormammu.BooklogWeb.model.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import com.dormammu.BooklogWeb.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 //@RequestMapping("api/v1")
@@ -19,6 +15,7 @@ public class RestApiController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("home")
+
     public String home() {
         return "<h1>home</h1>";
     }
@@ -50,8 +47,4 @@ public class RestApiController {
     public String admin() {
         return "admin";
     }
-
-    // =================================================================================
-
-
 }
