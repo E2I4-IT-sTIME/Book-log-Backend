@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //http.addFilterAfter(new MyFilter3(), SecurityContextPersistenceFilter.class);
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션 사용X
-        .and()
+                .and()
                 .addFilter(corsFilter)  // 시큐리티 필터에 등록 인증
                 .formLogin().disable()
                 .httpBasic().disable()
