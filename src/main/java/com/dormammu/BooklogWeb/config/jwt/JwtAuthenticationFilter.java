@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter : 로그인 시도중");
 
-        // 1. username, password 받아서
+        // 1. username, password 받기
         ObjectMapper om = new ObjectMapper();  // json데이터를 파싱해준다
         LoginRequestDto loginRequestDto = null;
         try{

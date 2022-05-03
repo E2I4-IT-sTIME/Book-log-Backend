@@ -23,5 +23,6 @@ public class FilterConfig {
         bean.addUrlPatterns("/*");
         bean.setOrder(1);
         return bean;
+
     }
 }

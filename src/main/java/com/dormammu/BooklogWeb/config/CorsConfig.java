@@ -20,5 +20,6 @@ public class CorsConfig {
 
         source.registerCorsConfiguration("/api/**", config);
         return new CorsFilter(source);
+
     }
 }
