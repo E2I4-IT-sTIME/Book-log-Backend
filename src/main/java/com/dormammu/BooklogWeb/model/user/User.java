@@ -9,9 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Data
 @Entity
@@ -54,10 +51,8 @@ public class User {
     //@Column(nullable = false)
     private boolean active;
 
-    //@Enumerated(EnumType.STRING)
-    private String roles;  // USER, ADMIN
-    // private RoleType role;
+    private String roles;  // ROLE_USER, ROLE_ADMIN
+
     @CreationTimestamp
     private Timestamp createDate;
-
 }
