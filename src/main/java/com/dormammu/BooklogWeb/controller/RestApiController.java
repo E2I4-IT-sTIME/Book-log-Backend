@@ -1,7 +1,7 @@
 package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.model.user.User;
+import com.dormammu.BooklogWeb.model.User;
 import com.dormammu.BooklogWeb.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
