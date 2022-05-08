@@ -1,6 +1,6 @@
 package com.dormammu.BooklogWeb.config.auth;
 
-import com.dormammu.BooklogWeb.model.user.User;
+import com.dormammu.BooklogWeb.model.User;
 import com.dormammu.BooklogWeb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

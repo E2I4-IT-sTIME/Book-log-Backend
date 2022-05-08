@@ -1,19 +1,22 @@
-package com.dormammu.BooklogWeb.model.user;
+package com.dormammu.BooklogWeb.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "portfolios")
 @Table(name = "user")
 public class User {
 
@@ -21,8 +24,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    // private UserInfo userInfo;
+    @OneToMany(mappedBy = "userInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Portfolio> portfolios;
 
     @Column(nullable = false)
     private String username;

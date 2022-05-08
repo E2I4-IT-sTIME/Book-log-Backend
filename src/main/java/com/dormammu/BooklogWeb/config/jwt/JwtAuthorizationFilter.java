@@ -3,7 +3,7 @@ package com.dormammu.BooklogWeb.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.model.user.User;
+import com.dormammu.BooklogWeb.model.User;
 import com.dormammu.BooklogWeb.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
