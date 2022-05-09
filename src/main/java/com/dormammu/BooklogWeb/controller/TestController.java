@@ -24,11 +24,11 @@ public class TestController {
 
     // 내 포트폴리오 조회 페이지
     @GetMapping("/api/v1/user/{id}/porfols")
-    public String porfolList(@PathVariable Long id, Authentication authentication) {
+    public List<Portfolio> porfolList(@PathVariable Long id, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         System.out.println("현재 로그인된 유저 : " + principalDetails.getUser().getUsername() + principalDetails.getUser().getNickname());
-        List<Portfolio> portfolios = portfolioService.portfolList(principalDetails.getUser());
-        return "portfolios";
+        //List<Portfolio> portfolios =
+        return portfolioService.portfolList(principalDetails.getUser());
     }
 
     @GetMapping("/")
