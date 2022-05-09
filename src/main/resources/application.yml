@@ -9,9 +9,9 @@ server:
 
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/booklog
-    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://booklog-db.c4akum70ou2t.ap-northeast-2.rds.amazonaws.com:3306/booklog_db
+    username: admin
     password: 20000118
   main:
     allow-circular-references: true
