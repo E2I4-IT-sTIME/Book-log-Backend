@@ -2,7 +2,7 @@ package com.dormammu.BooklogWeb.config;
 
 import com.dormammu.BooklogWeb.config.jwt.JwtAuthenticationFilter;
 import com.dormammu.BooklogWeb.config.jwt.JwtAuthorizationFilter;
-import com.dormammu.BooklogWeb.repository.UserRepository;
+import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
