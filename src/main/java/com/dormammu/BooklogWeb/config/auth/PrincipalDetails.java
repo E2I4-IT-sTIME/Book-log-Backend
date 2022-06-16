@@ -1,6 +1,6 @@
 package com.dormammu.BooklogWeb.config.auth;
 
-import com.dormammu.BooklogWeb.model.User;
+import com.dormammu.BooklogWeb.domain.user.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
