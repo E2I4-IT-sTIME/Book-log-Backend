@@ -1,10 +1,9 @@
-package com.dormammu.BooklogWeb.model;
+package com.dormammu.BooklogWeb.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
+import com.dormammu.BooklogWeb.domain.review.Review;
+import com.fasterxml.jackson.annotation.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,21 +12,18 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "portfolios")
+//@ToString(exclude = "portfolios")
 @Table(name = "user")
 public class User {
 
     @Id  // Primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "userInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Portfolio> portfolios;
+    private int id;
 
     @Column(nullable = false)
     private String username;
@@ -47,17 +43,23 @@ public class User {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
-    @Column(nullable = true)
     private String job;
 
-    //@Column(nullable = false)
     private String area;
 
-    //@Column(nullable = false)
     private boolean active;
 
     private String roles;  // ROLE_USER, ROLE_ADMIN
 
     @CreationTimestamp
     private Timestamp createDate;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@JsonManagedReference
+    private List<Portfolio> portfolios;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@JsonManagedReference
+    private List<Review> reviews;
 }
