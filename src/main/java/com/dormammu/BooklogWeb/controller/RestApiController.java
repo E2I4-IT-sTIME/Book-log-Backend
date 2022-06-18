@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-//@RequestMapping("api/v1")
+//@RequestMapping("api")
 @RestController
 @RequiredArgsConstructor
 public class RestApiController {
@@ -37,7 +37,7 @@ public class RestApiController {
     }
 
     // user, admin 가능
-    @GetMapping("/api/v1/user")
+    @GetMapping("/api/user")
     public String user(Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         System.out.println("authentication : " + principalDetails.getUsername());
@@ -45,7 +45,7 @@ public class RestApiController {
     }
 
     // admin만 가능
-    @GetMapping("/api/v1/admin")
+    @GetMapping("/api/admin")
     public String admin() {
         return "admin";
     }
