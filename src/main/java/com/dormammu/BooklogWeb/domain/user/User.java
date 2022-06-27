@@ -1,5 +1,6 @@
 package com.dormammu.BooklogWeb.domain.user;
 
+import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.fasterxml.jackson.annotation.*;
@@ -22,6 +23,7 @@ import java.util.List;
 public class User {
 
     @Id  // Primary key
+    @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -62,4 +64,8 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     //@JsonManagedReference
     private List<Review> reviews;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Meeting> meetings;
+
 }
