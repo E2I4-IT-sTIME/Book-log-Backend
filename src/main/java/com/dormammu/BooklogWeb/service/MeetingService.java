@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class MeetingService {
@@ -26,6 +28,22 @@ public class MeetingService {
         meetingRepository.save(meeting);
 
         return "모임 생성 완료";
+    }
+
+    @Transactional
+    public List<Meeting> meetingList(){
+        System.out.println("meetingList 들어옴");
+        List<Meeting> meetingList = meetingRepository.findAll();
+        System.out.println("모임 리스트 출력 : " + meetingList);
+        return meetingList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Meeting> myMeetingList(User user){
+        System.out.println("myMeetingList 들어옴");
+        List<Meeting> myMeetingList = meetingRepository.findByUserId(user.getId());
+        System.out.println("내 모임 리스트 출력: " + myMeetingList);
+        return myMeetingList;
     }
 
 }
