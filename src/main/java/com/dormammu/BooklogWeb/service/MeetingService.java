@@ -17,6 +17,7 @@ public class MeetingService {
 
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
+    private final MeetingUserService meetingUserService;
 
     @Transactional
     public String createMeeting(User user, PostMeetingReq postMeetingReq){
@@ -26,6 +27,7 @@ public class MeetingService {
         meeting.setMax_num(postMeetingReq.getMax_num());
         meeting.setMeeting_date(postMeetingReq.getMeeting_date());
         meetingRepository.save(meeting);
+        meetingUserService.createMeeting(user, meeting);
 
         return "모임 생성 완료";
     }

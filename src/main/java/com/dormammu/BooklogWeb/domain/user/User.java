@@ -1,6 +1,6 @@
 package com.dormammu.BooklogWeb.domain.user;
 
-import com.dormammu.BooklogWeb.domain.meeting.Meeting;
+import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.fasterxml.jackson.annotation.*;
@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -65,7 +66,10 @@ public class User {
     //@JsonManagedReference
     private List<Review> reviews;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Meeting> meetings;
+//    @ManyToMany(mappedBy = "users")
+//    private List<Meeting> meetings;
+
+    @OneToMany(mappedBy = "user")
+    private List<MeetingUser> meetingUsers = new ArrayList<>();
 
 }
