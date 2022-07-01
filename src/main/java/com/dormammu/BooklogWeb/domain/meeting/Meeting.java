@@ -1,6 +1,5 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
-import com.dormammu.BooklogWeb.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,11 +35,14 @@ public class Meeting {
     @Column(nullable = false)
     private boolean onoff;
 
-    @ManyToMany
-    @JoinTable(name = "MEETING_USER",
-        joinColumns = @JoinColumn(name = "MEETING_ID"),
-        inverseJoinColumns = @JoinColumn(name = "USER_ID"))
-    private List<User> users = new ArrayList<User>();
+//    @ManyToMany
+//    @JoinTable(name = "MEETING_USER",
+//        joinColumns = @JoinColumn(name = "MEETING_ID"),
+//        inverseJoinColumns = @JoinColumn(name = "USER_ID"))
+//    private List<User> users = new ArrayList<User>();
+
+    @OneToMany(mappedBy = "meeting")
+    private List<MeetingUser> users = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;

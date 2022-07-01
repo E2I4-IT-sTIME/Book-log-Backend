@@ -2,10 +2,12 @@ package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
+import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import com.dormammu.BooklogWeb.service.MeetingService;
+import com.dormammu.BooklogWeb.service.MeetingUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
