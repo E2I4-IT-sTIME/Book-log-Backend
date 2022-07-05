@@ -6,6 +6,8 @@ import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.dormammu.BooklogWeb.domain.hastag.HashTagRepository;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
+import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
+import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
@@ -21,9 +23,9 @@ public class MeetingService {
 
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
-    private final MeetingUserService meetingUserService;
     private final AdminQnARepository adminQnARepository;
     private final HashTagRepository hashTagRepository;
+    private final MeetingUserRepository meetingUserRepository;
 
     @Transactional
     public String createMeeting(User user, PostMeetingReq postMeetingReq){
@@ -49,10 +51,13 @@ public class MeetingService {
         hashTag.setTag4(postMeetingReq.getH4());
         hashTag.setTag5(postMeetingReq.getH5());
 
+        MeetingUser meetingUser = new MeetingUser();
+        meetingUser.setMeeting(meeting);
+        meetingUser.setUser(user);
+        meetingUserRepository.save(meetingUser);
         adminQnARepository.save(adminQnA);
         hashTagRepository.save(hashTag);
         meetingRepository.save(meeting);
-        meetingUserService.createMeeting(user, meeting);
 
         return "모임 생성 완료";
     }
@@ -71,6 +76,26 @@ public class MeetingService {
         List<Meeting> myMeetingList = meetingRepository.findByUserId(user.getId());
         System.out.println("내 모임 리스트 출력: " + myMeetingList);
         return myMeetingList;
+    }
+
+    @Transactional
+    public String addMeeting(User user, Meeting meeting){
+        MeetingUser meetingUser = new MeetingUser();
+        meetingUser.setUser(user);
+        meetingUser.setMeeting(meeting);
+
+        meetingUserRepository.save(meetingUser);
+        return "모임 입장 완료";
+    }
+
+    @Transactional
+    public String outMeeting(User user, Meeting meeting){
+
+        MeetingUser meetingUser =  meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
+        System.out.println(user.getId() +" AND " + meeting.getId());
+        meetingUserRepository.delete(meetingUser);
+
+        return "모임 탈퇴 완료";
     }
 
 }

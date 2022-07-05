@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface MeetingUserRepository extends JpaRepository<MeetingUser, Integer> {
 
     MeetingUser findByUserIdAndMeetingId(int userId, int meetingId);
-//    void deleteById(Long meetingUserId);
 }

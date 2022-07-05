@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,14 +44,11 @@ public class Meeting {
 
     private int max_num;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private Date meeting_date;
-
     @Column(nullable = false)
     private boolean onoff;
 
     @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
-
 
 }
