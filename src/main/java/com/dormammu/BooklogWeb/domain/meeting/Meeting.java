@@ -1,5 +1,7 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
+import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
+import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,24 @@ public class Meeting {
 
     private int userId;
 
+    @Lob
+    @Column(nullable = false)
+    private String info; // 모임 소개글
+
+    @Lob
+    private String image; // 대표 이미지
+
+    private String area;  // 오프라인- 활동지역
+
+    private String ment; // 가입 안내 멘트
+
+    @OneToOne
+    private AdminQnA adminQnA;  // 가입 질문
+
+    @OneToOne
+    @JoinColumn(name = "hastag_id")
+    private HashTag hashTag;
+
     @Column(nullable = false)
     private String name;
 
@@ -35,16 +55,8 @@ public class Meeting {
     @Column(nullable = false)
     private boolean onoff;
 
-//    @ManyToMany
-//    @JoinTable(name = "MEETING_USER",
-//        joinColumns = @JoinColumn(name = "MEETING_ID"),
-//        inverseJoinColumns = @JoinColumn(name = "USER_ID"))
-//    private List<User> users = new ArrayList<User>();
-
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MeetingUser> users = new ArrayList<>();
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createDate;
 
 }
