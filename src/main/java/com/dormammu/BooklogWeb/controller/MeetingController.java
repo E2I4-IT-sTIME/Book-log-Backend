@@ -63,7 +63,7 @@ public class MeetingController {
 //        System.out.println(user.getId());
 //        System.out.println(principalDetails.getUser().getId());
 ////
-//        if (user.getId() == principalDetails.getUser().getId()){
+//        if (user.getId() == principalDetails.getUser().getId()){  // 이거 확인해줘야함
 //            System.out.println("들어옴2");
             return meetingUserService.addMeeting(user, meeting);
 //        }
@@ -78,4 +78,15 @@ public class MeetingController {
         User user = userRepository.findById(principalDetails.getUser().getId());
         return meetingUserService.outMeeting(user, meeting);
     }
+
+//    @DeleteMapping("/auth/meeting/{id}")
+//    public String deleteMeeting(@PathVariable int id, Authentication authentication){
+//
+//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//        Meeting meeting = meetingRepository.findByMeetingId(id);
+//        System.out.println("meeting id : " + meeting.getId() + ", " + "meeting name : " + meeting.getName());
+////        return meetingService.deleteMeeting(meeting);
+//        return "여기";
+//
+//    }
 }

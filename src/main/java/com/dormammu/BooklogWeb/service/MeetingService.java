@@ -1,5 +1,9 @@
 package com.dormammu.BooklogWeb.service;
 
+import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
+import com.dormammu.BooklogWeb.domain.QnA.AdminQnARepository;
+import com.dormammu.BooklogWeb.domain.hastag.HashTag;
+import com.dormammu.BooklogWeb.domain.hastag.HashTagRepository;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
@@ -18,14 +22,35 @@ public class MeetingService {
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
     private final MeetingUserService meetingUserService;
+    private final AdminQnARepository adminQnARepository;
+    private final HashTagRepository hashTagRepository;
 
     @Transactional
     public String createMeeting(User user, PostMeetingReq postMeetingReq){
         Meeting meeting = new Meeting();
         meeting.setName(postMeetingReq.getName());
+        meeting.setInfo(postMeetingReq.getInfo());
+        meeting.setMent(postMeetingReq.getMent());
+        meeting.setImage(postMeetingReq.getImage());
         meeting.setUserId(user.getId());
         meeting.setMax_num(postMeetingReq.getMax_num());
-        meeting.setMeeting_date(postMeetingReq.getMeeting_date());
+
+        AdminQnA adminQnA = new AdminQnA();
+        adminQnA.setMeeting(meeting);
+        adminQnA.setQ1(postMeetingReq.getQ1());
+        adminQnA.setQ2(postMeetingReq.getQ2());
+        adminQnA.setQ3(postMeetingReq.getQ3());
+
+        HashTag hashTag = new HashTag();
+        hashTag.setMeeting(meeting);
+        hashTag.setTag1(postMeetingReq.getH1());
+        hashTag.setTag2(postMeetingReq.getH2());
+        hashTag.setTag3(postMeetingReq.getH3());
+        hashTag.setTag4(postMeetingReq.getH4());
+        hashTag.setTag5(postMeetingReq.getH5());
+
+        adminQnARepository.save(adminQnA);
+        hashTagRepository.save(hashTag);
         meetingRepository.save(meeting);
         meetingUserService.createMeeting(user, meeting);
 
