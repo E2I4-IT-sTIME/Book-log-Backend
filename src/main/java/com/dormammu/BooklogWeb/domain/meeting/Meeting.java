@@ -37,12 +37,6 @@ public class Meeting {
 
     private String ment; // 가입 안내 멘트
 
-    @OneToOne
-    private AdminQnA adminQnA;  // 가입 질문
-
-    @OneToOne
-    @JoinColumn(name = "hastag_id")
-    private HashTag hashTag;
 
     @Column(nullable = false)
     private String name;

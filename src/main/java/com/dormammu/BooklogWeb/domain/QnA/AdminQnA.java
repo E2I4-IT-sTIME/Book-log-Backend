@@ -31,8 +31,8 @@ public class AdminQnA {
     @OneToMany(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserQnA> userQnA;
 
-    @OneToOne(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "meeting_id")
+    @OneToOne
+    @JoinColumn(name = "meeting")
     private Meeting meeting;
 
 
