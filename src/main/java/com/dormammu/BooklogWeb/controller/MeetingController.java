@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
+import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
@@ -20,6 +21,8 @@ public class MeetingController {
 
     private final MeetingService meetingService;
     private final UserRepository userRepository;
+    private final MeetingRepository meetingRepository;
+    private final MeetingUserService meetingUserService;
 
     @PostMapping("/auth/meeting")
     public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication){
@@ -48,5 +51,31 @@ public class MeetingController {
             return meetingService.myMeetingList(user);
         }
         return null;
+    }
+
+    @GetMapping("/auth/meetings/{id}")
+    public String addMeeting(@PathVariable int id, Authentication authentication){
+        System.out.println("들어옴1");
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(id);
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+//        System.out.println(user.getId());
+//        System.out.println(principalDetails.getUser().getId());
+////
+//        if (user.getId() == principalDetails.getUser().getId()){
+//            System.out.println("들어옴2");
+            return meetingUserService.addMeeting(user, meeting);
+//        }
+//        return null;
+    }
+
+    @DeleteMapping("/auth/meeting/{id}/out")
+    public String outMeeting(@PathVariable int id, Authentication authentication){
+        Meeting meeting = meetingRepository.findById(id);
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        User user = userRepository.findById(principalDetails.getUser().getId());
+        return meetingUserService.outMeeting(user, meeting);
     }
 }

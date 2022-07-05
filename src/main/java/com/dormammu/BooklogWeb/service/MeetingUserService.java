@@ -6,7 +6,6 @@ import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +28,24 @@ public class MeetingUserService {
         meetingUserRepository.save(meetingUser);
 
         return "모임-유저 생성 완료";
+    }
+
+    @Transactional
+    public String addMeeting(User user, Meeting meeting){
+        MeetingUser meetingUser = new MeetingUser();
+        meetingUser.setUser(user);
+        meetingUser.setMeeting(meeting);
+
+        meetingUserRepository.save(meetingUser);
+        return "모임-유저 입장 완료";
+    }
+
+    @Transactional
+    public String outMeeting(User user, Meeting meeting){
+
+        MeetingUser meetingUser =  meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
+        System.out.println(user.getId() +" AND " + meeting.getId());
+        meetingUserRepository.delete(meetingUser);
+        return "모임-유저 탈퇴 완료";
     }
 }
