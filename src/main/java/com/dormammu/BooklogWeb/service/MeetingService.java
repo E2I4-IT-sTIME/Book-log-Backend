@@ -10,6 +10,7 @@ import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -97,5 +98,27 @@ public class MeetingService {
 
         return "모임 탈퇴 완료";
     }
+
+    @Transactional
+    public String update(int id, PatchMeetingReq patchMeetingReq){
+        Meeting meeting = meetingRepository.findById(id);
+        System.out.println(meeting.getName() + "의 모임 정보를 수정합니다");
+        meeting.setName(patchMeetingReq.getName());
+        meeting.setInfo(patchMeetingReq.getInfo());
+        meeting.setMent(patchMeetingReq.getMent());
+        meeting.setImage(patchMeetingReq.getImage());
+        meeting.setOnoff(patchMeetingReq.isOnoff());
+        meeting.setMax_num(patchMeetingReq.getMax_num());
+
+        return "모임 정보 수정 완료";
+    }
+
+    //    @Transactional
+//    public String deleteMeeting(User user, Meeting meeting){
+//        System.out.println("User :" + user.getUsername() + ", " + "Meeting : " + meeting.getName());
+//
+//        meetingRepository.delete(meeting);
+//        return "모임 삭제 완료";
+//    }
 
 }

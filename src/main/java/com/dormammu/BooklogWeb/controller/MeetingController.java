@@ -5,6 +5,7 @@ import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import com.dormammu.BooklogWeb.service.MeetingService;
 import lombok.RequiredArgsConstructor;
@@ -76,14 +77,28 @@ public class MeetingController {
         return null;
     }
 
-//    @DeleteMapping("/auth/meeting/{meeting_id}")  // 모임 삭제
-//    public String deleteMeeting(@PathVariable int meeting_id, Authentication authentication){
+    @PatchMapping("/auth/meeting/{id}")
+    public String updateMeeting(@PathVariable int id, Authentication authentication, @RequestBody PatchMeetingReq patchMeetingReq){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(id);
+        User user = userRepository.findById(meeting.getUserId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.update(id, patchMeetingReq);  // 모임 id 넘겨줌
+        }
+        return null;
+    }
+
+    //    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제
+//    public String deleteMeeting(@PathVariable int id, Authentication authentication){
 //
 //        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//        Meeting meeting = meetingRepository.findByMeetingId(meeting_id);
-//        System.out.println("meeting id : " + meeting.getId() + ", " + "meeting name : " + meeting.getName());
-////        return meetingService.deleteMeeting(meeting);
-//        return "여기";
+//        Meeting meeting = meetingRepository.findById(id);
+//        User user = userRepository.findById(principalDetails.getUser().getId());
 //
+//        if(user.getId() == principalDetails.getUser().getId()){
+//            return meetingService.deleteMeeting(user, meeting);
+//        }
+//        return null;
 //    }
 }
