@@ -22,6 +22,8 @@ public class UserQnA {
     @Lob
     private String A3;
 
+    private int userId;
+
     @ManyToOne
     private AdminQnA adminQnA;
 

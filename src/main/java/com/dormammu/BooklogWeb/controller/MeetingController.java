@@ -7,6 +7,7 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.MeetingRes;
 import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
+import com.dormammu.BooklogWeb.dto.PostAnswerReq;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import com.dormammu.BooklogWeb.service.MeetingService;
 import lombok.RequiredArgsConstructor;
@@ -104,7 +105,7 @@ public class MeetingController {
 //        return null;
 //    }
 
-    @PostMapping("/auth/{id}/question")
+    @GetMapping("/auth/{id}/question")
     public MeetingRes questionList(@PathVariable int id, Authentication authentication){
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -113,6 +114,18 @@ public class MeetingController {
 
         if (user.getId() == principalDetails.getUser().getId()){
             return meetingService.questionList(meeting);
+        }
+        return null;
+    }
+
+    @PostMapping("/auth/{id}/answer")
+    public String createAnswer(@RequestBody PostAnswerReq postAnswerReq, @PathVariable int id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(id);
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()) {
+           return meetingService.createAnswer(id, postAnswerReq);
         }
         return null;
     }
