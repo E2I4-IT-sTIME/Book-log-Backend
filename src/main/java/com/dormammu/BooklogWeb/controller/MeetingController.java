@@ -26,7 +26,8 @@ public class MeetingController {
     @PostMapping("/auth/meeting")
     public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        if (postMeetingReq.getUserId() == principalDetails.getUser().getId()){
+        User user = userRepository.findById(principalDetails.getUser().getId());
+        if (user.getId() == principalDetails.getUser().getId()){
             meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
             return "모임 생성 완료";
 
