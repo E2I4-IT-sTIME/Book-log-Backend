@@ -34,8 +34,6 @@ public class Meeting {
     @Lob
     private String image; // 대표 이미지
 
-    private String area;  // 오프라인- 활동지역
-
     private String ment; // 가입 안내 멘트
 
 
