@@ -10,12 +10,14 @@ import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.MeetingRes;
 import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -102,7 +104,7 @@ public class MeetingService {
     @Transactional
     public String update(int id, PatchMeetingReq patchMeetingReq){
         Meeting meeting = meetingRepository.findById(id);
-        System.out.println(meeting.getName() + "의 모임 정보를 수정합니다");
+//        System.out.println(meeting.getName() + "의 모임 정보를 수정합니다");
         meeting.setName(patchMeetingReq.getName());
         meeting.setInfo(patchMeetingReq.getInfo());
         meeting.setMent(patchMeetingReq.getMent());
@@ -121,4 +123,22 @@ public class MeetingService {
 //        return "모임 삭제 완료";
 //    }
 
+    @Transactional(readOnly = true)
+    public MeetingRes questionList(Meeting meeting){
+        // 미팅을 가져와서
+        AdminQnA question = adminQnARepository.findByMeetingId(meeting.getId());
+        List<String> questions = new ArrayList<>();
+
+        questions.add(question.getQ1());
+        questions.add(question.getQ2());
+        questions.add(question.getQ3());
+        System.out.println("질문 리스트 출력 : " + questions);
+
+        MeetingRes meetingRes = MeetingRes.builder()
+                .Q1(question.getQ1())
+                .Q2(question.getQ2())
+                .Q3(question.getQ3()).build();
+        return meetingRes;
+
+    }
 }
