@@ -52,4 +52,16 @@ public class PortfolioService {
             return null;
         }
     }
+
+    @Transactional
+    public String deletePortfolio(User user, int p_id) {
+        Portfolio portfolio = portfolioRepository.findById(p_id);
+        if (portfolio.getUser().getId() == user.getId()) {
+            portfolioRepository.delete(portfolio);
+            return "포트폴리오 삭제 완료";
+        }
+        else {
+            return null;
+        }
+    }
 }
