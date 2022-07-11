@@ -4,6 +4,7 @@ import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.GetPortfolioRes;
 import com.dormammu.BooklogWeb.dto.PostPortfolioReq;
 import com.dormammu.BooklogWeb.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,19 @@ public class PortfolioController {
 
         return "포트폴리오 삭제 완료";
 
+    }
+
+    // 포트폴리오 조회 (개별)
+    @GetMapping("/auth/user/{id}/portfolios/{portfolio_id}")
+    public GetPortfolioRes onePortfolio(Authentication authentication, @PathVariable int id, @PathVariable int portfolio_id) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        if (principalDetails.getUser().getId() == id) {
+            GetPortfolioRes getPortfolioRes = portfolioService.onePortfolio(id, portfolio_id);
+            return getPortfolioRes;
+        }
+        else {
+            return null;
+        }
     }
 
 }

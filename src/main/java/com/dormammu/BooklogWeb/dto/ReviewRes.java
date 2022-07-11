@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class ReviewRes {
     private String title;
     private String content;
+    private String book_name;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;

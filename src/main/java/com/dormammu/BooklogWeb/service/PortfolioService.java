@@ -1,15 +1,20 @@
 package com.dormammu.BooklogWeb.service;
 
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
+import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.portfolio.PortfolioRepository;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.GetPortfolioRes;
 import com.dormammu.BooklogWeb.dto.PostPortfolioReq;
+import com.dormammu.BooklogWeb.dto.ReviewListRes;
+import com.dormammu.BooklogWeb.dto.ReviewRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.expression.spel.ast.PropertyOrFieldReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -63,5 +68,32 @@ public class PortfolioService {
         else {
             return null;
         }
+    }
+
+    @Transactional
+    public GetPortfolioRes onePortfolio(int user_id, int portfolio_id) {
+        Portfolio portfolio = portfolioRepository.findById(portfolio_id);
+        User user = userRepository.findById(user_id);
+
+        List<Review> reviews = portfolio.getReviews();
+
+        List<ReviewRes> reviewResList = new ArrayList<>();
+
+        for (Review r : reviews) {
+            ReviewRes reviewRes = ReviewRes.builder()
+                    .title(r.getTitle())
+                    .content(r.getContent())
+                    .book_name(r.getBook_name())
+                    .createDate(r.getCreateDate()).build();
+            reviewResList.add(reviewRes);
+        }
+
+        GetPortfolioRes getPortfolioRes = GetPortfolioRes.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .title(portfolio.getTitle())
+                .reviewResList(reviewResList).build();
+
+        return getPortfolioRes;
     }
 }
