@@ -27,6 +27,8 @@ public class Review {
 
     private String content;
 
+    private String book_name;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     //@JsonBackReference
