@@ -131,7 +131,7 @@ public class MeetingController {
         return null;
     }
 //
-//    @GetMapping("/auth/meetings/{id}/answers/{answers_id}")
+//    @GetMapping("/auth/meetings/{id}/answers/{answers_id}")  // 모임 답변 조회 api
 //    public String answerList(@PathVariable int id, @PathVariable int answers_id, Authentication authentication){
 //        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 //        Meeting meeting = meetingRepository.findById(id);
