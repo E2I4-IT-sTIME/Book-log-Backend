@@ -42,6 +42,8 @@ public class Meeting {
 
     private int max_num;
 
+    private int cur_num;  // 현재 몇 명인지
+
     @Column(nullable = false)
     private boolean onoff;
 
