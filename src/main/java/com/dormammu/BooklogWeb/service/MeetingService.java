@@ -2,6 +2,8 @@ package com.dormammu.BooklogWeb.service;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnARepository;
+import com.dormammu.BooklogWeb.domain.QnA.UserQnA;
+import com.dormammu.BooklogWeb.domain.QnA.UserQnARepository;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.dormammu.BooklogWeb.domain.hastag.HashTagRepository;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
@@ -12,6 +14,7 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.MeetingRes;
 import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
+import com.dormammu.BooklogWeb.dto.PostAnswerReq;
 import com.dormammu.BooklogWeb.dto.PostMeetingReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ public class MeetingService {
     private final AdminQnARepository adminQnARepository;
     private final HashTagRepository hashTagRepository;
     private final MeetingUserRepository meetingUserRepository;
+    private final UserQnARepository userQnARepository;
 
     @Transactional
     public String createMeeting(User user, PostMeetingReq postMeetingReq){
@@ -45,6 +49,9 @@ public class MeetingService {
         adminQnA.setQ1(postMeetingReq.getQ1());
         adminQnA.setQ2(postMeetingReq.getQ2());
         adminQnA.setQ3(postMeetingReq.getQ3());
+        adminQnA.setQ3(postMeetingReq.getQ4());
+        adminQnA.setQ3(postMeetingReq.getQ5());
+
 
         HashTag hashTag = new HashTag();
         hashTag.setMeeting(meeting);
@@ -132,13 +139,39 @@ public class MeetingService {
         questions.add(question.getQ1());
         questions.add(question.getQ2());
         questions.add(question.getQ3());
-        System.out.println("질문 리스트 출력 : " + questions);
+//        System.out.println("질문 리스트 출력 : " + questions);
 
         MeetingRes meetingRes = MeetingRes.builder()
                 .Q1(question.getQ1())
                 .Q2(question.getQ2())
-                .Q3(question.getQ3()).build();
+                .Q3(question.getQ3())
+                .Q4(question.getQ4())
+                .Q5(question.getQ5()).build();
         return meetingRes;
-
     }
+
+    @Transactional
+    public String createAnswer(int id, PostAnswerReq postAnswerReq){
+        UserQnA userQnA = new UserQnA();
+
+        userQnA.setA1(postAnswerReq.getA1());
+        userQnA.setA2(postAnswerReq.getA2());
+        userQnA.setA3(postAnswerReq.getA3());
+        userQnA.setUserId(postAnswerReq.getUserId());
+
+        AdminQnA adminQnA = adminQnARepository.findByMeetingId(id);
+        userQnA.setAdminQnA(adminQnA);
+        userQnARepository.save(userQnA);
+        return "답변 생성 완료";
+    }
+//
+//    @Transactional(readOnly = true)
+////    public List<UserQnA> answerList(int id, int answers_id){
+////        List<UserQnA> userqnaList = userQnARepository.findAll();
+////        System.out.println(userqnaList);
+////        return userqnaList;
+//    public String answerList(int id, int answers_id){
+//        System.out.println("answerList 들어옴");
+//        return "들어옴";
+//    }
 }

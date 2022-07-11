@@ -16,6 +16,9 @@ public class MeetingRes {
     private String Q1;
     private String Q2;
     private String Q3;
+    private String Q4;
+    private String Q5;
+
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
