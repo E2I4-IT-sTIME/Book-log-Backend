@@ -20,15 +20,6 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
 
     @Transactional
-    public String createPortfolio(User user, PostPortfolioReq portfolioReq) {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setTitle(portfolioReq.getTitle());
-        portfolio.setUser(user);
-        portfolioRepository.save(portfolio);
-        return "포트폴리오 생성 완료";
-    }
-
-    @Transactional
     public List<Portfolio> myPortfolioList(User user) {
         System.out.println("portfolioService 들어옴");
         List<Portfolio> portfolioList = portfolioRepository.findByUser(user);
@@ -37,5 +28,40 @@ public class PortfolioService {
         System.out.println("레퍼지토리로 포폴 리스트 출력 : " + portfolioList);
 
         return portfolioList;
+    }
+
+    @Transactional
+    public String createPortfolio(User user, PostPortfolioReq portfolioReq) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setTitle(portfolioReq.getTitle());
+        portfolio.setContent(portfolioReq.getContent());
+        portfolio.setUser(user);
+        portfolioRepository.save(portfolio);
+        return "포트폴리오 생성 완료";
+    }
+
+    @Transactional
+    public String updatePortfolio(User user, PostPortfolioReq portfolioReq, int p_id) {
+        Portfolio origin_portfolio = portfolioRepository.findById(p_id);
+        if (origin_portfolio.getUser().getId() == user.getId()) {
+            origin_portfolio.setTitle(portfolioReq.getTitle());
+            origin_portfolio.setContent(portfolioReq.getContent());
+            return "포트폴리오 수정 완료";
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public String deletePortfolio(User user, int p_id) {
+        Portfolio portfolio = portfolioRepository.findById(p_id);
+        if (portfolio.getUser().getId() == user.getId()) {
+            portfolioRepository.delete(portfolio);
+            return "포트폴리오 삭제 완료";
+        }
+        else {
+            return null;
+        }
     }
 }
