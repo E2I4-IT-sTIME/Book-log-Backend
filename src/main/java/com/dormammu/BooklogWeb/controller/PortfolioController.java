@@ -49,11 +49,18 @@ public class PortfolioController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         portfolioService.updatePortfolio(principalDetails.getUser(), postPortfolioReq, p_id);
 
-        System.out.println("포폴 수정 controller");
         return "포트폴리오 수정 완료";
 
     }
 
     // 포트폴리오 삭제
+    @DeleteMapping("/auth/portfolio/{p_id}")
+    public String deletePortfolio(Authentication authentication, @PathVariable int p_id) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        portfolioService.deletePortfolio(principalDetails.getUser(), p_id);
+
+        return "포트폴리오 삭제 완료";
+
+    }
 
 }
