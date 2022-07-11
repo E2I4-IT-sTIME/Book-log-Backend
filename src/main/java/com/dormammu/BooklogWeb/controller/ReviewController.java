@@ -46,6 +46,15 @@ public class ReviewController {
     }
 
     // 서평 수정
+    @PatchMapping("auth/review/{review_id}")
+    public String updateReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication, @PathVariable int review_id) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        if (postReviewReq.getUserId() == principalDetails.getUser().getId()) {
+            reviewService.updateReview(postReviewReq, review_id);
+            return "서평 생성 완료";
+        }
+        return null;
+    }
 
     // 서평 삭제
 }
