@@ -72,4 +72,16 @@ public class ReviewService {
             return null;
         }
     }
+
+    @Transactional
+    public String deleteReview(User user, int review_id) {
+        Review review = reviewRepository.findById(review_id);
+        if (review.getUser().getId() == user.getId()) {
+            reviewRepository.delete(review);
+            return "서평 삭제 완료";
+        }
+        else {
+            return null;
+        }
+    }
 }
