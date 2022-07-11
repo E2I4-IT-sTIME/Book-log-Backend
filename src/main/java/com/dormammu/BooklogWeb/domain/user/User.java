@@ -58,6 +58,7 @@ public class User {
     private Timestamp createDate;
 
     @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     //@JsonManagedReference
     private List<Portfolio> portfolios;
