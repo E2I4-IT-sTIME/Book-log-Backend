@@ -23,6 +23,7 @@ public class PortfolioService {
     public String createPortfolio(User user, PostPortfolioReq portfolioReq) {
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle(portfolioReq.getTitle());
+        portfolio.setContent(portfolioReq.getContent());
         portfolio.setUser(user);
         portfolioRepository.save(portfolio);
         return "포트폴리오 생성 완료";
