@@ -27,6 +27,11 @@ public class AdminQnA {
 
     @Lob
     private String Q3;
+    @Lob
+    private String Q4;
+    @Lob
+    private String Q5;
+
 
     @OneToMany(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserQnA> userQnA;

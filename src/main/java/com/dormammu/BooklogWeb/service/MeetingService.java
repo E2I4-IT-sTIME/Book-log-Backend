@@ -49,6 +49,9 @@ public class MeetingService {
         adminQnA.setQ1(postMeetingReq.getQ1());
         adminQnA.setQ2(postMeetingReq.getQ2());
         adminQnA.setQ3(postMeetingReq.getQ3());
+        adminQnA.setQ3(postMeetingReq.getQ4());
+        adminQnA.setQ3(postMeetingReq.getQ5());
+
 
         HashTag hashTag = new HashTag();
         hashTag.setMeeting(meeting);
@@ -141,7 +144,9 @@ public class MeetingService {
         MeetingRes meetingRes = MeetingRes.builder()
                 .Q1(question.getQ1())
                 .Q2(question.getQ2())
-                .Q3(question.getQ3()).build();
+                .Q3(question.getQ3())
+                .Q4(question.getQ4())
+                .Q5(question.getQ5()).build();
         return meetingRes;
     }
 
@@ -159,4 +164,14 @@ public class MeetingService {
         userQnARepository.save(userQnA);
         return "답변 생성 완료";
     }
+//
+//    @Transactional(readOnly = true)
+////    public List<UserQnA> answerList(int id, int answers_id){
+////        List<UserQnA> userqnaList = userQnARepository.findAll();
+////        System.out.println(userqnaList);
+////        return userqnaList;
+//    public String answerList(int id, int answers_id){
+//        System.out.println("answerList 들어옴");
+//        return "들어옴";
+//    }
 }
