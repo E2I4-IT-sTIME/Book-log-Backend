@@ -25,7 +25,7 @@ public class Portfolio {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    //@JsonBackReference
+    @JsonBackReference
     private User user;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
