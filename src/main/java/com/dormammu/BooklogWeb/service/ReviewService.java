@@ -58,4 +58,18 @@ public class ReviewService {
 
         return "서평 생성 완료";
     }
+
+    @Transactional
+    public String updateReview(PostReviewReq postReviewReq, int review_id) {
+        Review origin_review = reviewRepository.findById(review_id);
+        if (origin_review.getUser().getId() == postReviewReq.getUserId()) {
+            origin_review.setTitle(postReviewReq.getTitle());
+            origin_review.setContent(postReviewReq.getContent());
+            origin_review.setBook_name(postReviewReq.getBook_name());
+            return "서평 수정 완료";
+        }
+        else {
+            return null;
+        }
+    }
 }
