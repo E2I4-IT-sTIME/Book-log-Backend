@@ -49,8 +49,8 @@ public class MeetingService {
         adminQnA.setQ1(postMeetingReq.getQ1());
         adminQnA.setQ2(postMeetingReq.getQ2());
         adminQnA.setQ3(postMeetingReq.getQ3());
-        adminQnA.setQ3(postMeetingReq.getQ4());
-        adminQnA.setQ3(postMeetingReq.getQ5());
+        adminQnA.setQ4(postMeetingReq.getQ4());
+        adminQnA.setQ5(postMeetingReq.getQ5());
 
 
         HashTag hashTag = new HashTag();

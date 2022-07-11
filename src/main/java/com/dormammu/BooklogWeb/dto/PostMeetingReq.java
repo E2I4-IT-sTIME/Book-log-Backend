@@ -31,8 +31,6 @@ public class PostMeetingReq {
     private String q4;
     private String q5;
 
-    private int userId;
-
     private int max_num;
 
     private String h1;
