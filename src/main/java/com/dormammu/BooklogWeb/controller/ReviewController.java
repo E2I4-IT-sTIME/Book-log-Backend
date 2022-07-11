@@ -5,14 +5,13 @@ import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.PostReviewReq;
 import com.dormammu.BooklogWeb.dto.ReviewListRes;
 import com.dormammu.BooklogWeb.service.PortfolioService;
 import com.dormammu.BooklogWeb.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,4 +33,19 @@ public class ReviewController {
         }
         return null;
     }
+
+    // 서평 생성
+    @PostMapping("auth/review")
+    public String createReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        if (postReviewReq.getUserId() == principalDetails.getUser().getId()) {
+            reviewService.createReview(postReviewReq, principalDetails.getUser());
+            return "서평 생성 완료";
+        }
+        return null;
+    }
+
+    // 서평 수정
+
+    // 서평 삭제
 }

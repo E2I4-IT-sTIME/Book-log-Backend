@@ -6,6 +6,7 @@ import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.review.ReviewRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.PostReviewReq;
 import com.dormammu.BooklogWeb.dto.ReviewListRes;
 import com.dormammu.BooklogWeb.dto.ReviewRes;
 import lombok.Builder;
@@ -44,5 +45,17 @@ public class ReviewService {
                 .nickname(user.getNickname())
                 .reviewResList(reviewResList).build();
         return reviewListRes;
+    }
+
+    @Transactional
+    public String createReview(PostReviewReq postReviewReq, User user) {
+        Review review = new Review();
+        review.setTitle(postReviewReq.getTitle());
+        review.setContent(postReviewReq.getContent());
+        review.setBook_name(postReviewReq.getBook_name());
+        review.setUser(user);
+        reviewRepository.save(review);
+
+        return "서평 생성 완료";
     }
 }
