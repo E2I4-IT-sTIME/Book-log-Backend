@@ -23,6 +23,8 @@ public class Portfolio {
 
     private String title;
 
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference

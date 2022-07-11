@@ -15,6 +15,8 @@ public class PostPortfolioReq {
 
     private int userId;
 
+    private String content;
+
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
 }
