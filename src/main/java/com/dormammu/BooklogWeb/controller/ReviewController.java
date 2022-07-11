@@ -35,7 +35,7 @@ public class ReviewController {
     }
 
     // 서평 생성
-    @PostMapping("auth/review")
+    @PostMapping("/auth/review")
     public String createReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         if (postReviewReq.getUserId() == principalDetails.getUser().getId()) {
@@ -46,7 +46,7 @@ public class ReviewController {
     }
 
     // 서평 수정
-    @PatchMapping("auth/review/{review_id}")
+    @PatchMapping("/auth/review/{review_id}")
     public String updateReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication, @PathVariable int review_id) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         if (postReviewReq.getUserId() == principalDetails.getUser().getId()) {
@@ -57,4 +57,12 @@ public class ReviewController {
     }
 
     // 서평 삭제
+    @DeleteMapping("/auth/review/{review_id}")
+    public String deleteReview(Authentication authentication, @PathVariable int review_id) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        reviewService.deleteReview(principalDetails.getUser(), review_id);
+
+        return "서평 삭제 완료";
+
+    }
 }
