@@ -42,6 +42,7 @@ public class MeetingService {
         meeting.setMent(postMeetingReq.getMent());
         meeting.setImage(postMeetingReq.getImage());
         meeting.setUserId(user.getId());
+        meeting.setCur_num(1);
         meeting.setMax_num(postMeetingReq.getMax_num());
 
         AdminQnA adminQnA = new AdminQnA();
@@ -93,6 +94,7 @@ public class MeetingService {
         MeetingUser meetingUser = new MeetingUser();
         meetingUser.setUser(user);
         meetingUser.setMeeting(meeting);
+        meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
 
         meetingUserRepository.save(meetingUser);
         return "모임 입장 완료";
