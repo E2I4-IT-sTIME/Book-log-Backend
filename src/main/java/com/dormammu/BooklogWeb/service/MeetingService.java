@@ -52,6 +52,7 @@ public class MeetingService {
         adminQnA.setQ3(postMeetingReq.getQ3());
         adminQnA.setQ4(postMeetingReq.getQ4());
         adminQnA.setQ5(postMeetingReq.getQ5());
+        meeting.setAdminQnA(adminQnA);
 
 
         HashTag hashTag = new HashTag();
@@ -61,6 +62,7 @@ public class MeetingService {
         hashTag.setTag3(postMeetingReq.getH3());
         hashTag.setTag4(postMeetingReq.getH4());
         hashTag.setTag5(postMeetingReq.getH5());
+        meeting.setHashTag(hashTag);
 
         MeetingUser meetingUser = new MeetingUser();
         meetingUser.setMeeting(meeting);
@@ -69,6 +71,8 @@ public class MeetingService {
         adminQnARepository.save(adminQnA);
         hashTagRepository.save(hashTag);
         meetingRepository.save(meeting);
+//        HashTag hashTag1 = hashTagRepository.findByMeetingId(meeting.getId());
+//        System.out.println(hashTag1.getTag1());
 
         return "모임 생성 완료";
     }
@@ -105,6 +109,7 @@ public class MeetingService {
 
         MeetingUser meetingUser =  meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
         System.out.println(user.getId() +" AND " + meeting.getId());
+        meeting.setCur_num(meeting.getCur_num()-1);
         meetingUserRepository.delete(meetingUser);
 
         return "모임 탈퇴 완료";
@@ -124,11 +129,15 @@ public class MeetingService {
         return "모임 정보 수정 완료";
     }
 
-    //    @Transactional
+//    @Transactional
 //    public String deleteMeeting(User user, Meeting meeting){
 //        System.out.println("User :" + user.getUsername() + ", " + "Meeting : " + meeting.getName());
-//
+////        // 모임 삭제시 해시태그, 질문
 //        meetingRepository.delete(meeting);
+////        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting.getId());
+////        adminQnARepository.delete(adminQnA);
+////        HashTag hashTag = hashTagRepository.findByMeetingId(meeting.getId());
+////        hashTagRepository.delete(hashTag);
 //        return "모임 삭제 완료";
 //    }
 

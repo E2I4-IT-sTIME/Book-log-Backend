@@ -3,9 +3,12 @@ package com.dormammu.BooklogWeb.domain.meeting;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -50,5 +53,13 @@ public class Meeting {
     @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
+
+    @OneToOne
+    @JsonManagedReference
+    private AdminQnA adminQnA;
+
+    @OneToOne
+    @JsonManagedReference
+    private HashTag hashTag;
 
 }

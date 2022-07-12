@@ -93,7 +93,7 @@ public class MeetingController {
         return null;
     }
 
-    //    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제
+//    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제
 //    public String deleteMeeting(@PathVariable int id, Authentication authentication){
 //
 //        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();

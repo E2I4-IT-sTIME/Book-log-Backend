@@ -1,6 +1,8 @@
 package com.dormammu.BooklogWeb.domain.hastag;
 
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,8 +30,8 @@ public class HashTag {
 
     private String tag5;
 
-    @OneToOne
+    @OneToOne(mappedBy = "hashTag")
     @JoinColumn(name = "meeting")
+    @JsonBackReference
     private Meeting meeting;
-
 }
