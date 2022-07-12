@@ -5,6 +5,7 @@ import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.GetCommunityRes;
 import com.dormammu.BooklogWeb.dto.PostReviewReq;
 import com.dormammu.BooklogWeb.dto.ReviewListRes;
 import com.dormammu.BooklogWeb.service.PortfolioService;
@@ -64,5 +65,12 @@ public class ReviewController {
 
         return "서평 삭제 완료";
 
+    }
+
+    // 커뮤니티 페이지 (모든 사람들의 서평 리스트)
+    @GetMapping("/community")
+    public List<GetCommunityRes> community(Authentication authentication) {
+        List<GetCommunityRes> getCommunityRes = reviewService.community();
+        return getCommunityRes;
     }
 }
