@@ -6,6 +6,7 @@ import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.review.ReviewRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.GetCommunityRes;
 import com.dormammu.BooklogWeb.dto.PostReviewReq;
 import com.dormammu.BooklogWeb.dto.ReviewListRes;
 import com.dormammu.BooklogWeb.dto.ReviewRes;
@@ -83,5 +84,24 @@ public class ReviewService {
         else {
             return null;
         }
+    }
+
+    @Transactional
+    public List<GetCommunityRes> community() {
+        List<GetCommunityRes> getCommunityResList = new ArrayList<>();
+        List<Review> reviews = reviewRepository.findAll();
+        for (Review r : reviews) {
+            GetCommunityRes getCommunityRes = new GetCommunityRes();
+
+            getCommunityRes.setTitle(r.getTitle());
+            getCommunityRes.setWriter("작가");
+            getCommunityRes.setPublisher("출판사");
+            getCommunityRes.setImg("img123");
+            getCommunityRes.setNickname(r.getUser().getNickname());
+
+            getCommunityResList.add(getCommunityRes);
+        }
+
+        return getCommunityResList;
     }
 }
