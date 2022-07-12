@@ -104,4 +104,18 @@ public class ReviewService {
 
         return getCommunityResList;
     }
+
+    @Transactional
+    public GetCommunityRes communityDetail(int review_id) {
+        Review review = reviewRepository.findById(review_id);
+        GetCommunityRes getCommunityRes = new GetCommunityRes();
+
+        getCommunityRes.setTitle(review.getTitle());
+        getCommunityRes.setWriter("작가(더미데이터)");
+        getCommunityRes.setPublisher("출판사(더미데이터");
+        getCommunityRes.setImg("img123(더미데이터)");
+        getCommunityRes.setNickname(review.getUser().getNickname());
+
+        return getCommunityRes;
+    }
 }
