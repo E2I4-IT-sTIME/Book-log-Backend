@@ -67,10 +67,17 @@ public class ReviewController {
 
     }
 
-    // 커뮤니티 페이지 (모든 사람들의 서평 리스트)
+    // 커뮤니티 전체 페이지 (모든 사람들의 서평 리스트)
     @GetMapping("/community")
     public List<GetCommunityRes> community(Authentication authentication) {
         List<GetCommunityRes> getCommunityRes = reviewService.community();
+        return getCommunityRes;
+    }
+
+    // 커뮤니티 상세 페이지 (한 사람들의 서평)
+    @GetMapping("/auth/reviews/{review_id}")
+    public GetCommunityRes communityDetail(Authentication authentication, @PathVariable int review_id) {
+        GetCommunityRes getCommunityRes = reviewService.communityDetail(review_id);
         return getCommunityRes;
     }
 }
