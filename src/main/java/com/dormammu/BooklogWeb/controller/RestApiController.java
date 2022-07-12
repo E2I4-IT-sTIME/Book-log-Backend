@@ -3,6 +3,7 @@ package com.dormammu.BooklogWeb.controller;
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class RestApiController {
+    private final UserService userService;
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -34,6 +36,13 @@ public class RestApiController {
         user.setRoles("ROLE_USER");
         userRepository.save(user);
         return "회원가입완료";
+    }
+
+    // 회원 탈퇴
+    @PatchMapping("/auth/user/delete/{id}")
+    public String deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
+        return "회원탈퇴완료";
     }
 
     // user, admin 가능
