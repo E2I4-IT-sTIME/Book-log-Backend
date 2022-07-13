@@ -5,6 +5,7 @@ import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,16 +29,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
-    private String nickname;
+    @Column(nullable = true)
+    private String nickname = "닉네임"; // 나중에 db create해서 이 필드 지우기
 
-    //@Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String imgHome;
@@ -50,7 +51,7 @@ public class User {
 
     private String area;
 
-    private boolean active;
+    private boolean active = true;
 
     private String roles;  // ROLE_USER, ROLE_ADMIN
 
