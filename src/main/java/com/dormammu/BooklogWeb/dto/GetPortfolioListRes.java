@@ -10,12 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetPortfolioRes {
+public class GetPortfolioListRes {
     //private String nickname;
     private String title; // 포트폴리오 제목
     private String content; // 포트폴리오 설명
-
-    @Nullable
-    List<ReviewRes> reviewResList;
 
 }
