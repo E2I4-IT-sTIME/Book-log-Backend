@@ -11,7 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostReviewReq {
-    private int userId;
+
+    private int portfolio_id;
 
     private String title;
 
