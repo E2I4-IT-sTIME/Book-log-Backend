@@ -1,6 +1,7 @@
 package com.dormammu.BooklogWeb.dto;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -15,4 +16,7 @@ public class GetCommunityRes {
     private String writer;
     private String publisher;
     private String nickname;
+
+    @Nullable
+    private String content;
 }
