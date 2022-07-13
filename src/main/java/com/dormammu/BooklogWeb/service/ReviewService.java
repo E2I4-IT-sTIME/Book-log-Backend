@@ -117,6 +117,7 @@ public class ReviewService {
         getCommunityRes.setPublisher("출판사(더미데이터");
         getCommunityRes.setImg("img123(더미데이터)");
         getCommunityRes.setNickname(review.getUser().getNickname());
+        getCommunityRes.setContent(review.getContent());
 
         return getCommunityRes;
     }
