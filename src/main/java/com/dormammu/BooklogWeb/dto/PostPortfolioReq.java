@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class PostPortfolioReq {
     private String title;
 
-    private int userId;
+    //private int userId;
 
     private String content;
 
