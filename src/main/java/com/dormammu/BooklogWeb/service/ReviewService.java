@@ -21,8 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ReviewService {
-
-    private final UserRepository userRepository;
+    private final PortfolioRepository portfolioRepository;
     private final ReviewRepository reviewRepository;
 
     @Transactional
@@ -51,6 +50,9 @@ public class ReviewService {
     @Transactional
     public String createReview(PostReviewReq postReviewReq, User user) {
         Review review = new Review();
+
+        Portfolio portfolio = portfolioRepository.findById(postReviewReq.getPortfolio_id());
+        review.setPortfolio(portfolio);
         review.setTitle(postReviewReq.getTitle());
         review.setContent(postReviewReq.getContent());
         review.setBook_name(postReviewReq.getBook_name());
@@ -61,9 +63,9 @@ public class ReviewService {
     }
 
     @Transactional
-    public String updateReview(PostReviewReq postReviewReq, int review_id) {
+    public String updateReview(PostReviewReq postReviewReq, int review_id, User user) {
         Review origin_review = reviewRepository.findById(review_id);
-        if (origin_review.getUser().getId() == postReviewReq.getUserId()) {
+        if (origin_review.getUser().getId() == user.getId()) {
             origin_review.setTitle(postReviewReq.getTitle());
             origin_review.setContent(postReviewReq.getContent());
             origin_review.setBook_name(postReviewReq.getBook_name());
