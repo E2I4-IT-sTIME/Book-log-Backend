@@ -5,15 +5,13 @@ import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.portfolio.PortfolioRepository;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.GetPortfolioRes;
-import com.dormammu.BooklogWeb.dto.PostPortfolioReq;
-import com.dormammu.BooklogWeb.dto.ReviewListRes;
-import com.dormammu.BooklogWeb.dto.ReviewRes;
+import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.expression.spel.ast.PropertyOrFieldReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sound.sampled.Port;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +23,20 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
 
     @Transactional
-    public List<Portfolio> myPortfolioList(User user) {
-        System.out.println("portfolioService 들어옴");
+    public List<GetPortfolioListRes> myPortfolioList(User user) {
         List<Portfolio> portfolioList = portfolioRepository.findByUser(user);
-        //List<Portfolio> portfolios = user.getPortfolios(); <- 이 방법도 가능
-        //System.out.println("포폴 : " + portfolios);
-        System.out.println("레퍼지토리로 포폴 리스트 출력 : " + portfolioList);
 
-        return portfolioList;
+        List<GetPortfolioListRes> getPortfolioListResList = new ArrayList<>();
+
+        for (Portfolio pf : portfolioList) {
+            GetPortfolioListRes getPortfolioListRes = new GetPortfolioListRes();
+            getPortfolioListRes.setTitle(pf.getTitle());
+            getPortfolioListRes.setContent(pf.getContent());
+
+            getPortfolioListResList.add(getPortfolioListRes);
+        }
+
+        return getPortfolioListResList;
     }
 
     @Transactional
@@ -89,8 +93,6 @@ public class PortfolioService {
         }
 
         GetPortfolioRes getPortfolioRes = GetPortfolioRes.builder()
-                .userId(user.getId())
-                .nickname(user.getNickname())
                 .title(portfolio.getTitle())
                 .reviewResList(reviewResList).build();
 
