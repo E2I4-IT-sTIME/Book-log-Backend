@@ -32,13 +32,9 @@ public class AdminQnA {
     @Lob
     private String Q5;
 
-
     @OneToMany(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserQnA> userQnA;
 
-    @OneToOne
-    @JoinColumn(name = "meeting")
+    @OneToOne(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Meeting meeting;
-
-
 }

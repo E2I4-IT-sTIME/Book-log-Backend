@@ -28,8 +28,7 @@ public class HashTag {
 
     private String tag5;
 
-    @OneToOne
-    @JoinColumn(name = "meeting")
+    @OneToOne(mappedBy = "hashTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Meeting meeting;
 
 }
