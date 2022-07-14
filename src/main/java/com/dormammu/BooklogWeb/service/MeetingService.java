@@ -134,10 +134,9 @@ public class MeetingService {
 //        System.out.println("User :" + user.getUsername() + ", " + "Meeting : " + meeting.getName());
 ////        // 모임 삭제시 해시태그, 질문
 //        meetingRepository.delete(meeting);
-////        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting.getId());
-////        adminQnARepository.delete(adminQnA);
-////        HashTag hashTag = hashTagRepository.findByMeetingId(meeting.getId());
-////        hashTagRepository.delete(hashTag);
+//        System.out.println("모임 삭제됨");
+//        AdminQnA adminQnA = adminQnARepository.findById(meeting.getAdminQnA().getId());
+//        adminQnARepository.delete(adminQnA);
 //        return "모임 삭제 완료";
 //    }
 

@@ -1,6 +1,7 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
+//import com.dormammu.BooklogWeb.domain.board.MeetingBoard;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,16 +51,21 @@ public class Meeting {
     @Column(nullable = false)
     private boolean onoff;
 
-    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
 
-    @OneToOne
+    @JsonIgnore
     @JsonManagedReference
+    @OneToOne(fetch = FetchType.LAZY)
     private AdminQnA adminQnA;
 
-    @OneToOne
+    @JsonIgnore
     @JsonManagedReference
+    @OneToOne(fetch = FetchType.LAZY)
     private HashTag hashTag;
+
+//    @OneToOne
+//    private MeetingBoard meetingBoard;
 
 }

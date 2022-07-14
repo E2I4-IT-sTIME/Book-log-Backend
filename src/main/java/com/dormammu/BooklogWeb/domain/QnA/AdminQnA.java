@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.domain.QnA;
 
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "adminQnA")
+@ToString(exclude = "meeting")
 public class AdminQnA {
 
     @Id
@@ -36,12 +38,13 @@ public class AdminQnA {
     private String Q5;
 
 
-    @OneToMany(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserQnA> userQnA;
 
-    @OneToOne(mappedBy = "adminQnA")
-    @JoinColumn(name = "meeting")
+//    @JsonIgnore
     @JsonBackReference
+    @OneToOne(mappedBy = "adminQnA", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "meeting")
     private Meeting meeting;
 
 
