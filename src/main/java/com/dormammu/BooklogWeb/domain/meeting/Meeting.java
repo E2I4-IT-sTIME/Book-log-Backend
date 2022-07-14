@@ -51,4 +51,12 @@ public class Meeting {
     @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "hashTag_id")
+    private HashTag hashTag;
+
+    @OneToOne
+    @JoinColumn(name = "adminQnA_id")
+    private AdminQnA adminQnA;
+
 }
