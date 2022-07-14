@@ -10,9 +10,14 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewRes {
+public class PostReviewReq {
+
+    private int portfolio_id;
+
     private String title;
+
     private String content;
+
     private String book_name;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")

@@ -55,17 +55,12 @@ public class Meeting {
     @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
 
-    @JsonIgnore
-    @JsonManagedReference
-    @OneToOne(fetch = FetchType.LAZY)
-    private AdminQnA adminQnA;
-
-    @JsonIgnore
-    @JsonManagedReference
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "hashTag_id")
     private HashTag hashTag;
 
-//    @OneToOne
-//    private MeetingBoard meetingBoard;
+    @OneToOne
+    @JoinColumn(name = "adminQnA_id")
+    private AdminQnA adminQnA;
 
 }

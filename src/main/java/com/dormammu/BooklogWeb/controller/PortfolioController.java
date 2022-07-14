@@ -4,6 +4,8 @@ import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.GetPortfolioListRes;
+import com.dormammu.BooklogWeb.dto.GetPortfolioRes;
 import com.dormammu.BooklogWeb.dto.PostPortfolioReq;
 import com.dormammu.BooklogWeb.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,11 @@ public class PortfolioController {
     private final UserRepository userRepository;
 
     // 내 포트폴리오 조회 페이지
-    @GetMapping("/api/user/{id}/porfols")
-    public List<Portfolio> myPortfolioList(@PathVariable int id, Authentication authentication) {
+    @GetMapping("/auth/user/{id}/portfolios")
+    public List<GetPortfolioListRes> myPortfolioList(@PathVariable int id, Authentication authentication) {
         User user = userRepository.findById(id);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         if (user.getId() == principalDetails.getUser().getId()) {
-            System.out.println("현재 로그인된 유저 : " + principalDetails.getUser().getUsername() + "&&&&&" + user.getUsername());
             return portfolioService.myPortfolioList(user);
         }
         return null;
@@ -35,12 +36,9 @@ public class PortfolioController {
     @PostMapping("/auth/portfolio")
     public String createPortfolio(@RequestBody PostPortfolioReq postPortfolioReq, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        if (postPortfolioReq.getUserId() == principalDetails.getUser().getId()) {
-            portfolioService.createPortfolio(principalDetails.getUser(), postPortfolioReq);
+        portfolioService.createPortfolio(principalDetails.getUser(), postPortfolioReq);
 
-            return "포트폴리오 생성 완료";
-        }
-        return null;
+        return "포트폴리오 생성 완료";
     }
 
     // 포트폴리오 수정
@@ -61,6 +59,19 @@ public class PortfolioController {
 
         return "포트폴리오 삭제 완료";
 
+    }
+
+    // 포트폴리오 조회 (개별)
+    @GetMapping("/auth/user/{id}/portfolios/{portfolio_id}")
+    public GetPortfolioRes onePortfolio(Authentication authentication, @PathVariable int id, @PathVariable int portfolio_id) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        if (principalDetails.getUser().getId() == id) {
+            GetPortfolioRes getPortfolioRes = portfolioService.onePortfolio(id, portfolio_id);
+            return getPortfolioRes;
+        }
+        else {
+            return null;
+        }
     }
 
 }

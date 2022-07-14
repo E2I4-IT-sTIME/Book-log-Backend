@@ -33,9 +33,6 @@ public class HashTag {
 
     private String tag5;
 
-//    @JsonIgnore
-    @JsonBackReference
-    @OneToOne(mappedBy = "hashTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "meeting")
+    @OneToOne(mappedBy = "hashTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Meeting meeting;
 }

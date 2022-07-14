@@ -3,15 +3,22 @@ package com.dormammu.BooklogWeb.controller;
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.JoinRequestDto;
+import com.dormammu.BooklogWeb.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 //@RequestMapping("api")
 @RestController
 @RequiredArgsConstructor
 public class RestApiController {
+    private final UserService userService;
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -29,11 +36,27 @@ public class RestApiController {
     }
 
     @PostMapping("join")
-    public String join(@RequestBody User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles("ROLE_USER");
-        userRepository.save(user);
+    public String join(@Valid @RequestBody JoinRequestDto joinRequestDto, Errors errors) {
+        if (errors.hasErrors()) {
+            Map<String, String> validatorResult = userService.validateHandling(errors);
+            for (String key : validatorResult.keySet()) {
+                System.out.println(validatorResult.get(key));
+                return validatorResult.get(key);
+            }
+        }
+        userService.checkUsernameDuplication(joinRequestDto);
+        userService.checkEmailDuplication(joinRequestDto);
+        joinRequestDto.setPassword(bCryptPasswordEncoder.encode(joinRequestDto.getPassword()));
+        joinRequestDto.setRoles("ROLE_USER");
+        userService.joinUser(joinRequestDto);
         return "회원가입완료";
+    }
+
+    // 회원 탈퇴
+    @PatchMapping("/auth/user/delete/{id}")
+    public String deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
+        return "회원탈퇴완료";
     }
 
     // user, admin 가능
