@@ -12,10 +12,7 @@ import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.MeetingRes;
-import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
-import com.dormammu.BooklogWeb.dto.PostAnswerReq;
-import com.dormammu.BooklogWeb.dto.PostMeetingReq;
+import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,27 +163,42 @@ public class MeetingService {
     }
 
     @Transactional
-    public String createAnswer(int id, PostAnswerReq postAnswerReq){
+    public String createAnswer(User user, int id, PostAnswerReq postAnswerReq){
         UserQnA userQnA = new UserQnA();
 
         userQnA.setA1(postAnswerReq.getA1());
         userQnA.setA2(postAnswerReq.getA2());
         userQnA.setA3(postAnswerReq.getA3());
-        userQnA.setUserId(postAnswerReq.getUserId());
+        userQnA.setA4(postAnswerReq.getA4());
+        userQnA.setA5(postAnswerReq.getA5());
+        userQnA.setUserId(user.getId());
 
+        // 모임 id
         AdminQnA adminQnA = adminQnARepository.findByMeetingId(id);
         userQnA.setAdminQnA(adminQnA);
         userQnARepository.save(userQnA);
         return "답변 생성 완료";
     }
-//
-//    @Transactional(readOnly = true)
-////    public List<UserQnA> answerList(int id, int answers_id){
-////        List<UserQnA> userqnaList = userQnARepository.findAll();
-////        System.out.println(userqnaList);
-////        return userqnaList;
-//    public String answerList(int id, int answers_id){
-//        System.out.println("answerList 들어옴");
-//        return "들어옴";
-//    }
+
+    @Transactional(readOnly = true)
+    public List<GetUserQnAListRes> answerList(int meeting_id){
+        Meeting meeting = meetingRepository.findById(meeting_id);
+
+        List<UserQnA> userQnAList =  userQnARepository.findByAdminQnAId(meeting.getAdminQnA().getId());
+        List<GetUserQnAListRes> getUserQnAListResList =  new ArrayList<>();
+
+        for (UserQnA userqna : userQnAList){
+            GetUserQnAListRes getUserQnAListRes = new GetUserQnAListRes();
+            getUserQnAListRes.setUserId(userqna.getUserId());
+            getUserQnAListRes.setA1(userqna.getA1());
+            getUserQnAListRes.setA2(userqna.getA2());
+            getUserQnAListRes.setA3(userqna.getA3());
+            getUserQnAListRes.setA4(userqna.getA4());
+            getUserQnAListRes.setA5(userqna.getA5());
+
+            getUserQnAListResList.add(getUserQnAListRes);
+        }
+        System.out.println("answerList 들어옴");
+        return getUserQnAListResList;
+    }
 }

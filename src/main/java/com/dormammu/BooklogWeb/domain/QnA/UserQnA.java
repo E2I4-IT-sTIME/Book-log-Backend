@@ -22,9 +22,16 @@ public class UserQnA {
     @Lob
     private String A3;
 
+    @Lob
+    private String A4;
+
+    @Lob
+    private String A5;
+
     private int userId;
 
     @ManyToOne
+    @JoinColumn(name = "adminQnA_id")
     private AdminQnA adminQnA;
 
 }
