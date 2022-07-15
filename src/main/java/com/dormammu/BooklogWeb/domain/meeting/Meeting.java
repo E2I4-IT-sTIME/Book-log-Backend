@@ -62,5 +62,4 @@ public class Meeting {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "adminQnA_id")
     private AdminQnA adminQnA;
-
 }
