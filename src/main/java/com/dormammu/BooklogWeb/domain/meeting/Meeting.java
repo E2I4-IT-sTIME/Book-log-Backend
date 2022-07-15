@@ -1,11 +1,15 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
+//import com.dormammu.BooklogWeb.domain.board.MeetingBoard;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -47,16 +51,15 @@ public class Meeting {
     @Column(nullable = false)
     private boolean onoff;
 
-    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "hashTag_id")
     private HashTag hashTag;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "adminQnA_id")
     private AdminQnA adminQnA;
-
 }

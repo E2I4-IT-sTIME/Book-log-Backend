@@ -1,9 +1,12 @@
 package com.dormammu.BooklogWeb.domain.QnA;
 
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
