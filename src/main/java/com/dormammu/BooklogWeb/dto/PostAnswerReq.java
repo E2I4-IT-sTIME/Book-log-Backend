@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostAnswerReq {
-    private int userId;
     private String a1;
     private String a2;
     private String a3;
+    private String a4;
+    private String a5;
+
 }

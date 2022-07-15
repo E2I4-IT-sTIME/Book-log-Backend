@@ -6,10 +6,7 @@ import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.MeetingRes;
-import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
-import com.dormammu.BooklogWeb.dto.PostAnswerReq;
-import com.dormammu.BooklogWeb.dto.PostMeetingReq;
+import com.dormammu.BooklogWeb.dto.*;
 import com.dormammu.BooklogWeb.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -125,24 +122,24 @@ public class MeetingController {
         User user = userRepository.findById(principalDetails.getUser().getId());
 
         if (user.getId() == principalDetails.getUser().getId()) {
-           return meetingService.createAnswer(id, postAnswerReq);
+           return meetingService.createAnswer(principalDetails.getUser(), id, postAnswerReq);
         }
         return null;
     }
-//
-//    @GetMapping("/auth/meetings/{id}/answers/{answers_id}")  // 모임 답변 조회 api
-//    public String answerList(@PathVariable int id, @PathVariable int answers_id, Authentication authentication){
-//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//        Meeting meeting = meetingRepository.findById(id);
-//        User user = userRepository.findById(principalDetails.getUser().getId());
-//
-//        if (user.getId() == principalDetails.getUser().getId()){  // 로그인한 사용자 == 접근한 사용자
-//            // 접근한 사람이 모임 관리자인지 확인
-//            if (user.getId() == meeting.getUserId()) {
-//                return meetingService.answerList(id, answers_id);
-//            }
-//            return null;
-//        }
-//        return null;
-//    }
+
+    @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
+    public List<GetUserQnAListRes> answerList(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){  // 로그인한 사용자 == 접근한 사용자
+            // 접근한 사람이 모임 관리자인지 확인
+            if (user.getId() == meeting.getUserId()) {
+                return meetingService.answerList(meeting_id);
+            }
+            return null;
+        }
+        return null;
+    }
 }
