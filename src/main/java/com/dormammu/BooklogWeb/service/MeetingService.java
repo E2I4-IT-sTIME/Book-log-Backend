@@ -75,7 +75,6 @@ public class MeetingService {
         HashTag hashTag1 = hashTagRepository.findById(hashTag.getId());
 
         meeting.setHashTag(hashTag1);
-        System.out.println("해시태그 설정 완료");
         meeting.setAdminQnA(adminQnA1);
 
         return "모임 생성 완료";
@@ -153,6 +152,8 @@ public class MeetingService {
         questions.add(question.getQ1());
         questions.add(question.getQ2());
         questions.add(question.getQ3());
+        questions.add(question.getQ4());
+        questions.add(question.getQ5());
 //        System.out.println("질문 리스트 출력 : " + questions);
 
         MeetingRes meetingRes = MeetingRes.builder()
