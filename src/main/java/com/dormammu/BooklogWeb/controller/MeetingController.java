@@ -93,18 +93,18 @@ public class MeetingController {
         return null;
     }
 
-//    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제
-//    public String deleteMeeting(@PathVariable int id, Authentication authentication){
-//
-//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//        Meeting meeting = meetingRepository.findById(id);
-//        User user = userRepository.findById(principalDetails.getUser().getId());
-//
-//        if(user.getId() == principalDetails.getUser().getId()){
-//            return meetingService.deleteMeeting(user, meeting);
-//        }
-//        return null;
-//    }
+    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제
+    public String deleteMeeting(@PathVariable int id, Authentication authentication){
+
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(id);
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if(user.getId() == principalDetails.getUser().getId()){
+            return meetingService.deleteMeeting(user, meeting);
+        }
+        return null;
+    }
 
     @GetMapping("/auth/{id}/question")
     public MeetingRes questionList(@PathVariable int id, Authentication authentication){

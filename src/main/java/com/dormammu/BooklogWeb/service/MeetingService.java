@@ -52,7 +52,7 @@ public class MeetingService {
         adminQnA.setQ3(postMeetingReq.getQ3());
         adminQnA.setQ4(postMeetingReq.getQ4());
         adminQnA.setQ5(postMeetingReq.getQ5());
-        meeting.setAdminQnA(adminQnA);
+//        meeting.setAdminQnA(adminQnA);
 
 
         HashTag hashTag = new HashTag();
@@ -62,7 +62,7 @@ public class MeetingService {
         hashTag.setTag3(postMeetingReq.getH3());
         hashTag.setTag4(postMeetingReq.getH4());
         hashTag.setTag5(postMeetingReq.getH5());
-        meeting.setHashTag(hashTag);
+//        meeting.setHashTag(hashTag);
 
         MeetingUser meetingUser = new MeetingUser();
         meetingUser.setMeeting(meeting);
@@ -71,8 +71,12 @@ public class MeetingService {
         adminQnARepository.save(adminQnA);
         hashTagRepository.save(hashTag);
         meetingRepository.save(meeting);
-//        HashTag hashTag1 = hashTagRepository.findByMeetingId(meeting.getId());
-//        System.out.println(hashTag1.getTag1());
+        AdminQnA adminQnA1 = adminQnARepository.findById(adminQnA.getId());
+        HashTag hashTag1 = hashTagRepository.findById(hashTag.getId());
+
+        meeting.setHashTag(hashTag1);
+        System.out.println("해시태그 설정 완료");
+        meeting.setAdminQnA(adminQnA1);
 
         return "모임 생성 완료";
     }
@@ -81,6 +85,7 @@ public class MeetingService {
     public List<Meeting> meetingList(){
         System.out.println("meetingList 들어옴");
         List<Meeting> meetingList = meetingRepository.findAll();
+        System.out.println("리스트 찾음");
         System.out.println("모임 리스트 출력 : " + meetingList);
         return meetingList;
     }
@@ -129,16 +134,15 @@ public class MeetingService {
         return "모임 정보 수정 완료";
     }
 
-//    @Transactional
-//    public String deleteMeeting(User user, Meeting meeting){
-//        System.out.println("User :" + user.getUsername() + ", " + "Meeting : " + meeting.getName());
-////        // 모임 삭제시 해시태그, 질문
-//        meetingRepository.delete(meeting);
-//        System.out.println("모임 삭제됨");
-//        AdminQnA adminQnA = adminQnARepository.findById(meeting.getAdminQnA().getId());
-//        adminQnARepository.delete(adminQnA);
-//        return "모임 삭제 완료";
-//    }
+    @Transactional
+    public String deleteMeeting(User user, Meeting meeting){
+        System.out.println("User :" + user.getUsername() + ", " + "Meeting : " + meeting.getName());
+        meetingRepository.delete(meeting);
+        System.out.println("모임 삭제됨");
+
+//        System.out.println("큐앤에이, 해시태그, 미팅유저 삭제됨");  // 모임 삭제 -> meetingUser전부, 해시태그, 큐앤에이
+        return "모임 삭제 완료";
+    }
 
     @Transactional(readOnly = true)
     public MeetingRes questionList(Meeting meeting){

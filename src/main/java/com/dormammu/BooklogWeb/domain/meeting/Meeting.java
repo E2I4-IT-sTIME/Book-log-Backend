@@ -55,11 +55,11 @@ public class Meeting {
     @JsonBackReference
     private List<MeetingUser> users = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "hashTag_id")
     private HashTag hashTag;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "adminQnA_id")
     private AdminQnA adminQnA;
 
