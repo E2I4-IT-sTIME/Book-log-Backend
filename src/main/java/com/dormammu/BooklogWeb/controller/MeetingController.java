@@ -1,7 +1,6 @@
 package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.domain.QnA.UserQnA;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
@@ -141,5 +140,17 @@ public class MeetingController {
             return null;
         }
         return null;
+    }
+
+    @GetMapping("/auth/meetings/{meeting_id}/answers/{answer_id}")  // 모임 답변 개별 조회 api
+    public GetAnswerRes oneAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.oneAnswer(user,meeting_id);
+        }
+        return null;
+
     }
 }

@@ -201,4 +201,21 @@ public class MeetingService {
         System.out.println("answerList 들어옴");
         return getUserQnAListResList;
     }
+
+    @Transactional(readOnly = true)
+    public GetAnswerRes oneAnswer(User user, int meeting_id){
+        // user랑 meeting_id 넘겨받아서
+        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting_id);
+        UserQnA userQnA = userQnARepository.findByUserIdAndAdminQnAId(user.getId(), adminQnA.getId());
+
+        GetAnswerRes getMeetingRes = new GetAnswerRes();
+        getMeetingRes.setA1(userQnA.getA1());
+        getMeetingRes.setA2(userQnA.getA2());
+        getMeetingRes.setA3(userQnA.getA3());
+        getMeetingRes.setA4(userQnA.getA4());
+        getMeetingRes.setA5(userQnA.getA5());
+        getMeetingRes.setUserId(user.getId());
+
+        return getMeetingRes;
+    }
 }
