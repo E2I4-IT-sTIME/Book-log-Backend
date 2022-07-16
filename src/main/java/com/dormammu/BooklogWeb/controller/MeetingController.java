@@ -151,6 +151,16 @@ public class MeetingController {
             return meetingService.oneAnswer(user,meeting_id);
         }
         return null;
+    }
 
+    @DeleteMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 삭제 api
+    public String deleteAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.deleteAnswer(user, meeting_id, answer_id);
+        }
+        return null;
     }
 }
