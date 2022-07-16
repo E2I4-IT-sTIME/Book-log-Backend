@@ -218,4 +218,31 @@ public class MeetingService {
 
         return getMeetingRes;
     }
+
+    @Transactional
+    public String deleteAnswer(User user, int meeting_id, int answer_id){
+        UserQnA userQnA = userQnARepository.findById(answer_id);
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
+            UserQnA userQnA1 = userQnARepository.findByUserIdAndAdminQnAId(userQnA.getId(), userQnA.getAdminQnA().getId());
+            userQnARepository.delete(userQnA1);
+            return "모임 답변 삭제 완료";
+        }
+        return null;
+    }
+
+    @Transactional
+    public String outUser(User user, int meeting_id, int user_id){
+
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        // 현재인원에서 한명 빠지고 , meeting-user에서 삭제됨
+        if (meeting.getUserId() == user.getId()) {  // 모임 만든사람만 삭제권한이 있으므로 확인해주기
+            meeting.setCur_num(meeting.getCur_num() - 1); // 인원수 -1
+
+            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user_id, meeting_id);
+            meetingUserRepository.delete(meetingUser);
+            return "모임 강퇴 완료";
+        }
+        return null;
+    }
 }

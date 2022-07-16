@@ -151,6 +151,27 @@ public class MeetingController {
             return meetingService.oneAnswer(user,meeting_id);
         }
         return null;
+    }
 
+    @DeleteMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 삭제 api
+    public String deleteAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.deleteAnswer(user, meeting_id, answer_id);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/auth/meeting/{meeting_id}/out/{user_id}")  // 모임 강퇴 api
+    public String outUser(@PathVariable int meeting_id, @PathVariable int user_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.outUser(user, meeting_id, user_id);
+        }
+        return null;
     }
 }
