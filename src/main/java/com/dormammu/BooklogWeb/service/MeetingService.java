@@ -78,19 +78,69 @@ public class MeetingService {
     }
 
     @Transactional
-    public List<Meeting> meetingList(){
+    public List<GetMeetingRes> meetingList(){
         System.out.println("meetingList 들어옴");
         List<Meeting> meetingList = meetingRepository.findAll();
-        System.out.println("리스트 찾음");
-        System.out.println("모임 리스트 출력 : " + meetingList);
-        return meetingList;
+        List<GetMeetingRes> meetingResList = new ArrayList<>();
+
+        for (Meeting mt: meetingList){
+            HashTag hashTag = hashTagRepository.findById(mt.getHashTag().getId());
+            AdminQnA adminQnA = adminQnARepository.findById(mt.getAdminQnA().getId());
+            GetMeetingRes getMeetingRes = GetMeetingRes.builder()
+                    .info(mt.getInfo())
+                    .image(mt.getImage())
+                    .ment(mt.getMent())
+                    .name(mt.getName())
+                    .max_num(mt.getMax_num())
+                    .cur_num(mt.getCur_num())
+                    .onoff(mt.isOnoff())
+                    .a1(hashTag.getTag1())
+                    .a2(hashTag.getTag2())
+                    .a3(hashTag.getTag3())
+                    .a4(hashTag.getTag4())
+                    .a5(hashTag.getTag5())
+                    .q1(adminQnA.getQ1())
+                    .q2(adminQnA.getQ2())
+                    .q3(adminQnA.getQ3())
+                    .q4(adminQnA.getQ4())
+                    .q5(adminQnA.getQ5()).build();
+
+            meetingResList.add(getMeetingRes);
+        }
+        return meetingResList;
     }
 
     @Transactional(readOnly = true)
-    public List<Meeting> myMeetingList(User user){
+    public List<GetMeetingRes> myMeetingList(User user){
         System.out.println("myMeetingList 들어옴");
-        List<Meeting> myMeetingList = meetingRepository.findByUserId(user.getId());
-        System.out.println("내 모임 리스트 출력: " + myMeetingList);
+        List<Meeting> myMeetings = meetingRepository.findByUserId(user.getId());
+//        System.out.println("내 모임: " + myMeetings);
+        List<GetMeetingRes> myMeetingList = new ArrayList<>();
+
+        for (Meeting mt: myMeetings){
+            HashTag hashTag = hashTagRepository.findById(mt.getHashTag().getId());
+            AdminQnA adminQnA = adminQnARepository.findById(mt.getAdminQnA().getId());
+            GetMeetingRes getMeetingRes = GetMeetingRes.builder()
+                    .info(mt.getInfo())
+                    .image(mt.getImage())
+                    .ment(mt.getMent())
+                    .name(mt.getName())
+                    .max_num(mt.getMax_num())
+                    .cur_num(mt.getCur_num())
+                    .onoff(mt.isOnoff())
+                    .a1(hashTag.getTag1())
+                    .a2(hashTag.getTag2())
+                    .a3(hashTag.getTag3())
+                    .a4(hashTag.getTag4())
+                    .a5(hashTag.getTag5())
+                    .q1(adminQnA.getQ1())
+                    .q2(adminQnA.getQ2())
+                    .q3(adminQnA.getQ3())
+                    .q4(adminQnA.getQ4())
+                    .q5(adminQnA.getQ5()).build();
+            myMeetingList.add(getMeetingRes);
+        }
+
         return myMeetingList;
     }
 

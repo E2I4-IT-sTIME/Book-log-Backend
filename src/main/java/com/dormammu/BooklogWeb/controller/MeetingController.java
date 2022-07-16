@@ -34,13 +34,12 @@ public class MeetingController {
     }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API
-    public List<Meeting> meetingList(){
-        System.out.println("controller로 들어옴");
+    public List<GetMeetingRes> meetingList(){
         return meetingService.meetingList();
     }
 
     @GetMapping("/api/user/{id}/meetings")  // 내 모임 조회 API
-    public List<Meeting> myMeetingList(@PathVariable int id, Authentication authentication){
+    public List<GetMeetingRes> myMeetingList(@PathVariable int id, Authentication authentication){
 
         User user = userRepository.findById(id);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
