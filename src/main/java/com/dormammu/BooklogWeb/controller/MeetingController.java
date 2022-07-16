@@ -163,4 +163,15 @@ public class MeetingController {
         }
         return null;
     }
+
+    @DeleteMapping("/auth/meeting/{meeting_id}/out/{user_id}")  // 모임 강퇴 api
+    public String outUser(@PathVariable int meeting_id, @PathVariable int user_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.outUser(user, meeting_id, user_id);
+        }
+        return null;
+    }
 }

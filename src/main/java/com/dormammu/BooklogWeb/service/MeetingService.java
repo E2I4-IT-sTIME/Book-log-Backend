@@ -230,4 +230,19 @@ public class MeetingService {
         }
         return null;
     }
+
+    @Transactional
+    public String outUser(User user, int meeting_id, int user_id){
+
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        // 현재인원에서 한명 빠지고 , meeting-user에서 삭제됨
+        if (meeting.getUserId() == user.getId()) {  // 모임 만든사람만 삭제권한이 있으므로 확인해주기
+            meeting.setCur_num(meeting.getCur_num() - 1); // 인원수 -1
+
+            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user_id, meeting_id);
+            meetingUserRepository.delete(meetingUser);
+            return "모임 강퇴 완료";
+        }
+        return null;
+    }
 }
