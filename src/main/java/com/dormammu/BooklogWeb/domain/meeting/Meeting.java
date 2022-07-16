@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -58,5 +59,8 @@ public class Meeting {
     @OneToOne
     @JoinColumn(name = "adminQnA_id")
     private AdminQnA adminQnA;
+
+    @Nullable
+    private String notice;
 
 }

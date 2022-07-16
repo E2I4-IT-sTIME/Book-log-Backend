@@ -12,10 +12,7 @@ import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.MeetingRes;
-import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
-import com.dormammu.BooklogWeb.dto.PostAnswerReq;
-import com.dormammu.BooklogWeb.dto.PostMeetingReq;
+import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,4 +173,20 @@ public class MeetingService {
 //        System.out.println("answerList 들어옴");
 //        return "들어옴";
 //    }
+
+    @Transactional
+    public String createNotice(int meeting_id, User user, PostNoticeReq postNoticeReq){
+
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        if (meeting.getUserId() == user.getId()) {
+            System.out.println(meeting.getName());
+            System.out.println(postNoticeReq.getNotice());
+
+            meeting.setNotice(postNoticeReq.getNotice());
+            meetingRepository.save(meeting);
+            return "공지 생성 완료";
+        }
+
+        return null;
+    }
 }

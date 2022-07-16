@@ -6,10 +6,7 @@ import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.MeetingRes;
-import com.dormammu.BooklogWeb.dto.PatchMeetingReq;
-import com.dormammu.BooklogWeb.dto.PostAnswerReq;
-import com.dormammu.BooklogWeb.dto.PostMeetingReq;
+import com.dormammu.BooklogWeb.dto.*;
 import com.dormammu.BooklogWeb.service.MeetingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -146,4 +143,11 @@ public class MeetingController {
 //        }
 //        return null;
 //    }
+
+    @PatchMapping("/auth/meeting/{meeting_id}/notice")
+    public String createNotice(@PathVariable int meeting_id, @RequestBody PostNoticeReq postNoticeReq, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        meetingService.createNotice(meeting_id, principalDetails.getUser(), postNoticeReq);
+        return "공지 생성 완료";
+    }
 }
