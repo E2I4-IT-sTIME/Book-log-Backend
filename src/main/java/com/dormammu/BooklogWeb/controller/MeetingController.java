@@ -173,27 +173,18 @@ public class MeetingController {
         }
         return null;
     }
-//
-//    @GetMapping("/auth/meetings/{id}/answers/{answers_id}")  // 모임 답변 조회 api
-//    public String answerList(@PathVariable int id, @PathVariable int answers_id, Authentication authentication){
-//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//        Meeting meeting = meetingRepository.findById(id);
-//        User user = userRepository.findById(principalDetails.getUser().getId());
-//
-//        if (user.getId() == principalDetails.getUser().getId()){  // 로그인한 사용자 == 접근한 사용자
-//            // 접근한 사람이 모임 관리자인지 확인
-//            if (user.getId() == meeting.getUserId()) {
-//                return meetingService.answerList(id, answers_id);
-//            }
-//            return null;
-//        }
-//        return null;
-//    }
 
-    @PatchMapping("/auth/meeting/{meeting_id}/notice")
+    @PatchMapping("/auth/meeting/{meeting_id}/notice")  // 모임 공지 생성 api
     public String createNotice(@PathVariable int meeting_id, @RequestBody PostNoticeReq postNoticeReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         meetingService.createNotice(meeting_id, principalDetails.getUser(), postNoticeReq);
         return "공지 생성 완료";
+    }
+
+    @DeleteMapping("/auth/meeting/{meeting_id}/notice")  // 모임 공지 삭제 api
+    public String deleteNotice(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        meetingService.deleteNotice(meeting_id, principalDetails.getUser());
+        return "공지 삭제 완료";
     }
 }
