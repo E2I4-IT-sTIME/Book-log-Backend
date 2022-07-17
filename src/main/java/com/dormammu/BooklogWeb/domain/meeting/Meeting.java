@@ -67,7 +67,5 @@ public class Meeting {
 
     @Nullable
     private String notice;
-//
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    private List<Comment> comments;
+
 }

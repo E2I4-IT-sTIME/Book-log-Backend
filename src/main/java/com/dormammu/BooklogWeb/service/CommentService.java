@@ -25,4 +25,28 @@ public class CommentService {
 
         return "댓글 작성 완료";
     }
+
+    @Transactional
+    public String updateComment(User user, int comment_id, PostCommentReq postCommentReq){
+        Comment comment = commentRepository.findById(comment_id);
+
+        if (comment.getUser().getId() == user.getId()) {
+            comment.setContent(postCommentReq.getContent());
+            return "댓글 수정 완료";
+        } else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public String deleteComment(User user, int comment_id){
+        Comment comment = commentRepository.findById(comment_id);
+
+        if (comment.getUser().getId() == user.getId()){
+            commentRepository.delete(comment);
+            return "댓글 삭제 완료";
+        } else{
+            return null;
+        }
+    }
 }

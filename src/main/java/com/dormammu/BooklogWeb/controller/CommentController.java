@@ -7,10 +7,7 @@ import com.dormammu.BooklogWeb.dto.PostCommentReq;
 import com.dormammu.BooklogWeb.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +20,19 @@ public class CommentController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         commentService.createComment(meeting_id, principalDetails.getUser(), postCommentReq);
         return "댓글 생성 완료";
+    }
+
+    @PatchMapping("/auth/meeting/{meeting_id}/comment/{comment_id}")  // 댓글 수정 api
+    public String updateComment(@PathVariable int meeting_id, @PathVariable int comment_id, Authentication authentication, @RequestBody PostCommentReq postCommentReq){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        commentService.updateComment(principalDetails.getUser(), comment_id, postCommentReq);
+        return "댓글 수정 완료";
+    }
+
+    @DeleteMapping("/auth/meeting/{meeting_id}/comment/{comment_id}")  // 댓글 삭제 api
+    public String deleteComment(@PathVariable int meeting_id, @PathVariable int comment_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        commentService.deleteComment(principalDetails.getUser(), comment_id);
+        return "댓글 삭제 완료";
     }
 }
