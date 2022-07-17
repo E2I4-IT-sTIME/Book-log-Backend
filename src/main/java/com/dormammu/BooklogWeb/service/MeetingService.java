@@ -230,17 +230,6 @@ public class MeetingService {
         return "답변 생성 완료";
     }
 
-//
-//    @Transactional(readOnly = true)
-////    public List<UserQnA> answerList(int id, int answers_id){
-////        List<UserQnA> userqnaList = userQnARepository.findAll();
-////        System.out.println(userqnaList);
-////        return userqnaList;
-//    public String answerList(int id, int answers_id){
-//        System.out.println("answerList 들어옴");
-//        return "들어옴";
-//    }
-
     @Transactional
     public String createNotice(int meeting_id, User user, PostNoticeReq postNoticeReq){
 
@@ -252,6 +241,16 @@ public class MeetingService {
             meeting.setNotice(postNoticeReq.getNotice());
             meetingRepository.save(meeting);
             return "공지 생성 완료";
+        }
+        return null;
+    }
+
+    @Transactional
+    public String deleteNotice(int meeting_id, User user){
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        if (meeting.getUserId() == user.getId()){
+            meeting.setNotice(null);
+            return "공지 삭제 완료";
         }
         return null;
     }
