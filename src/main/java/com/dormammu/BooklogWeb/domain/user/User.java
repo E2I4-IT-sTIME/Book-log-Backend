@@ -1,11 +1,11 @@
 package com.dormammu.BooklogWeb.domain.user;
 
+import com.dormammu.BooklogWeb.domain.comment.Comment;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -73,5 +73,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<MeetingUser> meetingUsers = new ArrayList<>();
+//
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Comment> comments;
 
 }

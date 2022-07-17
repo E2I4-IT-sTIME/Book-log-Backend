@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 //import com.dormammu.BooklogWeb.domain.board.MeetingBoard;
+import com.dormammu.BooklogWeb.domain.comment.Comment;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -66,4 +67,7 @@ public class Meeting {
 
     @Nullable
     private String notice;
+//
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private List<Comment> comments;
 }
