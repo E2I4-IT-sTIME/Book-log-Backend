@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class ReviewListRes {
     private int userId;
-    private String nickname;
+    private String username;
 
     List<ReviewRes> reviewResList;
 

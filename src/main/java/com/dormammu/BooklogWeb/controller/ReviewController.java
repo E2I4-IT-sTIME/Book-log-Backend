@@ -48,7 +48,7 @@ public class ReviewController {
     public String updateReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication, @PathVariable int review_id) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         reviewService.updateReview(postReviewReq, review_id, principalDetails.getUser());
-        return "서평 생성 완료";
+        return "서평 수정 완료";
     }
 
     // 서평 삭제
