@@ -54,14 +54,7 @@ public class UserService {
         return validatorResult;
     }
 
-    /* 아이디, 이메일 중복 여부 확인 */
-    @Transactional
-    public void checkUsernameDuplication(JoinRequestDto dto) {
-        boolean usernameDuplicate = userRepository.existsByUsername(dto.getUsername());
-        if (usernameDuplicate) {
-            throw new IllegalStateException("이미 존재하는 아이디입니다.");
-        }
-    }
+    /* 이메일 중복 여부 확인 */
 
     @Transactional
     public void checkEmailDuplication(JoinRequestDto dto) {

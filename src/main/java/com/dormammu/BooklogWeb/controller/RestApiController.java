@@ -44,7 +44,6 @@ public class RestApiController {
                 return validatorResult.get(key);
             }
         }
-        userService.checkUsernameDuplication(joinRequestDto);
         userService.checkEmailDuplication(joinRequestDto);
         joinRequestDto.setPassword(bCryptPasswordEncoder.encode(joinRequestDto.getPassword()));
         joinRequestDto.setRoles("ROLE_USER");
