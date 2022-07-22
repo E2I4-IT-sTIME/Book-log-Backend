@@ -42,7 +42,7 @@ public class ReviewService {
 
         ReviewListRes reviewListRes = ReviewListRes.builder()
                 .userId(user.getId())
-                .nickname(user.getNickname())
+                .username(user.getUsername())
                 .reviewResList(reviewResList).build();
         return reviewListRes;
     }
@@ -99,7 +99,7 @@ public class ReviewService {
             getCommunityRes.setWriter("작가");
             getCommunityRes.setPublisher("출판사");
             getCommunityRes.setImg("img123");
-            getCommunityRes.setNickname(r.getUser().getNickname());
+            getCommunityRes.setUsername(r.getUser().getUsername());
 
             getCommunityResList.add(getCommunityRes);
         }
@@ -116,7 +116,7 @@ public class ReviewService {
         getCommunityRes.setWriter("작가(더미데이터)");
         getCommunityRes.setPublisher("출판사(더미데이터");
         getCommunityRes.setImg("img123(더미데이터)");
-        getCommunityRes.setNickname(review.getUser().getNickname());
+        getCommunityRes.setUsername(review.getUser().getUsername());
         getCommunityRes.setContent(review.getContent());
 
         return getCommunityRes;
