@@ -51,12 +51,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String username =
                 JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
-                        .getClaim("username").asString();  // 토큰을 서명해서 username가져오기
+                        .getClaim("email").asString();  // 토큰을 서명해서 username가져오기
 
         // null이 아니면 서명이 정상적으로 됨
         if (username != null){
 //            System.out.println("username 정상");
-            User user = userRepository.findByUsername(username);
+            User user = userRepository.findByEmail(username);
 
             // 인증은 토큰 검증시 끝. 인증을 하기 위해서가 아닌 스프링 시큐리티가 수행해주는 권한 처리를 위해
             // 아래와 같이 토큰을 만들어서 Authentication 객체를 강제로 만들고 그걸 세션에 저장!

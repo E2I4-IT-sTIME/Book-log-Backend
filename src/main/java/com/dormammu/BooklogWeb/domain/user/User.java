@@ -35,8 +35,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = true)
-    private String nickname = "닉네임"; // 나중에 db create해서 이 필드 지우기
+//    @Column(nullable = true)
+//    private String nickname = "닉네임"; // 나중에 db create해서 이 필드 지우기
 
     @Column(nullable = false, unique = true)
     private String email;
