@@ -1,7 +1,6 @@
 package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.domain.QnA.UserQnA;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
@@ -22,7 +21,7 @@ public class MeetingController {
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
 
-    @PostMapping("/auth/meeting")
+    @PostMapping("/auth/meeting")  // 모임 생성 API
     public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userRepository.findById(principalDetails.getUser().getId());
@@ -34,14 +33,18 @@ public class MeetingController {
         return null;
     }
 
-    @GetMapping("/meetings")
-    public List<Meeting> meetingList(){
-        System.out.println("controller로 들어옴");
+    @GetMapping("/meetings")  // 모임 리스트 조회 API
+    public List<GetMeetingRes> meetingList(){
         return meetingService.meetingList();
     }
 
-    @GetMapping("/api/user/{id}/meetings")
-    public List<Meeting> myMeetingList(@PathVariable int id, Authentication authentication){
+    @GetMapping("/meetings/{meeting_id}")  // 모임 개별 조회 API
+    public GetMeetingRes oneMeeting(@PathVariable int meeting_id){
+        return meetingService.oneMeeting(meeting_id);
+    }
+
+    @GetMapping("/api/user/{id}/meetings")  // 내 모임 조회 API
+    public List<GetMeetingRes> myMeetingList(@PathVariable int id, Authentication authentication){
 
         User user = userRepository.findById(id);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -52,9 +55,8 @@ public class MeetingController {
         return null;
     }
 
-    @GetMapping("/auth/meetings/{id}")
+    @GetMapping("/auth/meetings/{id}")  // 모임 입장 API
     public String addMeeting(@PathVariable int id, Authentication authentication){
-        System.out.println("들어옴1");
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Meeting meeting = meetingRepository.findById(id);
         User user = userRepository.findById(principalDetails.getUser().getId());
@@ -66,7 +68,7 @@ public class MeetingController {
         return null;
     }
 
-    @DeleteMapping("/auth/meeting/{id}/out")
+    @DeleteMapping("/auth/meeting/{id}/out")  // 모임 탈퇴 API
     public String outMeeting(@PathVariable int id, Authentication authentication){
         Meeting meeting = meetingRepository.findById(id);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -78,7 +80,7 @@ public class MeetingController {
         return null;
     }
 
-    @PatchMapping("/auth/meeting/{id}")
+    @PatchMapping("/auth/meeting/{id}")  // 모임 수정 API
     public String updateMeeting(@PathVariable int id, Authentication authentication, @RequestBody PatchMeetingReq patchMeetingReq){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Meeting meeting = meetingRepository.findById(id);
@@ -90,20 +92,20 @@ public class MeetingController {
         return null;
     }
 
-    //    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제
-//    public String deleteMeeting(@PathVariable int id, Authentication authentication){
-//
-//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//        Meeting meeting = meetingRepository.findById(id);
-//        User user = userRepository.findById(principalDetails.getUser().getId());
-//
-//        if(user.getId() == principalDetails.getUser().getId()){
-//            return meetingService.deleteMeeting(user, meeting);
-//        }
-//        return null;
-//    }
+    @DeleteMapping("/auth/meeting/{id}")  // 모임 삭제 API
+    public String deleteMeeting(@PathVariable int id, Authentication authentication){
 
-    @GetMapping("/auth/{id}/question")
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(id);
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if(user.getId() == principalDetails.getUser().getId()){
+            return meetingService.deleteMeeting(user, meeting);
+        }
+        return null;
+    }
+
+    @GetMapping("/auth/{id}/question")  // 모임 질문 조회 API
     public MeetingRes questionList(@PathVariable int id, Authentication authentication){
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -116,38 +118,78 @@ public class MeetingController {
         return null;
     }
 
-    @PostMapping("/auth/{id}/answer")
+    @PostMapping("/auth/{id}/answer")  // 모임 답변 생성 API
     public String createAnswer(@RequestBody PostAnswerReq postAnswerReq, @PathVariable int id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Meeting meeting = meetingRepository.findById(id);
         User user = userRepository.findById(principalDetails.getUser().getId());
 
         if (user.getId() == principalDetails.getUser().getId()) {
-           return meetingService.createAnswer(id, postAnswerReq);
+           return meetingService.createAnswer(principalDetails.getUser(), id, postAnswerReq);
         }
         return null;
     }
-//
-//    @GetMapping("/auth/meetings/{id}/answers/{answers_id}")  // 모임 답변 조회 api
-//    public String answerList(@PathVariable int id, @PathVariable int answers_id, Authentication authentication){
-//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-//        Meeting meeting = meetingRepository.findById(id);
-//        User user = userRepository.findById(principalDetails.getUser().getId());
-//
-//        if (user.getId() == principalDetails.getUser().getId()){  // 로그인한 사용자 == 접근한 사용자
-//            // 접근한 사람이 모임 관리자인지 확인
-//            if (user.getId() == meeting.getUserId()) {
-//                return meetingService.answerList(id, answers_id);
-//            }
-//            return null;
-//        }
-//        return null;
-//    }
 
-    @PatchMapping("/auth/meeting/{meeting_id}/notice")
+    @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
+    public List<GetUserQnAListRes> answerList(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){  // 로그인한 사용자 == 접근한 사용자
+            // 접근한 사람이 모임 관리자인지 확인
+            if (user.getId() == meeting.getUserId()) {
+                return meetingService.answerList(meeting_id);
+            }
+            return null;
+        }
+        return null;
+    }
+
+    @GetMapping("/auth/meetings/{meeting_id}/answers/{answer_id}")  // 모임 답변 개별 조회 api
+    public GetAnswerRes oneAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.oneAnswer(user,meeting_id);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 삭제 api
+    public String deleteAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.deleteAnswer(user, meeting_id, answer_id);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/auth/meeting/{meeting_id}/out/{user_id}")  // 모임 강퇴 api
+    public String outUser(@PathVariable int meeting_id, @PathVariable int user_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.outUser(user, meeting_id, user_id);
+        }
+        return null;
+    }
+
+    @PatchMapping("/auth/meeting/{meeting_id}/notice")  // 모임 공지 생성 api
     public String createNotice(@PathVariable int meeting_id, @RequestBody PostNoticeReq postNoticeReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         meetingService.createNotice(meeting_id, principalDetails.getUser(), postNoticeReq);
         return "공지 생성 완료";
+    }
+
+    @DeleteMapping("/auth/meeting/{meeting_id}/notice")  // 모임 공지 삭제 api
+    public String deleteNotice(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        meetingService.deleteNotice(meeting_id, principalDetails.getUser());
+        return "공지 삭제 완료";
     }
 }

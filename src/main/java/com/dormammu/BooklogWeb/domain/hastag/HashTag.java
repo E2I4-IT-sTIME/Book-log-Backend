@@ -1,9 +1,12 @@
 package com.dormammu.BooklogWeb.domain.hastag;
 
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -12,6 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "hastag")
+@ToString(exclude = "meeting")
 public class HashTag {
 
     @Id
@@ -30,5 +34,4 @@ public class HashTag {
 
     @OneToOne(mappedBy = "hashTag", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Meeting meeting;
-
 }
