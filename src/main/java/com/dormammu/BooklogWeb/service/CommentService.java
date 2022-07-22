@@ -5,10 +5,15 @@ import com.dormammu.BooklogWeb.domain.comment.CommentRepository;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
+import com.dormammu.BooklogWeb.dto.CommentListRes;
+import com.dormammu.BooklogWeb.dto.CommentRes;
 import com.dormammu.BooklogWeb.dto.PostCommentReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -48,5 +53,26 @@ public class CommentService {
         } else{
             return null;
         }
+    }
+
+    @Transactional(readOnly = true)
+    public CommentListRes commentsList(int meeting_id){
+
+        List<Comment> commentList = commentRepository.findByMeetingId(meeting_id);
+
+        List<CommentRes> commentResList = new ArrayList<>();
+
+        for (Comment cm: commentList){
+            CommentRes commentRes = CommentRes.builder()
+                    .content(cm.getContent())
+                    .username(cm.getUser().getUsername())
+                    .build();
+            commentResList.add(commentRes);
+//            System.out.println(cm.getContent());
+        }
+
+        CommentListRes commentListRes = CommentListRes.builder()
+                .commentResList(commentResList).build();
+        return commentListRes;
     }
 }
