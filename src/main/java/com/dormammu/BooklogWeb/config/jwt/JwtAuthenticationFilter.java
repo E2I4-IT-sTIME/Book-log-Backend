@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // authentication객체가 session영역에 저장된다. => 로그인이 되었음
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("로그인 완료됨 : " + principalDetails.getUser().getUsername());  // 로그인이 정상적으로 되었음
+        System.out.println("로그인 완료됨 : " + principalDetails.getUser().getEmail());  // 로그인이 정상적으로 되었음
 
         // 리턴의 이유는 권한관리를sercuriy가 대신 해주기에 편함.
         // 굳이 JWT 토큰을 사용하면서 세션을 만들 필요가 없지만, 권한처리의 문제때문에 session에 넣어준다.
@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(principalDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))  // 만료시간 1000이 1초. 1분*10
                 .withClaim("id", principalDetails.getUser().getId())
-                .withClaim("username", principalDetails.getUser().getUsername())
+                .withClaim("email", principalDetails.getUser().getEmail())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // 내 서버만 아는 고유한 값
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);

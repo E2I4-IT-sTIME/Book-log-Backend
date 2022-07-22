@@ -14,6 +14,6 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
     List<Meeting> findByUsers(User user);
     List<Meeting> findByUserId(int userId);
     Meeting findById(int id);
-    List<Meeting> findAll();
+    //List<Meeting> findAll();
     AdminQnA findByAdminQnAId(int adminQnAId);
 }

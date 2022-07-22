@@ -39,6 +39,8 @@ public class PostMeetingReq {
     private String h4;
     private String h5;
 
+    private Boolean onoff;
+
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate;
 
