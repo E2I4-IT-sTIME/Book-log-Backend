@@ -111,6 +111,33 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
+    public GetMeetingRes oneMeeting(int meeting_id){
+        GetMeetingRes getMeetingRes = new GetMeetingRes();
+        Meeting meeting = meetingRepository.findById(meeting_id);
+
+        getMeetingRes.setInfo(meeting.getInfo());
+        getMeetingRes.setImage(meeting.getImage());
+        getMeetingRes.setMent(meeting.getMent());
+        getMeetingRes.setName(meeting.getName());
+        getMeetingRes.setMax_num(meeting.getMax_num());
+        getMeetingRes.setCur_num(meeting.getCur_num());
+        getMeetingRes.setOnoff(meeting.isOnoff());
+        getMeetingRes.setQ1(meeting.getAdminQnA().getQ1());
+        getMeetingRes.setQ2(meeting.getAdminQnA().getQ2());
+        getMeetingRes.setQ3(meeting.getAdminQnA().getQ3());
+        getMeetingRes.setQ4(meeting.getAdminQnA().getQ4());
+        getMeetingRes.setQ5(meeting.getAdminQnA().getQ5());
+
+        getMeetingRes.setA1(meeting.getHashTag().getTag1());
+        getMeetingRes.setA2(meeting.getHashTag().getTag2());
+        getMeetingRes.setA3(meeting.getHashTag().getTag3());
+        getMeetingRes.setA4(meeting.getHashTag().getTag4());
+        getMeetingRes.setA5(meeting.getHashTag().getTag5());
+
+        return getMeetingRes;
+    }
+
+    @Transactional(readOnly = true)
     public List<GetMeetingRes> myMeetingList(User user){
         System.out.println("myMeetingList 들어옴");
         List<Meeting> myMeetings = meetingRepository.findByUserId(user.getId());

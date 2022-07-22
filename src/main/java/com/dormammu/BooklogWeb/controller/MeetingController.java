@@ -38,6 +38,11 @@ public class MeetingController {
         return meetingService.meetingList();
     }
 
+    @GetMapping("/meetings/{meeting_id}")  // 모임 개별 조회 API
+    public GetMeetingRes oneMeeting(@PathVariable int meeting_id){
+        return meetingService.oneMeeting(meeting_id);
+    }
+
     @GetMapping("/api/user/{id}/meetings")  // 내 모임 조회 API
     public List<GetMeetingRes> myMeetingList(@PathVariable int id, Authentication authentication){
 
