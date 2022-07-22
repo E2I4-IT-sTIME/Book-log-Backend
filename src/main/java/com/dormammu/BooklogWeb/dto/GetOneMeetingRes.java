@@ -1,10 +1,8 @@
 package com.dormammu.BooklogWeb.dto;
 
 
-import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import lombok.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -12,13 +10,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetMeetingRes {
+public class GetOneMeetingRes {
     private int id; // meeting_id
     private String info;
     private String image;
     private String name;
-    private int max_num;
-    private int cur_num;
+    private String notice;
     private boolean onoff;
 
     List<String> tags;

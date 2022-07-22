@@ -24,13 +24,9 @@ public class MeetingController {
     @PostMapping("/auth/meeting")  // 모임 생성 API
     public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        User user = userRepository.findById(principalDetails.getUser().getId());
-        if (user.getId() == principalDetails.getUser().getId()){
-            meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
-            return "모임 생성 완료";
-
-        }
-        return null;
+        System.out.println("*******************");
+        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
+        return "모임 생성 완료";
     }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API
@@ -39,7 +35,7 @@ public class MeetingController {
     }
 
     @GetMapping("/meetings/{meeting_id}")  // 모임 개별 조회 API
-    public GetMeetingRes oneMeeting(@PathVariable int meeting_id){
+    public GetOneMeetingRes oneMeeting(@PathVariable int meeting_id){
         return meetingService.oneMeeting(meeting_id);
     }
 
@@ -131,30 +127,26 @@ public class MeetingController {
     }
 
     @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
-    public List<GetUserQnAListRes> answerList(@PathVariable int meeting_id, Authentication authentication){
+    public List<GetAnswerRes> answerList(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Meeting meeting = meetingRepository.findById(meeting_id);
         User user = userRepository.findById(principalDetails.getUser().getId());
 
-        if (user.getId() == principalDetails.getUser().getId()){  // 로그인한 사용자 == 접근한 사용자
-            // 접근한 사람이 모임 관리자인지 확인
-            if (user.getId() == meeting.getUserId()) {
-                return meetingService.answerList(meeting_id);
-            }
-            return null;
+        // 접근한 사람이 모임 관리자인지 확인
+        if (user.getId() == meeting.getUserId()) {
+            return meetingService.answerList(meeting_id);
         }
         return null;
     }
 
-    @GetMapping("/auth/meetings/{meeting_id}/answers/{answer_id}")  // 모임 답변 개별 조회 api
-    public GetAnswerRes oneAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
+    @GetMapping("/auth/meeting/{meeting_id}/answers/{user_id}")  // 모임 답변 개별 조회 api
+    public GetAnswerRes oneAnswer(@PathVariable int meeting_id, Authentication authentication, @PathVariable int user_id){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        User user = userRepository.findById(principalDetails.getUser().getId());
+        User user = userRepository.findById(user_id);
 
-        if (user.getId() == principalDetails.getUser().getId()){
-            return meetingService.oneAnswer(user,meeting_id);
-        }
-        return null;
+
+        return meetingService.oneAnswer(user,meeting_id);
+
     }
 
     @DeleteMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 삭제 api

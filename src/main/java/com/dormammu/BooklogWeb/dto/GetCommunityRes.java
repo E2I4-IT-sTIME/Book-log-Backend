@@ -15,7 +15,7 @@ public class GetCommunityRes {
     private String img;
     private String writer;
     private String publisher;
-    private String nickname;
+    private String username;
 
     @Nullable
     private String content;

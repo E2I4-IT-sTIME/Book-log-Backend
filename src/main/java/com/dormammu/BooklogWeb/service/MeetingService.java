@@ -14,6 +14,7 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ public class MeetingService {
         meeting.setUserId(user.getId());
         meeting.setCur_num(1);
         meeting.setMax_num(postMeetingReq.getMax_num());
+        meeting.setOnoff(postMeetingReq.getOnoff());
 
         AdminQnA adminQnA = new AdminQnA();
         adminQnA.setMeeting(meeting);
@@ -85,25 +87,23 @@ public class MeetingService {
 
         for (Meeting mt: meetingList){
             HashTag hashTag = hashTagRepository.findById(mt.getHashTag().getId());
-            AdminQnA adminQnA = adminQnARepository.findById(mt.getAdminQnA().getId());
+            List<String> tags = new ArrayList<>();
+            System.out.println(hashTag.toString()); // hashTag.toString()
+            tags.add(hashTag.getTag1());
+            tags.add(hashTag.getTag2());
+            tags.add(hashTag.getTag3());
+            tags.add(hashTag.getTag4());
+            tags.add(hashTag.getTag5());
             GetMeetingRes getMeetingRes = GetMeetingRes.builder()
+                    .id(mt.getId())
                     .info(mt.getInfo())
                     .image(mt.getImage())
-                    .ment(mt.getMent())
                     .name(mt.getName())
                     .max_num(mt.getMax_num())
                     .cur_num(mt.getCur_num())
                     .onoff(mt.isOnoff())
-                    .a1(hashTag.getTag1())
-                    .a2(hashTag.getTag2())
-                    .a3(hashTag.getTag3())
-                    .a4(hashTag.getTag4())
-                    .a5(hashTag.getTag5())
-                    .q1(adminQnA.getQ1())
-                    .q2(adminQnA.getQ2())
-                    .q3(adminQnA.getQ3())
-                    .q4(adminQnA.getQ4())
-                    .q5(adminQnA.getQ5()).build();
+                    .tags(tags)
+                    .build();
 
             meetingResList.add(getMeetingRes);
         }
@@ -111,30 +111,29 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public GetMeetingRes oneMeeting(int meeting_id){
-        GetMeetingRes getMeetingRes = new GetMeetingRes();
+    public GetOneMeetingRes oneMeeting(int meeting_id){
+        GetOneMeetingRes getOneMeetingRes = new GetOneMeetingRes();
         Meeting meeting = meetingRepository.findById(meeting_id);
 
-        getMeetingRes.setInfo(meeting.getInfo());
-        getMeetingRes.setImage(meeting.getImage());
-        getMeetingRes.setMent(meeting.getMent());
-        getMeetingRes.setName(meeting.getName());
-        getMeetingRes.setMax_num(meeting.getMax_num());
-        getMeetingRes.setCur_num(meeting.getCur_num());
-        getMeetingRes.setOnoff(meeting.isOnoff());
-        getMeetingRes.setQ1(meeting.getAdminQnA().getQ1());
-        getMeetingRes.setQ2(meeting.getAdminQnA().getQ2());
-        getMeetingRes.setQ3(meeting.getAdminQnA().getQ3());
-        getMeetingRes.setQ4(meeting.getAdminQnA().getQ4());
-        getMeetingRes.setQ5(meeting.getAdminQnA().getQ5());
+        getOneMeetingRes.setId(meeting.getId());
+        getOneMeetingRes.setInfo(meeting.getInfo());
+        getOneMeetingRes.setImage(meeting.getImage());
+        getOneMeetingRes.setName(meeting.getName());
+        getOneMeetingRes.setNotice(meeting.getNotice());
+        getOneMeetingRes.setOnoff(meeting.isOnoff());
 
-        getMeetingRes.setA1(meeting.getHashTag().getTag1());
-        getMeetingRes.setA2(meeting.getHashTag().getTag2());
-        getMeetingRes.setA3(meeting.getHashTag().getTag3());
-        getMeetingRes.setA4(meeting.getHashTag().getTag4());
-        getMeetingRes.setA5(meeting.getHashTag().getTag5());
+        HashTag hashTag = hashTagRepository.findById(meeting.getHashTag().getId());
+        List<String> tags = new ArrayList<>();
+        System.out.println(hashTag.toString()); // hashTag.toString()
+        tags.add(hashTag.getTag1());
+        tags.add(hashTag.getTag2());
+        tags.add(hashTag.getTag3());
+        tags.add(hashTag.getTag4());
+        tags.add(hashTag.getTag5());
 
-        return getMeetingRes;
+        getOneMeetingRes.setTags(tags);
+
+        return getOneMeetingRes;
     }
 
     @Transactional(readOnly = true)
@@ -150,21 +149,22 @@ public class MeetingService {
             GetMeetingRes getMeetingRes = GetMeetingRes.builder()
                     .info(mt.getInfo())
                     .image(mt.getImage())
-                    .ment(mt.getMent())
+//                    .ment(mt.getMent())
                     .name(mt.getName())
                     .max_num(mt.getMax_num())
                     .cur_num(mt.getCur_num())
                     .onoff(mt.isOnoff())
-                    .a1(hashTag.getTag1())
-                    .a2(hashTag.getTag2())
-                    .a3(hashTag.getTag3())
-                    .a4(hashTag.getTag4())
-                    .a5(hashTag.getTag5())
-                    .q1(adminQnA.getQ1())
-                    .q2(adminQnA.getQ2())
-                    .q3(adminQnA.getQ3())
-                    .q4(adminQnA.getQ4())
-                    .q5(adminQnA.getQ5()).build();
+//                    .a1(hashTag.getTag1())
+//                    .a2(hashTag.getTag2())
+//                    .a3(hashTag.getTag3())
+//                    .a4(hashTag.getTag4())
+//                    .a5(hashTag.getTag5())
+//                    .q1(adminQnA.getQ1())
+//                    .q2(adminQnA.getQ2())
+//                    .q3(adminQnA.getQ3())
+//                    .q4(adminQnA.getQ4())
+//                    .q5(adminQnA.getQ5())
+                    .build();
             myMeetingList.add(getMeetingRes);
         }
 
@@ -284,25 +284,39 @@ public class MeetingService {
 
 
     @Transactional(readOnly = true)
-    public List<GetUserQnAListRes> answerList(int meeting_id){
+    public List<GetAnswerRes> answerList(int meeting_id){
         Meeting meeting = meetingRepository.findById(meeting_id);
 
         List<UserQnA> userQnAList =  userQnARepository.findByAdminQnAId(meeting.getAdminQnA().getId());
-        List<GetUserQnAListRes> getUserQnAListResList =  new ArrayList<>();
+        List<AdminQnA> adminQnAList = adminQnARepository.findByMeetingId2(meeting_id);
+
+        List<GetAnswerRes> getAnswerResList =  new ArrayList<>();
 
         for (UserQnA userqna : userQnAList){
-            GetUserQnAListRes getUserQnAListRes = new GetUserQnAListRes();
-            getUserQnAListRes.setUserId(userqna.getUserId());
-            getUserQnAListRes.setA1(userqna.getA1());
-            getUserQnAListRes.setA2(userqna.getA2());
-            getUserQnAListRes.setA3(userqna.getA3());
-            getUserQnAListRes.setA4(userqna.getA4());
-            getUserQnAListRes.setA5(userqna.getA5());
+            GetAnswerRes getAnswerRes = new GetAnswerRes();
 
-            getUserQnAListResList.add(getUserQnAListRes);
+
+            User user = userRepository.findById(userqna.getUserId());
+            getAnswerRes.setUsername(user.getUsername());
+            getAnswerRes.setEmail(user.getEmail());
+
+//            getAnswerRes.setAnswers().add(userqna.getA1());
+//            userQnAList.add(userqna.getA2());
+//            userQnAList.add(userqna.getA3());
+//            userQnAList.add(userqna.getA4());
+
+            HashTag hashTag = hashTagRepository.findById(meeting.getHashTag().getId());
+            List<String> tags = new ArrayList<>();
+            System.out.println(hashTag.toString()); // hashTag.toString()
+            tags.add(hashTag.getTag1());
+            tags.add(hashTag.getTag2());
+            tags.add(hashTag.getTag3());
+            tags.add(hashTag.getTag4());
+            tags.add(hashTag.getTag5());
+
+            getAnswerResList.add(getAnswerRes);
         }
-        System.out.println("answerList 들어옴");
-        return getUserQnAListResList;
+        return getAnswerResList;
     }
 
     @Transactional(readOnly = true)
@@ -312,12 +326,27 @@ public class MeetingService {
         UserQnA userQnA = userQnARepository.findByUserIdAndAdminQnAId(user.getId(), adminQnA.getId());
 
         GetAnswerRes getMeetingRes = new GetAnswerRes();
-        getMeetingRes.setA1(userQnA.getA1());
-        getMeetingRes.setA2(userQnA.getA2());
-        getMeetingRes.setA3(userQnA.getA3());
-        getMeetingRes.setA4(userQnA.getA4());
-        getMeetingRes.setA5(userQnA.getA5());
-        getMeetingRes.setUserId(user.getId());
+
+        getMeetingRes.setUsername(user.getUsername());
+        getMeetingRes.setEmail(user.getEmail());
+
+        List<String> answers = new ArrayList<>();
+        List<String> questions = new ArrayList<>();
+
+        answers.add(userQnA.getA1());
+        answers.add(userQnA.getA1());
+        answers.add(userQnA.getA1());
+        answers.add(userQnA.getA1());
+        answers.add(userQnA.getA1());
+
+        questions.add(adminQnA.getQ1());
+        questions.add(adminQnA.getQ2());
+        questions.add(adminQnA.getQ3());
+        questions.add(adminQnA.getQ4());
+        questions.add(adminQnA.getQ5());
+
+        getMeetingRes.setAnswers(answers);
+        getMeetingRes.setQuestions(questions);
 
         return getMeetingRes;
     }
