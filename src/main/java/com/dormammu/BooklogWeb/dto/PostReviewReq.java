@@ -1,8 +1,10 @@
 package com.dormammu.BooklogWeb.dto;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Getter
@@ -20,6 +22,8 @@ public class PostReviewReq {
 
     private String book_name;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createDate;
+//    @DateTimeFormat(pattern = "yyyy-mm-dd")
+//    private LocalDate createDate;
+    @CreationTimestamp
+    private Timestamp createDate;
 }

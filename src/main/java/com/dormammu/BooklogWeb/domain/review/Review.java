@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "review")
+@ToString(exclude = "portfolio")
 public class Review {
 
     @Id  // Primary key
@@ -41,6 +43,9 @@ public class Review {
     //@JsonBackReference
     private User user;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createDate;
+//    @DateTimeFormat(pattern = "yyyy-mm-dd")
+//    private LocalDate createDate;
+
+    @CreationTimestamp
+    private Timestamp createDate;
 }
