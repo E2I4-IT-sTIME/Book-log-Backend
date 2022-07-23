@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PostReviewReq {
 
-    private int portfolio_id;
+    //private int portfolio_id;
 
     private String title;
 

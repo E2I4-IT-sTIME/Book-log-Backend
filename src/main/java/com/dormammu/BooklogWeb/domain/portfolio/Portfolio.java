@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class Portfolio {
     @JsonBackReference
     private User user;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createDate;
+//    @DateTimeFormat(pattern = "yyyy-mm-dd")
+//    private LocalDate createDate;
+    @CreationTimestamp
+    private Timestamp createDate;
 }

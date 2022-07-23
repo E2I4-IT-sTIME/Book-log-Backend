@@ -94,6 +94,7 @@ public class PortfolioService {
 
         GetPortfolioRes getPortfolioRes = GetPortfolioRes.builder()
                 .title(portfolio.getTitle())
+                .content(portfolio.getContent())
                 .reviewResList(reviewResList).build();
 
         return getPortfolioRes;
