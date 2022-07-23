@@ -51,8 +51,8 @@ public class ReviewService {
     public String createReview(PostReviewReq postReviewReq, User user) {
         Review review = new Review();
 
-        Portfolio portfolio = portfolioRepository.findById(postReviewReq.getPortfolio_id());
-        review.setPortfolio(portfolio);
+        //Portfolio portfolio = portfolioRepository.findById(postReviewReq.getPortfolio_id());
+        //review.setPortfolio(portfolio);
         review.setTitle(postReviewReq.getTitle());
         review.setContent(postReviewReq.getContent());
         review.setBook_name(postReviewReq.getBook_name());
@@ -96,6 +96,7 @@ public class ReviewService {
             GetCommunityRes getCommunityRes = new GetCommunityRes();
 
             getCommunityRes.setTitle(r.getTitle());
+            getCommunityRes.setContent(r.getContent());
             getCommunityRes.setWriter("작가");
             getCommunityRes.setPublisher("출판사");
             getCommunityRes.setImg("img123");
@@ -120,5 +121,15 @@ public class ReviewService {
         getCommunityRes.setContent(review.getContent());
 
         return getCommunityRes;
+    }
+
+    @Transactional
+    public String plusReviewToPortfolio(int portfolio_id, int review_id, User user) {
+        Portfolio portfolio = portfolioRepository.findById(portfolio_id);
+        Review review = reviewRepository.findById(review_id);
+
+        review.setPortfolio(portfolio);
+
+        return "포트폴리오에 서평 추가 완료";
     }
 }

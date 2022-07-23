@@ -24,7 +24,7 @@ public class ReviewController {
     private final UserRepository userRepository;
 
     // 내 서평 조회 페이지
-    @GetMapping("/api/v1/user/{id}/reviews")
+    @GetMapping("/auth/user/{id}/reviews")
     public ReviewListRes myReviewList(@PathVariable int id, Authentication authentication) {
         User user = userRepository.findById(id);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -68,10 +68,18 @@ public class ReviewController {
         return getCommunityRes;
     }
 
-    // 커뮤니티 상세 페이지 (한 사람들의 서평)
+    // 커뮤니티 상세 페이지 (한 사람의 서평)
     @GetMapping("/auth/reviews/{review_id}")
     public GetCommunityRes communityDetail(Authentication authentication, @PathVariable int review_id) {
         GetCommunityRes getCommunityRes = reviewService.communityDetail(review_id);
         return getCommunityRes;
+    }
+
+    // 서평 추가 버튼
+    @PostMapping("/auth/{portfolio_id}/review/{review_id}")
+    public String plusReviewToPortfolio(@PathVariable int portfolio_id, @PathVariable int review_id, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        reviewService.plusReviewToPortfolio(portfolio_id, review_id, principalDetails.getUser());
+        return "포트폴리오에 서평 추가 완료";
     }
 }
