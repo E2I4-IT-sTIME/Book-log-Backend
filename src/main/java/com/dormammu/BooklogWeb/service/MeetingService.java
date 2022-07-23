@@ -288,6 +288,7 @@ public class MeetingService {
 
             User user = userRepository.findById(userqna.getUserId());
             getAnswerRes.setUsername(user.getUsername());
+            getAnswerRes.setUser_id(user.getId());
             getAnswerRes.setEmail(user.getEmail());
              // 질문 배열
             List<String> qnaList = new ArrayList<>();

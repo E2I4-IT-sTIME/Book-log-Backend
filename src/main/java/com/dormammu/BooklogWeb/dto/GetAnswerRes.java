@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class GetAnswerRes {
+
+    private int user_id;
     private String username;
     private String email;
 
