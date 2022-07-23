@@ -65,6 +65,7 @@ public class CommentService {
         for (Comment cm: commentList){
             CommentRes commentRes = CommentRes.builder()
                     .content(cm.getContent())
+                    .comment_id(cm.getId())
                     .username(cm.getUser().getUsername())
                     .build();
             commentResList.add(commentRes);
