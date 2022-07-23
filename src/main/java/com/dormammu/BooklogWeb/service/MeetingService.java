@@ -268,7 +268,7 @@ public class MeetingService {
         return null;
     }
 
-
+/*
     @Transactional(readOnly = true)
     public List<GetAnswerRes> answerList(int meeting_id){  // 모임 답변 전체 조회 api
         System.out.println("서비스 들어옴");
@@ -310,6 +310,8 @@ public class MeetingService {
         }
         return getAnswerResList;
     }
+
+ */
 
     @Transactional(readOnly = true)
     public GetAnswerRes oneAnswer(User user, int meeting_id){
