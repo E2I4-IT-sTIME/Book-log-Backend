@@ -114,10 +114,12 @@ public class MeetingService {
     public GetOneMeetingRes oneMeeting(int meeting_id){
         GetOneMeetingRes getOneMeetingRes = new GetOneMeetingRes();
         Meeting meeting = meetingRepository.findById(meeting_id);
+        User user = userRepository.findById(meeting.getUserId());
 
         getOneMeetingRes.setId(meeting.getId());
         getOneMeetingRes.setInfo(meeting.getInfo());
         getOneMeetingRes.setImage(meeting.getImage());
+        getOneMeetingRes.setEmail(user.getEmail());
         getOneMeetingRes.setName(meeting.getName());
         getOneMeetingRes.setNotice(meeting.getNotice());
         getOneMeetingRes.setOnoff(meeting.isOnoff());
@@ -268,7 +270,7 @@ public class MeetingService {
         return null;
     }
 
-/*
+
     @Transactional(readOnly = true)
     public List<GetAnswerRes> answerList(int meeting_id){  // 모임 답변 전체 조회 api
         System.out.println("서비스 들어옴");
@@ -311,7 +313,6 @@ public class MeetingService {
         return getAnswerResList;
     }
 
- */
 
     @Transactional(readOnly = true)
     public GetAnswerRes oneAnswer(User user, int meeting_id){

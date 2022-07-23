@@ -15,6 +15,7 @@ public class GetOneMeetingRes {
     private String info;
     private String image;
     private String name;
+    private String email;
     private String notice;
     private boolean onoff;
 
