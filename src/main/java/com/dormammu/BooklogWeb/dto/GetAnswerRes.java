@@ -15,6 +15,5 @@ public class GetAnswerRes {
     private String email;
 
     private List<String> answers;
-
     private List<String> questions;
 }

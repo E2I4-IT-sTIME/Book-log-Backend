@@ -140,7 +140,6 @@ public class MeetingService {
     public List<GetMeetingRes> myMeetingList(User user){
         System.out.println("myMeetingList 들어옴");
         List<Meeting> myMeetings = meetingRepository.findByUserId(user.getId());
-//        System.out.println("내 모임: " + myMeetings);
         List<GetMeetingRes> myMeetingList = new ArrayList<>();
 
         for (Meeting mt: myMeetings){
@@ -149,21 +148,10 @@ public class MeetingService {
             GetMeetingRes getMeetingRes = GetMeetingRes.builder()
                     .info(mt.getInfo())
                     .image(mt.getImage())
-//                    .ment(mt.getMent())
                     .name(mt.getName())
                     .max_num(mt.getMax_num())
                     .cur_num(mt.getCur_num())
                     .onoff(mt.isOnoff())
-//                    .a1(hashTag.getTag1())
-//                    .a2(hashTag.getTag2())
-//                    .a3(hashTag.getTag3())
-//                    .a4(hashTag.getTag4())
-//                    .a5(hashTag.getTag5())
-//                    .q1(adminQnA.getQ1())
-//                    .q2(adminQnA.getQ2())
-//                    .q3(adminQnA.getQ3())
-//                    .q4(adminQnA.getQ4())
-//                    .q5(adminQnA.getQ5())
                     .build();
             myMeetingList.add(getMeetingRes);
         }
@@ -218,24 +206,22 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public MeetingRes questionList(Meeting meeting){
+    public MeetingRes questionList(int meeting_id){
         // 미팅을 가져와서
-        AdminQnA question = adminQnARepository.findByMeetingId(meeting.getId());
-        List<String> questions = new ArrayList<>();
+        AdminQnA question = adminQnARepository.findByMeetingId(meeting_id);
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        List<String> questionList = new ArrayList<>();
 
-        questions.add(question.getQ1());
-        questions.add(question.getQ2());
-        questions.add(question.getQ3());
-        questions.add(question.getQ4());
-        questions.add(question.getQ5());
+        questionList.add(question.getQ1());
+        questionList.add(question.getQ2());
+        questionList.add(question.getQ3());
+        questionList.add(question.getQ4());
+        questionList.add(question.getQ5());
 //        System.out.println("질문 리스트 출력 : " + questions);
 
         MeetingRes meetingRes = MeetingRes.builder()
-                .Q1(question.getQ1())
-                .Q2(question.getQ2())
-                .Q3(question.getQ3())
-                .Q4(question.getQ4())
-                .Q5(question.getQ5()).build();
+                .name(meeting.getName())
+                .questions(questionList).build();
         return meetingRes;
     }
 
@@ -284,11 +270,13 @@ public class MeetingService {
 
 
     @Transactional(readOnly = true)
-    public List<GetAnswerRes> answerList(int meeting_id){
+    public List<GetAnswerRes> answerList(int meeting_id){  // 모임 답변 전체 조회 api
+        System.out.println("서비스 들어옴");
         Meeting meeting = meetingRepository.findById(meeting_id);
 
         List<UserQnA> userQnAList =  userQnARepository.findByAdminQnAId(meeting.getAdminQnA().getId());
-        List<AdminQnA> adminQnAList = adminQnARepository.findByMeetingId2(meeting_id);
+//        List<AdminQnA> adminQnAList = adminQnARepository.findByMeetingId2(meeting_id);
+        AdminQnA adminQnA = adminQnARepository.findById(meeting.getAdminQnA().getId());
 
         List<GetAnswerRes> getAnswerResList =  new ArrayList<>();
 
@@ -299,20 +287,24 @@ public class MeetingService {
             User user = userRepository.findById(userqna.getUserId());
             getAnswerRes.setUsername(user.getUsername());
             getAnswerRes.setEmail(user.getEmail());
+             // 질문 배열
+            List<String> qnaList = new ArrayList<>();
+            qnaList.add(adminQnA.getQ1());
+            qnaList.add(adminQnA.getQ2());
+            qnaList.add(adminQnA.getQ3());
+            qnaList.add(adminQnA.getQ4());
+            qnaList.add(adminQnA.getQ5());
 
-//            getAnswerRes.setAnswers().add(userqna.getA1());
-//            userQnAList.add(userqna.getA2());
-//            userQnAList.add(userqna.getA3());
-//            userQnAList.add(userqna.getA4());
+            getAnswerRes.setQuestions(qnaList);
+            // 답변 배열
+            List<String> answerList = new ArrayList<>();
+            answerList.add(userqna.getA1());
+            answerList.add(userqna.getA2());
+            answerList.add(userqna.getA3());
+            answerList.add(userqna.getA4());
+            answerList.add(userqna.getA5());
 
-            HashTag hashTag = hashTagRepository.findById(meeting.getHashTag().getId());
-            List<String> tags = new ArrayList<>();
-            System.out.println(hashTag.toString()); // hashTag.toString()
-            tags.add(hashTag.getTag1());
-            tags.add(hashTag.getTag2());
-            tags.add(hashTag.getTag3());
-            tags.add(hashTag.getTag4());
-            tags.add(hashTag.getTag5());
+            getAnswerRes.setAnswers(answerList);
 
             getAnswerResList.add(getAnswerRes);
         }
