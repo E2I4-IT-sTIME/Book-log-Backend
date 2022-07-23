@@ -1,23 +1,17 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
-//import com.dormammu.BooklogWeb.domain.board.MeetingBoard;
-import com.dormammu.BooklogWeb.domain.comment.Comment;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -67,5 +61,8 @@ public class Meeting {
 
     @Nullable
     private String notice;
+
+    @CreationTimestamp
+    private Timestamp createDate;
 
 }
