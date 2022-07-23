@@ -282,7 +282,7 @@ public class MeetingService {
         return null;
     }
 
-
+/*
     @Transactional(readOnly = true)
     public List<GetAnswerRes> answerList(int meeting_id){
         Meeting meeting = meetingRepository.findById(meeting_id);
@@ -318,6 +318,8 @@ public class MeetingService {
         }
         return getAnswerResList;
     }
+
+ */
 
     @Transactional(readOnly = true)
     public GetAnswerRes oneAnswer(User user, int meeting_id){

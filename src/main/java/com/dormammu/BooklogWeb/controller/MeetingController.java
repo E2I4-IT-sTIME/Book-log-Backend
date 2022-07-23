@@ -126,6 +126,7 @@ public class MeetingController {
         return null;
     }
 
+    /*
     @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
     public List<GetAnswerRes> answerList(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -138,6 +139,8 @@ public class MeetingController {
         }
         return null;
     }
+
+     */
 
     @GetMapping("/auth/meeting/{meeting_id}/answers/{user_id}")  // 모임 답변 개별 조회 api
     public GetAnswerRes oneAnswer(@PathVariable int meeting_id, Authentication authentication, @PathVariable int user_id){
