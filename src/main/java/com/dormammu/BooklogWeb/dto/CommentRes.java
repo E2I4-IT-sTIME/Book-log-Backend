@@ -1,19 +1,14 @@
 package com.dormammu.BooklogWeb.dto;
 
-
+import com.dormammu.BooklogWeb.domain.user.User;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetAnswerRes {
+public class CommentRes {
+    private String content;
     private String username;
-    private String email;
-
-    private List<String> answers;
-    private List<String> questions;
 }

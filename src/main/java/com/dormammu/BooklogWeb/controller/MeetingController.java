@@ -101,17 +101,13 @@ public class MeetingController {
         return null;
     }
 
-    @GetMapping("/auth/{id}/question")  // 모임 질문 조회 API
-    public MeetingRes questionList(@PathVariable int id, Authentication authentication){
+    @GetMapping("/auth/{meeting_id}/question")  // 모임 질문 조회 API
+    public MeetingRes questionList(@PathVariable int meeting_id, Authentication authentication){
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Meeting meeting = meetingRepository.findById(id);
         User user = userRepository.findById(principalDetails.getUser().getId());
 
-        if (user.getId() == principalDetails.getUser().getId()){
-            return meetingService.questionList(meeting);
-        }
-        return null;
+        return meetingService.questionList(meeting_id);
     }
 
     @PostMapping("/auth/{id}/answer")  // 모임 답변 생성 API
