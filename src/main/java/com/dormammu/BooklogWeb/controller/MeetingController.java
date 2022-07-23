@@ -138,7 +138,7 @@ public class MeetingController {
 
 
 
-    @GetMapping("/auth/meeting/{meeting_id}/answers/{user_id}")  // 모임 답변 개별 조회 api
+    @GetMapping("/auth/meeting/{meeting_id}/answers/{user_id}")  // 모임 답변 개별 조회 api -> 사용 x 예정
     public GetAnswerRes oneAnswer(@PathVariable int meeting_id, Authentication authentication, @PathVariable int user_id){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userRepository.findById(user_id);
