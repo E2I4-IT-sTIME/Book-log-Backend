@@ -109,7 +109,6 @@ public class MeetingController {
         return meetingService.questionList(meeting_id);
     }
 
-
     @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
     public List<GetAnswerRes> answerList(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
