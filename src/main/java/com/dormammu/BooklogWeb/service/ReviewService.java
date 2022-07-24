@@ -48,7 +48,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public String createReview(PostReviewReq postReviewReq, User user) {
+    public int createReview(PostReviewReq postReviewReq, User user) {
         Review review = new Review();
 
         //Portfolio portfolio = portfolioRepository.findById(postReviewReq.getPortfolio_id());
@@ -59,7 +59,7 @@ public class ReviewService {
         review.setUser(user);
         reviewRepository.save(review);
 
-        return "서평 생성 완료";
+        return review.getId();
     }
 
     @Transactional
