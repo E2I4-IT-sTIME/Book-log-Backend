@@ -35,7 +35,7 @@ public class MeetingController {
     }
 
     @PostMapping("/images")
-    public String images(@RequestParam("images") MultipartFile multipartFile) throws IOException {
+    public String images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
         s3Uploader.upload(multipartFile, "static");
         return "test";
     }
