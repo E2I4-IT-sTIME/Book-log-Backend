@@ -34,10 +34,10 @@ public class PortfolioController {
 
     // 포트폴리오 생성
     @PostMapping("/auth/portfolio")
-    public int createPortfolio(@RequestBody PostPortfolioReq postPortfolioReq, Authentication authentication) {
+    public String createPortfolio(@RequestBody PostPortfolioReq postPortfolioReq, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        return portfolioService.createPortfolio(principalDetails.getUser(), postPortfolioReq);
+        return "portfolio_id : " + portfolioService.createPortfolio(principalDetails.getUser(), postPortfolioReq);
     }
 
     // 포트폴리오 수정
