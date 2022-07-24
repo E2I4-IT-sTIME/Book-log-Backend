@@ -24,4 +24,6 @@ public class MeetingUser {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String status;
+
 }

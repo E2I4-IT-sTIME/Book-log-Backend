@@ -51,7 +51,6 @@ public class MeetingService {
         adminQnA.setQ3(postMeetingReq.getQ3());
         adminQnA.setQ4(postMeetingReq.getQ4());
         adminQnA.setQ5(postMeetingReq.getQ5());
-//        meeting.setAdminQnA(adminQnA);
 
 
         HashTag hashTag = new HashTag();
@@ -61,10 +60,10 @@ public class MeetingService {
         hashTag.setTag3(postMeetingReq.getH3());
         hashTag.setTag4(postMeetingReq.getH4());
         hashTag.setTag5(postMeetingReq.getH5());
-//        meeting.setHashTag(hashTag);
 
         MeetingUser meetingUser = new MeetingUser();
         meetingUser.setMeeting(meeting);
+        meetingUser.setStatus("모임장");
         meetingUser.setUser(user);
         meetingUserRepository.save(meetingUser);
         adminQnARepository.save(adminQnA);
@@ -162,14 +161,30 @@ public class MeetingService {
     }
 
     @Transactional
-    public String addMeeting(User user, Meeting meeting){
+    public String addMeeting(User user, Meeting meeting, PostAnswerReq postAnswerReq){
         MeetingUser meetingUser = new MeetingUser();
         meetingUser.setUser(user);
         meetingUser.setMeeting(meeting);
-        meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
+        meetingUser.setStatus("수락 대기");
+        // meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
 
         meetingUserRepository.save(meetingUser);
-        return "모임 입장 완료";
+
+        UserQnA userQnA = new UserQnA();
+
+        userQnA.setA1(postAnswerReq.getA1());
+        userQnA.setA2(postAnswerReq.getA2());
+        userQnA.setA3(postAnswerReq.getA3());
+        userQnA.setA4(postAnswerReq.getA4());
+        userQnA.setA5(postAnswerReq.getA5());
+        userQnA.setUserId(user.getId());
+
+        // 모임 id
+        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting.getId());
+        userQnA.setAdminQnA(adminQnA);
+        userQnARepository.save(userQnA);
+
+        return "모임 가입 신청 완료";
     }
 
     @Transactional
@@ -228,24 +243,8 @@ public class MeetingService {
     }
 
 //    @Transactional
-//    public String createAnswer(User user, int meeting_id, PostAnswerListReq postAnswerListReq){
-//        System.out.println("서비스 들어옴");
+//    public String createAnswer(User user, int id, PostAnswerReq postAnswerReq){
 //        UserQnA userQnA = new UserQnA();
-//
-//        List<PostAnswerReq> postAnswerReqList = new ArrayList<>();
-//        PostAnswerReq post1 = postAnswerListReq.getPostAnswerReqs().get(0);
-//        System.out.println("get");
-//        postAnswerReqList.add(post1);
-//
-//        PostAnswerReq postAnswerReq = new PostAnswerReq();
-//
-//        postAnswerReq.setA1(postAnswerListReq.getPostAnswerReqs().get(0).getA1());
-//        postAnswerReq.setA2(postAnswerListReq.getPostAnswerReqs().get(0).getA2());
-//        postAnswerReq.setA3(postAnswerListReq.getPostAnswerReqs().get(0).getA3());
-//        postAnswerReq.setA4(postAnswerListReq.getPostAnswerReqs().get(0).getA4());
-//        postAnswerReq.setA5(postAnswerListReq.getPostAnswerReqs().get(0).getA5());
-//
-//        System.out.println("==========================");
 //
 //        userQnA.setA1(postAnswerReq.getA1());
 //        userQnA.setA2(postAnswerReq.getA2());
@@ -253,32 +252,12 @@ public class MeetingService {
 //        userQnA.setA4(postAnswerReq.getA4());
 //        userQnA.setA5(postAnswerReq.getA5());
 //        userQnA.setUserId(user.getId());
-//        userQnARepository.save(userQnA);
 //
 //        // 모임 id
-//        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting_id);
+//        AdminQnA adminQnA = adminQnARepository.findByMeetingId(id);
 //        userQnA.setAdminQnA(adminQnA);
 //        userQnARepository.save(userQnA);
-//
-//        System.out.println("=================저장");
-//        System.out.println("postAnswerListReq : " + postAnswerListReq);
-//
-//        return "모임 답변 생성 완료";
-//
-//        //        System.out.println(postAnswerReq.getAnswers());
-////        UserQnA userQnA = new UserQnA();
-////
-////        userQnA.setA1(postAnswerReq.getAnswers().get(0));
-////        userQnA.setA2(postAnswerReq.getAnswers().get(1));
-////        userQnA.setA3(postAnswerReq.getAnswers().get(2));
-////        userQnA.setA4(postAnswerReq.getAnswers().get(3));
-////        userQnA.setA5(postAnswerReq.getAnswers().get(4));
-////        userQnA.setUserId(user.getId());
-//
-////        // 모임 id
-////        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting_id);
-////        userQnA.setAdminQnA(adminQnA);
-////        userQnARepository.save(userQnA);
+//        return "답변 생성 완료";
 //    }
 
     @Transactional
@@ -384,12 +363,29 @@ public class MeetingService {
     }
 
     @Transactional
+    public String acceptAnswer(User user, int meeting_id, int answer_id){
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        UserQnA userQnA = userQnARepository.findById(answer_id);
+        if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
+            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
+            meetingUser.setStatus("승인");
+            meeting.setCur_num(meeting.getCur_num() + 1);
+            return "모임 답변 수락 완료";
+        }
+        return "모임장만 수락할 수 있습니다.";
+    }
+
+    @Transactional
     public String deleteAnswer(User user, int meeting_id, int answer_id){
         UserQnA userQnA = userQnARepository.findById(answer_id);
+        System.out.println(userQnA);
+        System.out.println(userQnA.getUserId());
         Meeting meeting = meetingRepository.findById(meeting_id);
         if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
-            UserQnA userQnA1 = userQnARepository.findByUserIdAndAdminQnAId(userQnA.getId(), userQnA.getAdminQnA().getId());
-            userQnARepository.delete(userQnA1);
+            //UserQnA userQnA1 = userQnARepository.findByUserIdAndAdminQnAId(userQnA.getId(), userQnA.getAdminQnA().getId());
+            userQnARepository.delete(userQnA);
+            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
+            meetingUser.setStatus("거절");
             return "모임 답변 삭제 완료";
         }
         return null;
