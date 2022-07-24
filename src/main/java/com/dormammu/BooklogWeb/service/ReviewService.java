@@ -37,6 +37,7 @@ public class ReviewService {
                     .title(rl.getTitle())
                     .content(rl.getContent())
                     .review_id(rl.getId())
+                    .book_name(rl.getBook_name())
                     .createDate(rl.getCreateDate()).build();
             reviewResList.add(reviewRes);
         }

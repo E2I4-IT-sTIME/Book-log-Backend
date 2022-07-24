@@ -37,10 +37,10 @@ public class ReviewController {
 
     // 서평 생성
     @PostMapping("/auth/review")
-    public int createReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication) {
+    public String createReview(@RequestBody PostReviewReq postReviewReq, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        return reviewService.createReview(postReviewReq, principalDetails.getUser());
+        return "review_id : " + reviewService.createReview(postReviewReq, principalDetails.getUser());
     }
 
     // 서평 수정
