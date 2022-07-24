@@ -24,7 +24,6 @@ public class MeetingController {
     @PostMapping("/auth/meeting")  // 모임 생성 API
     public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("*******************");
         meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
         return "모임 생성 완료";
     }
@@ -51,14 +50,14 @@ public class MeetingController {
         return null;
     }
 
-    @GetMapping("/auth/meetings/{id}")  // 모임 입장 API
-    public String addMeeting(@PathVariable int id, Authentication authentication){
+    @PostMapping("/auth/meetings/{id}")  // 모임 가입 신청 API
+    public String addMeeting(@RequestBody PostAnswerReq postAnswerReq, @PathVariable int id, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Meeting meeting = meetingRepository.findById(id);
         User user = userRepository.findById(principalDetails.getUser().getId());
 
-        if (user.getId() == principalDetails.getUser().getId()){
-            return meetingService.addMeeting(user, meeting);
+        if (user.getId() == principalDetails.getUser().getId()) {
+            return meetingService.addMeeting(user, meeting, postAnswerReq);
         }
 
         return null;
@@ -110,18 +109,6 @@ public class MeetingController {
         return meetingService.questionList(meeting_id);
     }
 
-    @PostMapping("/auth/{id}/answer")  // 모임 답변 생성 API
-    public String createAnswer(@RequestBody PostAnswerReq postAnswerReq, @PathVariable int id, Authentication authentication){
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Meeting meeting = meetingRepository.findById(id);
-        User user = userRepository.findById(principalDetails.getUser().getId());
-
-        if (user.getId() == principalDetails.getUser().getId()) {
-           return meetingService.createAnswer(principalDetails.getUser(), id, postAnswerReq);
-        }
-        return null;
-    }
-
 
     @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
     public List<GetAnswerRes> answerList(@PathVariable int meeting_id, Authentication authentication){
@@ -135,7 +122,6 @@ public class MeetingController {
         }
         return null;
     }
-
 
 
     @GetMapping("/auth/meeting/{meeting_id}/answers/{user_id}")  // 모임 답변 개별 조회 api -> 사용 x 예정
