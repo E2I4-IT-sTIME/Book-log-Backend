@@ -242,44 +242,23 @@ public class MeetingService {
         return meetingRes;
     }
 
-    @Transactional
-    public String createAnswer(User user, int meeting_id, PostAnswerListReq postAnswerListReq){
-        System.out.println("서비스 들어옴");
-        UserQnA userQnA = new UserQnA();
-
-        List<PostAnswerReq> postAnswerReqList = new ArrayList<>();
-        PostAnswerReq post1 = postAnswerListReq.getPostAnswerReqs().get(0);
-        System.out.println("get");
-        postAnswerReqList.add(post1);
-
-        PostAnswerReq postAnswerReq = new PostAnswerReq();
-
-        postAnswerReq.setA1(postAnswerListReq.getPostAnswerReqs().get(0).getA1());
-        postAnswerReq.setA2(postAnswerListReq.getPostAnswerReqs().get(0).getA2());
-        postAnswerReq.setA3(postAnswerListReq.getPostAnswerReqs().get(0).getA3());
-        postAnswerReq.setA4(postAnswerListReq.getPostAnswerReqs().get(0).getA4());
-        postAnswerReq.setA5(postAnswerListReq.getPostAnswerReqs().get(0).getA5());
-
-        System.out.println("==========================");
-        userQnA.setA1(postAnswerReq.getA1());
-        userQnA.setA2(postAnswerReq.getA2());
-        userQnA.setA3(postAnswerReq.getA3());
-        userQnA.setA4(postAnswerReq.getA4());
-        userQnA.setA5(postAnswerReq.getA5());
-        userQnA.setUserId(user.getId());
-        userQnARepository.save(userQnA);
-
-        // 모임 id
-        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting_id);
-        userQnA.setAdminQnA(adminQnA);
-        userQnARepository.save(userQnA);
-
-        System.out.println("=================저장");
-        System.out.println("postAnswerListReq : " + postAnswerListReq);
-
-        return "모임 답변 생성 완료";
-
-    }
+//    @Transactional
+//    public String createAnswer(User user, int id, PostAnswerReq postAnswerReq){
+//        UserQnA userQnA = new UserQnA();
+//
+//        userQnA.setA1(postAnswerReq.getA1());
+//        userQnA.setA2(postAnswerReq.getA2());
+//        userQnA.setA3(postAnswerReq.getA3());
+//        userQnA.setA4(postAnswerReq.getA4());
+//        userQnA.setA5(postAnswerReq.getA5());
+//        userQnA.setUserId(user.getId());
+//
+//        // 모임 id
+//        AdminQnA adminQnA = adminQnARepository.findByMeetingId(id);
+//        userQnA.setAdminQnA(adminQnA);
+//        userQnARepository.save(userQnA);
+//        return "답변 생성 완료";
+//    }
 
     @Transactional
     public String createNotice(int meeting_id, User user, PostNoticeReq postNoticeReq){
@@ -326,7 +305,7 @@ public class MeetingService {
             getAnswerRes.setUsername(user.getUsername());
             getAnswerRes.setUser_id(user.getId());
             getAnswerRes.setEmail(user.getEmail());
-             // 질문 배열
+            // 질문 배열
             List<String> qnaList = new ArrayList<>();
             qnaList.add(adminQnA.getQ1());
             qnaList.add(adminQnA.getQ2());
