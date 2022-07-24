@@ -86,5 +86,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));  // 내 서버만 아는 고유한 값
 
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+        response.addHeader("Cookie", String.valueOf(principalDetails.getUser().getId()));
     }
 }
