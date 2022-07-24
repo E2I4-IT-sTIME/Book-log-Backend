@@ -32,6 +32,7 @@ public class PortfolioService {
             GetPortfolioListRes getPortfolioListRes = new GetPortfolioListRes();
             getPortfolioListRes.setTitle(pf.getTitle());
             getPortfolioListRes.setContent(pf.getContent());
+            getPortfolioListRes.setPortfolio_id(pf.getId());
 
             getPortfolioListResList.add(getPortfolioListRes);
         }

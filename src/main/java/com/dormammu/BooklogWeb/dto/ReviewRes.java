@@ -16,6 +16,7 @@ public class ReviewRes {
     private String title;
     private String content;
     private String book_name;
+    private int review_id;
 
 //    @DateTimeFormat(pattern = "yyyy-mm-dd")
 //    private LocalDate createDate;

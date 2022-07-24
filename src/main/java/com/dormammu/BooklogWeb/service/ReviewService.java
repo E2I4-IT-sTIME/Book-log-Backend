@@ -36,6 +36,7 @@ public class ReviewService {
             ReviewRes reviewRes = ReviewRes.builder()
                     .title(rl.getTitle())
                     .content(rl.getContent())
+                    .review_id(rl.getId())
                     .createDate(rl.getCreateDate()).build();
             reviewResList.add(reviewRes);
         }
