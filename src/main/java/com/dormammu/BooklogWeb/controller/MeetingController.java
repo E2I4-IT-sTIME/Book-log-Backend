@@ -110,17 +110,14 @@ public class MeetingController {
         return meetingService.questionList(meeting_id);
     }
 
-    @PostMapping("/auth/{id}/answer")  // 모임 답변 생성 API
-    public String createAnswer(@RequestBody PostAnswerReq postAnswerReq, @PathVariable int id, Authentication authentication){
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Meeting meeting = meetingRepository.findById(id);
-        User user = userRepository.findById(principalDetails.getUser().getId());
-
-        if (user.getId() == principalDetails.getUser().getId()) {
-           return meetingService.createAnswer(principalDetails.getUser(), id, postAnswerReq);
-        }
-        return null;
-    }
+//    @PostMapping("/auth/{meeting_id}/answer")  // 모임 답변 생성 API
+//    public String createAnswer(@RequestBody PostAnswerListReq postAnswerListReq, @PathVariable int meeting_id, Authentication authentication){
+//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//        Meeting meeting = meetingRepository.findById(meeting_id);
+//        User user = userRepository.findById(principalDetails.getUser().getId());
+//
+//       return meetingService.createAnswer(principalDetails.getUser(), meeting_id, postAnswerListReq);
+//    }
 
 
     @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
