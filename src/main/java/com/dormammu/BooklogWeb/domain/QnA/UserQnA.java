@@ -1,12 +1,14 @@
 package com.dormammu.BooklogWeb.domain.QnA;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "user_QnA")
+@ToString(exclude = "adminQnA")
 public class UserQnA {
 
     @Id
