@@ -7,10 +7,13 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
 import com.dormammu.BooklogWeb.service.MeetingService;
+import com.dormammu.BooklogWeb.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -20,12 +23,21 @@ public class MeetingController {
     private final MeetingService meetingService;
     private final UserRepository userRepository;
     private final MeetingRepository meetingRepository;
+    private final S3Uploader s3Uploader;
 
     @PostMapping("/auth/meeting")  // 모임 생성 API
-    public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication){
+    public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication, @RequestParam("image") MultipartFile multipartFile) throws IOException {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
+        s3Uploader.upload(multipartFile, "static");
+
         return "모임 생성 완료";
+    }
+
+    @PostMapping("/images")
+    public String images(@RequestParam("images") MultipartFile multipartFile) throws IOException {
+        s3Uploader.upload(multipartFile, "static");
+        return "test";
     }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API
