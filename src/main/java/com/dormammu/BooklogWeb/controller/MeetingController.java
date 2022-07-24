@@ -134,7 +134,18 @@ public class MeetingController {
 
     }
 
-    @DeleteMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 삭제 api
+    @PostMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 수락 api (가입 수락)
+    public String acceptAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.acceptAnswer(user, meeting_id, answer_id);
+        }
+        return "모임장만 수락할 수 있습니다.";
+    }
+
+    @DeleteMapping("/auth/{meeting_id}/answer/{answer_id}")  // 모임 답변 삭제 api (가입 거절)
     public String deleteAnswer(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userRepository.findById(principalDetails.getUser().getId());

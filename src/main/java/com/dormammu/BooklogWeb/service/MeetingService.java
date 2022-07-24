@@ -362,12 +362,26 @@ public class MeetingService {
     }
 
     @Transactional
+    public String acceptAnswer(User user, int meeting_id, int answer_id){
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        UserQnA userQnA = userQnARepository.findById(answer_id);
+        if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
+            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
+            meetingUser.setStatus("승인");
+            return "모임 답변 수락 완료";
+        }
+        return "모임장만 수락할 수 있습니다.";
+    }
+
+    @Transactional
     public String deleteAnswer(User user, int meeting_id, int answer_id){
         UserQnA userQnA = userQnARepository.findById(answer_id);
         Meeting meeting = meetingRepository.findById(meeting_id);
         if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
             UserQnA userQnA1 = userQnARepository.findByUserIdAndAdminQnAId(userQnA.getId(), userQnA.getAdminQnA().getId());
             userQnARepository.delete(userQnA1);
+            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
+            meetingUser.setStatus("거절");
             return "모임 답변 삭제 완료";
         }
         return null;
