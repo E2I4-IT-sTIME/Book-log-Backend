@@ -7,7 +7,24 @@ server:
       enabled: true
       force: true
 
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAQ5IEBH3LA5BAOL24
+      secret-key: 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
+    s3:
+      bucket: booklog22
+    region:
+      static: ap-northeast-2 # 리전 정보
+    stack:
+      auto: false
+
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://booklog.chl7p9tqzuib.ap-northeast-2.rds.amazonaws.com:3306/booklog
