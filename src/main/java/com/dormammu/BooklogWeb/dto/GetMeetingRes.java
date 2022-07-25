@@ -20,6 +20,8 @@ public class GetMeetingRes {
     private int max_num;
     private int cur_num;
     private boolean onoff;
+    private String username;
+    private String email;
 
     List<String> tags;
 }
