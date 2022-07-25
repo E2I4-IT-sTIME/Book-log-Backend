@@ -226,6 +226,7 @@ public class MeetingService {
             tag.add(mt.getMeeting().getHashTag().getTag3());
             tag.add(mt.getMeeting().getHashTag().getTag4());
             tag.add(mt.getMeeting().getHashTag().getTag5());
+            User user1 = userRepository.findById(mt.getMeeting().getUserId());
 
             GetMeetingRes getMeetingRes = GetMeetingRes.builder()
                     .id(mt.getMeeting().getId())
@@ -235,6 +236,8 @@ public class MeetingService {
                     .max_num(mt.getMeeting().getMax_num())
                     .cur_num(mt.getMeeting().getCur_num())
                     .onoff(mt.getMeeting().isOnoff())
+                    .username(user.getUsername())
+                    .email(user1.getEmail())
                     .tags(tag)
                     .build();
             myMeetingList.add(getMeetingRes);
