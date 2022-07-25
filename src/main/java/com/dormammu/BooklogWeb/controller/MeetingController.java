@@ -50,7 +50,7 @@ public class MeetingController {
         return meetingService.oneMeeting(meeting_id);
     }
 
-    @GetMapping("/api/user/{id}/meetings")  // 내 모임 조회 API
+    @GetMapping("/auth/user/{id}/meetings")  // 내 모임 조회 API
     public List<GetMeetingRes> myMeetingList(@PathVariable int id, Authentication authentication){
 
         User user = userRepository.findById(id);
