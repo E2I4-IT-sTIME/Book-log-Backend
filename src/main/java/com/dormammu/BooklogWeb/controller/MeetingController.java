@@ -9,6 +9,7 @@ import com.dormammu.BooklogWeb.dto.*;
 import com.dormammu.BooklogWeb.service.MeetingService;
 import com.dormammu.BooklogWeb.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,24 +26,24 @@ public class MeetingController {
     private final MeetingRepository meetingRepository;
     private final S3Uploader s3Uploader;
 
-    @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
-    public String createMeeting(Authentication authentication,
-                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestPart(value = "postMeetingReq")PostMeetingReq postMeetingReq) throws IOException {
-
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        User user = userRepository.findById(principalDetails.getUser().getId());
-//        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
-//        FileUploadResponse meetingImage = s3Uploader.upload(meeting_id, multipartFile, "static");
-//        return ResponseEntity.ok().body(meetingImage);
-        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
-    }
-
-
-//    @PostMapping("/images")  // 이미지 업로드하기
-//    public String images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
-//        s3Uploader.upload(multipartFile, "static");
-//        return "test";
+//    @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
+//    public String createMeeting(Authentication authentication,
+//                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestPart(value = "postMeetingReq")PostMeetingReq postMeetingReq) throws IOException {
+//
+//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//        User user = userRepository.findById(principalDetails.getUser().getId());
+////        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
+////        FileUploadResponse meetingImage = s3Uploader.upload(meeting_id, multipartFile, "static");
+////        return ResponseEntity.ok().body(meetingImage);
+//        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
 //    }
+
+
+    @PostMapping("/images")  // 이미지 업로드하기
+    public ResponseEntity<?> images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
+        FileUploadResponse image = s3Uploader.upload(multipartFile, "static");
+        return ResponseEntity.ok(image);
+    }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API
     public List<GetMeetingRes> meetingList(){
