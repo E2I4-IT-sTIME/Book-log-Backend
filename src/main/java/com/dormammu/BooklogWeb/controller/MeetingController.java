@@ -9,6 +9,7 @@ import com.dormammu.BooklogWeb.dto.*;
 import com.dormammu.BooklogWeb.service.MeetingService;
 import com.dormammu.BooklogWeb.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,23 +38,25 @@ public class MeetingController {
 //        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
 //    }
 
+    /* 테스트 */
     @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
     public String createMeeting(Authentication authentication,
-                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestPart(value = "postMeetingReq")PostMeetingReq postMeetingReq) throws IOException {
+                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("info") String info,
+                                @RequestParam("ment") String ment, @RequestParam("max_num") String max_num, @RequestParam("onoff") String onoff,
+                                @RequestParam("questions")List<String> questions, @RequestParam("hashtags")List<String> hashtags) throws IOException {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userRepository.findById(principalDetails.getUser().getId());
-//        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
-//        FileUploadResponse meetingImage = s3Uploader.upload(meeting_id, multipartFile, "static");
-//        return ResponseEntity.ok().body(meetingImage);
-        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
+        return meetingService.createMeeting(user, multipartFile, name, info, ment, max_num, onoff, questions, hashtags);
     }
 
 
+
+
 //    @PostMapping("/images")  // 이미지 업로드하기
-//    public String images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
-//        s3Uploader.upload(multipartFile, "static");
-//        return "test";
+//    public ResponseEntity<?> images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
+//        FileUploadResponse image = s3Uploader.upload(multipartFile, "static");
+//        return ResponseEntity.ok(image);
 //    }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API

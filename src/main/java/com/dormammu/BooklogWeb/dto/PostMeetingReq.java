@@ -25,21 +25,21 @@ public class PostMeetingReq {
     private String ment;
     private String image;
 
-    private String q1;
-    private String q2;
-    private String q3;
-    private String q4;
-    private String q5;
+//    private String q1;
+//    private String q2;
+//    private String q3;
+//    private String q4;
+//    private String q5;
 
     List<String> questions;
 
     private int max_num;
 
-    private String h1;
-    private String h2;
-    private String h3;
-    private String h4;
-    private String h5;
+//    private String h1;
+//    private String h2;
+//    private String h3;
+//    private String h4;
+//    private String h5;
     List<String> hashtags;
 
     private Boolean onoff;
