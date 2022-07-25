@@ -137,6 +137,9 @@ public class MeetingService {
 
         getOneMeetingRes.setId(meeting.getId());
         getOneMeetingRes.setInfo(meeting.getInfo());
+        getOneMeetingRes.setMent(meeting.getMent());
+        getOneMeetingRes.setMax_num(meeting.getMax_num());
+        getOneMeetingRes.setCur_num(meeting.getCur_num());
         getOneMeetingRes.setImage(meeting.getImage());
         getOneMeetingRes.setEmail(user.getEmail());
         getOneMeetingRes.setName(meeting.getName());

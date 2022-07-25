@@ -13,6 +13,9 @@ import java.util.List;
 public class GetOneMeetingRes {
     private int id; // meeting_id
     private String info;
+    private String ment;
+    private int max_num;
+    private int cur_num;
     private String image;
     private String name;
     private String email;
