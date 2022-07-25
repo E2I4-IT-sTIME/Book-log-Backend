@@ -14,7 +14,6 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -139,7 +138,6 @@ public class MeetingService {
         tags.add(hashTag.getTag5());
 
         getOneMeetingRes.setTags(tags);
-
         return getOneMeetingRes;
     }
 
@@ -412,7 +410,7 @@ public class MeetingService {
     public String acceptAnswer(User user, int meeting_id, int answer_id){
         Meeting meeting = meetingRepository.findById(meeting_id);
         UserQnA userQnA = userQnARepository.findById(answer_id);
-        if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
+        if (meeting.getUserId() == user.getId()){
             MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
             meetingUser.setStatus("승인");
             meeting.setCur_num(meeting.getCur_num() + 1);

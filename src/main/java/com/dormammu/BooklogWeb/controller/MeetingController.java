@@ -72,11 +72,8 @@ public class MeetingController {
         Meeting meeting = meetingRepository.findById(id);
         User user = userRepository.findById(principalDetails.getUser().getId());
 
-        if (user.getId() == principalDetails.getUser().getId()) {
-            return meetingService.addMeeting(user, meeting, postAnswerReq);
-        }
+        return meetingService.addMeeting(user, meeting, postAnswerReq);
 
-        return null;
     }
 
     @DeleteMapping("/auth/meeting/{id}/out")  // 모임 탈퇴 API
