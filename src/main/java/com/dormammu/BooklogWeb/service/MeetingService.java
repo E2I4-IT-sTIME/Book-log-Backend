@@ -536,4 +536,14 @@ public class MeetingService {
         }
         return null;
     }
+
+    @Transactional(readOnly = true)
+    public String check(int meeting_id, User user){
+        MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
+        if (meetingUser.getStatus().equals("승인") || meetingUser.getStatus().equals("모임장")) {
+            return "가입";
+        }else{
+            return "미가입";
+        }
+    }
 }
