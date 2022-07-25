@@ -42,7 +42,7 @@ public class MeetingController {
     @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
     public String createMeeting(Authentication authentication,
                                 @RequestPart(value = "image") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("info") String info,
-                                @RequestParam("ment") String ment, @RequestParam("max_num") int max_num, @RequestParam("onoff") boolean onoff,
+                                @RequestParam("ment") String ment, @RequestParam("max_num") String max_num, @RequestParam("onoff") String onoff,
                                 @RequestParam("questions")List<String> questions, @RequestParam("hashtags")List<String> hashtags) throws IOException {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
