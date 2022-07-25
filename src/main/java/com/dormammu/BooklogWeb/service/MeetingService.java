@@ -101,7 +101,7 @@ public class MeetingService {
 
 
     @Transactional
-    public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, int max_num, boolean onoff, List<String> questions, List<String> hashtags) throws IOException {
+    public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, String max_num, String onoff, List<String> questions, List<String> hashtags) throws IOException {
         //        return meetingService.createMeeting(user, multipartFile, name, info, ment, image, max_num, onoff, questions, hashtags);
         Meeting meeting = new Meeting();
         meeting.setName(name);
@@ -110,8 +110,8 @@ public class MeetingService {
 //        meeting.setImage(postMeetingReq.getImage());
         meeting.setUserId(user.getId());
         meeting.setCur_num(1);
-        meeting.setMax_num(max_num);
-        meeting.setOnoff(onoff);
+        meeting.setMax_num(Integer.parseInt(max_num));
+        meeting.setOnoff(Boolean.parseBoolean(onoff));
 
         AdminQnA adminQnA = new AdminQnA();
         adminQnA.setMeeting(meeting);
