@@ -17,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +33,11 @@ public class MeetingService {
     private final HashTagRepository hashTagRepository;
     private final MeetingUserRepository meetingUserRepository;
     private final UserQnARepository userQnARepository;
+    private final S3Uploader s3Uploader;
+
 
     @Transactional
-    public String createMeeting(User user, PostMeetingReq postMeetingReq){
+    public String createMeeting(User user, MultipartFile multipartFile, PostMeetingReq postMeetingReq) throws IOException {
         Meeting meeting = new Meeting();
         meeting.setName(postMeetingReq.getName());
         meeting.setInfo(postMeetingReq.getInfo());
@@ -75,6 +79,8 @@ public class MeetingService {
         meeting.setHashTag(hashTag1);
         meeting.setAdminQnA(adminQnA1);
 
+        String r = s3Uploader.upload(meeting.getId(), multipartFile, "meeting");
+        System.out.println(r);
         return "모임 생성 완료";
     }
 

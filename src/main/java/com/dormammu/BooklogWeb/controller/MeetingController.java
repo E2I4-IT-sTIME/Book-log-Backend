@@ -25,20 +25,24 @@ public class MeetingController {
     private final MeetingRepository meetingRepository;
     private final S3Uploader s3Uploader;
 
-    @PostMapping("/auth/meeting")  // 모임 생성 API
-    public String createMeeting(@RequestBody PostMeetingReq postMeetingReq, Authentication authentication, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+    @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
+    public String createMeeting(Authentication authentication,
+                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestPart(value = "postMeetingReq")PostMeetingReq postMeetingReq) throws IOException {
+
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
-        s3Uploader.upload(multipartFile, "static");
-
-        return "모임 생성 완료";
+        User user = userRepository.findById(principalDetails.getUser().getId());
+//        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
+//        FileUploadResponse meetingImage = s3Uploader.upload(meeting_id, multipartFile, "static");
+//        return ResponseEntity.ok().body(meetingImage);
+        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
     }
 
-    @PostMapping("/images")
-    public String images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
-        s3Uploader.upload(multipartFile, "static");
-        return "test";
-    }
+
+//    @PostMapping("/images")  // 이미지 업로드하기
+//    public String images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
+//        s3Uploader.upload(multipartFile, "static");
+//        return "test";
+//    }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API
     public List<GetMeetingRes> meetingList(){
