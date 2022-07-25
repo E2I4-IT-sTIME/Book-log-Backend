@@ -37,6 +37,7 @@ public class MeetingService {
 
 //    @Transactional
 //    public String createMeeting(User user, MultipartFile multipartFile, PostMeetingReq postMeetingReq) throws IOException {
+//        //        return meetingService.createMeeting(user, multipartFile, name, info, ment, image, max_num, onoff, questions, hashtags);
 //        Meeting meeting = new Meeting();
 //        meeting.setName(postMeetingReq.getName());
 //        meeting.setInfo(postMeetingReq.getInfo());
@@ -97,6 +98,57 @@ public class MeetingService {
 //        System.out.println(r);
 //        return "모임 생성 완료";
 //    }
+
+
+    @Transactional
+    public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, int max_num, boolean onoff, List<String> questions, List<String> hashtags) throws IOException {
+        //        return meetingService.createMeeting(user, multipartFile, name, info, ment, image, max_num, onoff, questions, hashtags);
+        Meeting meeting = new Meeting();
+        meeting.setName(name);
+        meeting.setInfo(info);
+        meeting.setMent(ment);
+//        meeting.setImage(postMeetingReq.getImage());
+        meeting.setUserId(user.getId());
+        meeting.setCur_num(1);
+        meeting.setMax_num(max_num);
+        meeting.setOnoff(onoff);
+
+        AdminQnA adminQnA = new AdminQnA();
+        adminQnA.setMeeting(meeting);
+//        System.out.println(postMeetingReq.getQuestions());
+        adminQnA.setQ1(questions.get(0));
+        adminQnA.setQ2(questions.get(1));
+        adminQnA.setQ3(questions.get(2));
+        adminQnA.setQ4(questions.get(3));
+        adminQnA.setQ5(questions.get(4));
+
+        HashTag hashTag = new HashTag();
+        hashTag.setMeeting(meeting);
+        hashTag.setTag1(hashtags.get(0));
+        hashTag.setTag2(hashtags.get(1));
+        hashTag.setTag3(hashtags.get(2));
+        hashTag.setTag4(hashtags.get(3));
+        hashTag.setTag5(hashtags.get(4));
+
+
+        MeetingUser meetingUser = new MeetingUser();
+        meetingUser.setMeeting(meeting);
+        meetingUser.setStatus("모임장");
+        meetingUser.setUser(user);
+        meetingUserRepository.save(meetingUser);
+        adminQnARepository.save(adminQnA);
+        hashTagRepository.save(hashTag);
+        meetingRepository.save(meeting);
+        AdminQnA adminQnA1 = adminQnARepository.findById(adminQnA.getId());
+        HashTag hashTag1 = hashTagRepository.findById(hashTag.getId());
+
+        meeting.setHashTag(hashTag1);
+        meeting.setAdminQnA(adminQnA1);
+
+        String r = s3Uploader.upload(meeting.getId(), multipartFile, "static");
+        System.out.println(r);
+        return "모임 생성 완료";
+    }
 
     @Transactional
     public List<GetMeetingRes> meetingList(){
@@ -198,16 +250,21 @@ public class MeetingService {
         meetingUser.setMeeting(meeting);
         meetingUser.setStatus("수락 대기");
         // meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
-
         meetingUserRepository.save(meetingUser);
 
         UserQnA userQnA = new UserQnA();
+//
+//        userQnA.setA1(postAnswerReq.getA1());
+//        userQnA.setA2(postAnswerReq.getA2());
+//        userQnA.setA3(postAnswerReq.getA3());
+//        userQnA.setA4(postAnswerReq.getA4());
+//        userQnA.setA5(postAnswerReq.getA5());
+        userQnA.setA1(postAnswerReq.getAnswers().get(0));
+        userQnA.setA2(postAnswerReq.getAnswers().get(1));
+        userQnA.setA3(postAnswerReq.getAnswers().get(2));
+        userQnA.setA4(postAnswerReq.getAnswers().get(3));
+        userQnA.setA5(postAnswerReq.getAnswers().get(4));
 
-        userQnA.setA1(postAnswerReq.getA1());
-        userQnA.setA2(postAnswerReq.getA2());
-        userQnA.setA3(postAnswerReq.getA3());
-        userQnA.setA4(postAnswerReq.getA4());
-        userQnA.setA5(postAnswerReq.getA5());
         userQnA.setUserId(user.getId());
 
         // 모임 id

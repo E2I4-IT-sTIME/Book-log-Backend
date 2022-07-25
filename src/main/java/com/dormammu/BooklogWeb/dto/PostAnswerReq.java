@@ -18,7 +18,7 @@ public class PostAnswerReq {
     private String a3;
     private String a4;
     private String a5;
-//
-//    List<String> answers;
+
+    List<String> answers;
 
 }

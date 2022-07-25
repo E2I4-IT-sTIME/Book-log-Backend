@@ -38,12 +38,26 @@ public class MeetingController {
 //        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
 //    }
 
+    /* 테스트 */
+    @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
+    public String createMeeting(Authentication authentication,
+                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("info") String info,
+                                @RequestParam("ment") String ment, @RequestParam("max_num") int max_num, @RequestParam("onoff") boolean onoff,
+                                @RequestParam("questions")List<String> questions, @RequestParam("hashtags")List<String> hashtags) throws IOException {
 
-    @PostMapping("/images")  // 이미지 업로드하기
-    public ResponseEntity<?> images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
-        FileUploadResponse image = s3Uploader.upload(multipartFile, "static");
-        return ResponseEntity.ok(image);
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+        return meetingService.createMeeting(user, multipartFile, name, info, ment, max_num, onoff, questions, hashtags);
     }
+
+
+
+
+//    @PostMapping("/images")  // 이미지 업로드하기
+//    public ResponseEntity<?> images(@RequestPart("images") MultipartFile multipartFile) throws IOException {
+//        FileUploadResponse image = s3Uploader.upload(multipartFile, "static");
+//        return ResponseEntity.ok(image);
+//    }
 
     @GetMapping("/meetings")  // 모임 리스트 조회 API
     public List<GetMeetingRes> meetingList(){
