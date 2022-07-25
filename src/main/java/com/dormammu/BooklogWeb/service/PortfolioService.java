@@ -88,6 +88,7 @@ public class PortfolioService {
         for (Review r : reviews) {
             ReviewRes reviewRes = ReviewRes.builder()
                     .title(r.getTitle())
+                    .review_id(r.getId())
                     .content(r.getContent())
                     .book_name(r.getBook_name())
                     .createDate(r.getCreateDate()).build();
