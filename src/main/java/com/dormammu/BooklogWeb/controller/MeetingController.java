@@ -207,4 +207,10 @@ public class MeetingController {
         meetingService.deleteNotice(meeting_id, principalDetails.getUser());
         return "공지 삭제 완료";
     }
+
+    @GetMapping("/auth/meeting/{meeting_id}/check")
+    public String check(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return meetingService.check(meeting_id, principalDetails.getUser());
+    }
 }
