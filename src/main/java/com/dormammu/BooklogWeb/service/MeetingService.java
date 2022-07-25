@@ -162,19 +162,28 @@ public class MeetingService {
     @Transactional(readOnly = true)
     public List<GetMeetingRes> myMeetingList(User user){
         System.out.println("myMeetingList 들어옴");
-        List<Meeting> myMeetings = meetingRepository.findByUserId(user.getId());
+//        List<Meeting> myMeetings = meetingRepository.findByUserId(user.getId());
+        List<MeetingUser> meetingUsers = meetingUserRepository.findByUserId(user.getId());
+
         List<GetMeetingRes> myMeetingList = new ArrayList<>();
 
-        for (Meeting mt: myMeetings){
-            HashTag hashTag = hashTagRepository.findById(mt.getHashTag().getId());
-            AdminQnA adminQnA = adminQnARepository.findById(mt.getAdminQnA().getId());
+        for (MeetingUser mt: meetingUsers){
+            List<String> tag = new ArrayList<>();
+            tag.add(mt.getMeeting().getHashTag().getTag1());
+            tag.add(mt.getMeeting().getHashTag().getTag2());
+            tag.add(mt.getMeeting().getHashTag().getTag3());
+            tag.add(mt.getMeeting().getHashTag().getTag4());
+            tag.add(mt.getMeeting().getHashTag().getTag5());
+
             GetMeetingRes getMeetingRes = GetMeetingRes.builder()
-                    .info(mt.getInfo())
-                    .image(mt.getImage())
-                    .name(mt.getName())
-                    .max_num(mt.getMax_num())
-                    .cur_num(mt.getCur_num())
-                    .onoff(mt.isOnoff())
+                    .id(mt.getMeeting().getId())
+                    .info(mt.getMeeting().getInfo())
+                    .image(mt.getMeeting().getImage())
+                    .name(mt.getMeeting().getName())
+                    .max_num(mt.getMeeting().getMax_num())
+                    .cur_num(mt.getMeeting().getCur_num())
+                    .onoff(mt.getMeeting().isOnoff())
+                    .tags(tag)
                     .build();
             myMeetingList.add(getMeetingRes);
         }
