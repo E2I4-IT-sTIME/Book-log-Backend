@@ -67,6 +67,7 @@ public class CommentService {
                     .content(cm.getContent())
                     .comment_id(cm.getId())
                     .username(cm.getUser().getUsername())
+                    .email(cm.getUser().getEmail())
                     .build();
             commentResList.add(commentRes);
 //            System.out.println(cm.getContent());

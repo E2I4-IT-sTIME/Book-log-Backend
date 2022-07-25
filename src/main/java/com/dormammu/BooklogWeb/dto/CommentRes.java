@@ -12,4 +12,5 @@ public class CommentRes {
     private int comment_id;
     private String content;
     private String username;
+    private String email;
 }
