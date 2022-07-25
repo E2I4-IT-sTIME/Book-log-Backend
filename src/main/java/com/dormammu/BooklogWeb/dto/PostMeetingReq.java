@@ -31,6 +31,8 @@ public class PostMeetingReq {
     private String q4;
     private String q5;
 
+    List<String> questions;
+
     private int max_num;
 
     private String h1;
@@ -38,6 +40,7 @@ public class PostMeetingReq {
     private String h3;
     private String h4;
     private String h5;
+    List<String> hashtags;
 
     private Boolean onoff;
 

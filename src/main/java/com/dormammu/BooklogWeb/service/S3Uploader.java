@@ -7,6 +7,8 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
+import com.dormammu.BooklogWeb.domain.user.User;
+import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +31,7 @@ public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
     private final MeetingRepository meetingRepository;
+    private final UserRepository userRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -54,6 +57,29 @@ public class S3Uploader {
         return "모임 생성 및 사진 저장 성공";
     }
 
+//    public String uploadProfile(int userId, MultipartFile multipartFile, String dirName) throws IOException {
+//        File uploadFile = convert(multipartFile)
+//                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+//
+//
+//        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
+//        multipartFile.transferTo(filepath);
+////        return upload(multipartFile, dirName);
+////
+//        return uploadProfile(userId, uploadFile, dirName);
+//    }
+//
+//    // s3로 파일 업로드하기
+//    private String uploadProfile(int userId, File uploadFile, String dirName) {
+//        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+//        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+//        User user = userRepository.findById(userId);
+//        user.setImgPath(uploadImageUrl);
+//        removeNewFile(uploadFile);
+//
+//        return "회원가입 및 유저 프로필 사진 등록 완료";
+//    }
+//
     // 업로드하기
     private String putS3(File uploadFile, String fileName){
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
@@ -74,8 +100,9 @@ public class S3Uploader {
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(file.getBytes());
-//                System.out.println("변환");
+                System.out.println("변환");
             }
+            System.out.println("오류");
             return Optional.of(convertFile);
         }
 

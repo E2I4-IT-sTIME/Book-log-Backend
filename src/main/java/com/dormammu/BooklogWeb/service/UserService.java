@@ -10,8 +10,10 @@ import org.hibernate.mapping.Join;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +22,25 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final S3Uploader s3Uploader;
+
+//    public void joinUser(JoinRequestDto joinRequestDto, MultipartFile multipartFile) throws IOException {
+//        User user = new User();
+//        user.setUsername(joinRequestDto.getUsername());
+//        user.setPassword(joinRequestDto.getPassword());
+//        user.setEmail(joinRequestDto.getEmail());
+//        user.setImgHome(joinRequestDto.getImgHome());
+//        user.setImgPath(joinRequestDto.getImgPath());
+//        user.setBirthday(joinRequestDto.getBirthday());
+//        user.setJob(joinRequestDto.getJob());
+//        user.setArea(joinRequestDto.getArea());
+//        user.setActive(joinRequestDto.isActive());
+//        user.setRoles(joinRequestDto.getRoles());
+//        userRepository.save(user);
+//
+//        String r = s3Uploader.uploadProfile(user.getId(), multipartFile, "static");
+//        System.out.println(r);
+//    }
 
     public void joinUser(JoinRequestDto joinRequestDto) {
         User user = new User();
