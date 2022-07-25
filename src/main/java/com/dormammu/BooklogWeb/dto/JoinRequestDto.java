@@ -1,6 +1,9 @@
 package com.dormammu.BooklogWeb.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
@@ -12,6 +15,9 @@ import javax.validation.constraints.Pattern;
 import java.sql.Date;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class JoinRequestDto {
 
     @Column(nullable = false, unique = true)

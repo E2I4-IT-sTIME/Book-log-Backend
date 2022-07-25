@@ -10,8 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Map;
 
 //@RequestMapping("api")
@@ -34,6 +36,22 @@ public class RestApiController {
     public String token() {
         return "<h1>token</h1>";
     }
+
+//    @PostMapping("join")  // 회원가입 API (+이미지)
+//    public String join(@Valid @RequestPart(value = "joinRequestDto") JoinRequestDto joinRequestDto, @RequestPart(value = "image") MultipartFile multipartFile, Errors errors) throws IOException {
+//        if (errors.hasErrors()) {
+//            Map<String, String> validatorResult = userService.validateHandling(errors);
+//            for (String key : validatorResult.keySet()) {
+//                System.out.println(validatorResult.get(key));
+//                return validatorResult.get(key);
+//            }
+//        }
+//        userService.checkEmailDuplication(joinRequestDto);
+//        joinRequestDto.setPassword(bCryptPasswordEncoder.encode(joinRequestDto.getPassword()));
+//        joinRequestDto.setRoles("ROLE_USER");
+//        userService.joinUser(joinRequestDto, multipartFile);
+//        return "회원가입완료";
+//    }
 
     @PostMapping("join")
     public String join(@Valid @RequestBody JoinRequestDto joinRequestDto, Errors errors) {
