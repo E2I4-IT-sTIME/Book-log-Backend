@@ -5,9 +5,7 @@ import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.GetCommunityRes;
-import com.dormammu.BooklogWeb.dto.PostReviewReq;
-import com.dormammu.BooklogWeb.dto.ReviewListRes;
+import com.dormammu.BooklogWeb.dto.*;
 import com.dormammu.BooklogWeb.service.PortfolioService;
 import com.dormammu.BooklogWeb.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -81,5 +79,18 @@ public class ReviewController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         reviewService.plusReviewToPortfolio(portfolio_id, review_id, principalDetails.getUser());
         return "포트폴리오에 서평 추가 완료";
+    }
+
+    // 서평 조회 (개별)
+    @GetMapping("/auth/user/{id}/review/{review_id}")
+    public ReviewRes oneReview(Authentication authentication, @PathVariable int id, @PathVariable int review_id) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        if (principalDetails.getUser().getId() == id) {
+            ReviewRes reviewRes = reviewService.oneReview(id, review_id);
+            return reviewRes;
+        }
+        else {
+            return null;
+        }
     }
 }

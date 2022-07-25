@@ -6,10 +6,7 @@ import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.review.ReviewRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
-import com.dormammu.BooklogWeb.dto.GetCommunityRes;
-import com.dormammu.BooklogWeb.dto.PostReviewReq;
-import com.dormammu.BooklogWeb.dto.ReviewListRes;
-import com.dormammu.BooklogWeb.dto.ReviewRes;
+import com.dormammu.BooklogWeb.dto.*;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -133,5 +130,20 @@ public class ReviewService {
         review.setPortfolio(portfolio);
 
         return "포트폴리오에 서평 추가 완료";
+    }
+
+    @Transactional
+    public ReviewRes oneReview(int user_id, int review_id) {
+        Review review = reviewRepository.findById(review_id);
+
+        ReviewRes reviewRes = new ReviewRes();
+
+        reviewRes.setTitle(review.getTitle());
+        reviewRes.setContent(review.getContent());
+        reviewRes.setBook_name(review.getBook_name());
+        reviewRes.setReview_id(review.getId());
+        reviewRes.setCreateDate(review.getCreateDate());
+
+        return reviewRes;
     }
 }
