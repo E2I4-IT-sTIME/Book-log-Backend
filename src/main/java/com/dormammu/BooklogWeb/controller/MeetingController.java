@@ -25,6 +25,18 @@ public class MeetingController {
     private final MeetingRepository meetingRepository;
     private final S3Uploader s3Uploader;
 
+//    @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
+//    public String createMeeting(Authentication authentication,
+//                                @RequestPart(value = "image") MultipartFile multipartFile, @RequestPart(value = "postMeetingReq")PostMeetingReq postMeetingReq) throws IOException {
+//
+//        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+//        User user = userRepository.findById(principalDetails.getUser().getId());
+////        meetingService.createMeeting(principalDetails.getUser(), postMeetingReq);
+////        FileUploadResponse meetingImage = s3Uploader.upload(meeting_id, multipartFile, "static");
+////        return ResponseEntity.ok().body(meetingImage);
+//        return meetingService.createMeeting(user, multipartFile, postMeetingReq);
+//    }
+
     @PostMapping("/auth/meeting")  // 모임 생성 API(+이미지)
     public String createMeeting(Authentication authentication,
                                 @RequestPart(value = "image") MultipartFile multipartFile, @RequestPart(value = "postMeetingReq")PostMeetingReq postMeetingReq) throws IOException {
@@ -191,5 +203,16 @@ public class MeetingController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         meetingService.deleteNotice(meeting_id, principalDetails.getUser());
         return "공지 삭제 완료";
+    }
+
+    @PostMapping("/test")  // 모임 답변 수락 api (가입 수락)
+    public String test(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.acceptAnswer(user, meeting_id, answer_id);
+        }
+        return "모임장만 수락할 수 있습니다.";
     }
 }
