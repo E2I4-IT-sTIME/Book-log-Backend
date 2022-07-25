@@ -207,4 +207,15 @@ public class MeetingController {
         meetingService.deleteNotice(meeting_id, principalDetails.getUser());
         return "공지 삭제 완료";
     }
+
+    @PostMapping("/test")  // 모임 답변 수락 api (가입 수락)
+    public String test(@PathVariable int meeting_id, @PathVariable int answer_id, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        User user = userRepository.findById(principalDetails.getUser().getId());
+
+        if (user.getId() == principalDetails.getUser().getId()){
+            return meetingService.acceptAnswer(user, meeting_id, answer_id);
+        }
+        return "모임장만 수락할 수 있습니다.";
+    }
 }

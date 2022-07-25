@@ -29,7 +29,7 @@ public class Portfolio {
 
     private String content;
 
-    @OneToMany(mappedBy = "portfolio", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
 
     @ManyToOne
