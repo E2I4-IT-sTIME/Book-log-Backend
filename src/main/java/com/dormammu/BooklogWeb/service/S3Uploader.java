@@ -37,65 +37,65 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-//    public String upload(int meetingId, MultipartFile multipartFile, String dirName) throws IOException {
-//        File uploadFile = convert(multipartFile)
-//                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-//
-////        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
-////        multipartFile.transferTo(filepath);
-////        return upload(multipartFile, dirName);
-//        return upload(meetingId, uploadFile, dirName);
-//    }
-//
-//    // s3로 파일 업로드하기
-//    private String upload(int meetingId, File uploadFile, String dirName) {
-//        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
-//        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
-//        Meeting meeting = meetingRepository.findById(meetingId);
-//        meeting.setImage(uploadImageUrl);
-//        removeNewFile(uploadFile);
-//
-//        return "모임 생성 및 사진 저장 성공";
-//    }
-
-//    public String uploadProfile(int userId, MultipartFile multipartFile, String dirName) throws IOException {
-//        File uploadFile = convert(multipartFile)
-//                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-//
-//
-//        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
-//        multipartFile.transferTo(filepath);
-////        return upload(multipartFile, dirName);
-////
-//        return uploadProfile(userId, uploadFile, dirName);
-//    }
-//
-//    // s3로 파일 업로드하기
-//    private String uploadProfile(int userId, File uploadFile, String dirName) {
-//        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
-//        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
-//        User user = userRepository.findById(userId);
-//        user.setImgPath(uploadImageUrl);
-//        removeNewFile(uploadFile);
-//
-//        return "회원가입 및 유저 프로필 사진 등록 완료";
-//    }
-//
-    /*  사진 하나 업로드하기 */
-    public FileUploadResponse upload(MultipartFile multipartFile, String dirName) throws IOException {
+    public String upload(int meetingId, MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
-        return upload(uploadFile, dirName);
+//        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
+//        multipartFile.transferTo(filepath);
+//        return upload(multipartFile, dirName);
+        return upload(meetingId, uploadFile, dirName);
     }
 
-    private FileUploadResponse upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, fileName);
+    // s3로 파일 업로드하기
+    private String upload(int meetingId, File uploadFile, String dirName) {
+        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        Meeting meeting = meetingRepository.findById(meetingId);
+        meeting.setImage(uploadImageUrl);
         removeNewFile(uploadFile);
 
-        return new FileUploadResponse(fileName, uploadImageUrl);
+        return "모임 생성 및 사진 저장 성공";
     }
+
+    public String uploadProfile(int userId, MultipartFile multipartFile, String dirName) throws IOException {
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+
+
+        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
+        multipartFile.transferTo(filepath);
+//        return upload(multipartFile, dirName);
+//
+        return uploadProfile(userId, uploadFile, dirName);
+    }
+
+    // s3로 파일 업로드하기
+    private String uploadProfile(int userId, File uploadFile, String dirName) {
+        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        User user = userRepository.findById(userId);
+        user.setImgPath(uploadImageUrl);
+        removeNewFile(uploadFile);
+
+        return "회원가입 및 유저 프로필 사진 등록 완료";
+    }
+
+    /*  사진 하나 업로드하기 */
+//    public FileUploadResponse upload(MultipartFile multipartFile, String dirName) throws IOException {
+//        File uploadFile = convert(multipartFile)
+//                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+//
+//        return upload(uploadFile, dirName);
+//    }
+//
+//    private FileUploadResponse upload(File uploadFile, String dirName) {
+//        String fileName = dirName + "/" + uploadFile.getName();
+//        String uploadImageUrl = putS3(uploadFile, fileName);
+//        removeNewFile(uploadFile);
+//
+//        return new FileUploadResponse(fileName, uploadImageUrl);
+//    }
 
 
     // 업로드하기
