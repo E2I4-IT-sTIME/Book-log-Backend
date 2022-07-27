@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -294,10 +295,10 @@ public class MeetingService {
     @Transactional
     public String outMeeting(User user, Meeting meeting){
 
-        MeetingUser meetingUser =  meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
+        Optional<MeetingUser> meetingUser =  meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
         System.out.println(user.getId() +" AND " + meeting.getId());
         meeting.setCur_num(meeting.getCur_num()-1);
-        meetingUserRepository.delete(meetingUser);
+        meetingUserRepository.delete(meetingUser.get());
 
         return "모임 탈퇴 완료";
     }
@@ -527,8 +528,8 @@ public class MeetingService {
         Meeting meeting = meetingRepository.findById(meeting_id);
         UserQnA userQnA = userQnARepository.findById(answer_id);
         if (meeting.getUserId() == user.getId()){
-            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
-            meetingUser.setStatus("승인");
+            Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
+            meetingUser.get().setStatus("승인");
             meeting.setCur_num(meeting.getCur_num() + 1);
             return "모임 답변 수락 완료";
         }
@@ -544,8 +545,8 @@ public class MeetingService {
         if (meeting.getUserId() == user.getId()){ // 삭제하려는 사람이 모임 만든사람인지 확인
             //UserQnA userQnA1 = userQnARepository.findByUserIdAndAdminQnAId(userQnA.getId(), userQnA.getAdminQnA().getId());
             userQnARepository.delete(userQnA);
-            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
-            meetingUser.setStatus("거절");
+            Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(userQnA.getUserId(), meeting.getId());
+            meetingUser.get().setStatus("거절");
             return "모임 답변 삭제 완료";
         }
         return null;
@@ -559,22 +560,29 @@ public class MeetingService {
         if (meeting.getUserId() == user.getId()) {  // 모임 만든사람만 삭제권한이 있으므로 확인해주기
             meeting.setCur_num(meeting.getCur_num() - 1); // 인원수 -1
 
-            MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user_id, meeting_id);
-            meetingUserRepository.delete(meetingUser);
+            Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user_id, meeting_id);
+            meetingUserRepository.delete(meetingUser.get());
             return "모임 강퇴 완료";
         }
         return null;
     }
 
     @Transactional(readOnly = true)
-    public String check(int meeting_id, User user){
+    public int check(int meeting_id, User user){
         System.out.println("$$$$$$$$$$$$$$$$$$$$" + meeting_id);
-        MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" + meetingUser);
-        if (meetingUser.getStatus().equals("승인") || meetingUser.getStatus().equals("모임장")) {
-            return "가입";
-        }else{
-            return "미가입";
+//        MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
+        Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
+//        System.out.println("optional 실행");
+//        System.out.println(meetingUser);
+        if (!meetingUser.isPresent()){
+            return 0;
+        }else {
+
+            if (meetingUser.get().getStatus().equals("승인") || meetingUser.get().getStatus().equals("모임장")) {
+                return 2;
+            } else {
+                return 1;
+            }
         }
     }
 
