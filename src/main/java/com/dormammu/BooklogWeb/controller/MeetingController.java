@@ -42,11 +42,10 @@ public class MeetingController {
         return meetingService.meetingList();
     }
 
-    @GetMapping("/auth/meetings/{meeting_id}")  // 모임 개별 조회 API
-    public GetOneMeetingRes oneMeeting(@PathVariable int meeting_id, Authentication authentication){
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    @GetMapping("/meetings/{meeting_id}")  // 모임 개별 조회 API -> 로그인x/로그인o 전부 열려있어서 로그인o 사용자여도 토큰 안옴
+    public GetOneMeetingRes oneMeeting(@PathVariable int meeting_id){
 
-        return meetingService.oneMeeting(meeting_id, principalDetails.getUser());
+        return meetingService.oneMeeting(meeting_id);
     }
 
     @GetMapping("/auth/user/{id}/meetings")  // 내 모임 조회 API

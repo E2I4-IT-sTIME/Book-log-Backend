@@ -5,9 +5,7 @@ import com.dormammu.BooklogWeb.domain.portfolio.PortfolioRepository;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.review.ReviewRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
-import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +21,7 @@ public class ReviewService {
 
     @Transactional
     public ReviewListRes myReviewList(User user) {
-        System.out.println("ReviewService 들어옴!");
         List<Review> reviewList = reviewRepository.findByUserId(user.getId());
-        System.out.println("레퍼지토리로 서평 리스트 출력 : " + reviewList);
 
         List<ReviewRes> reviewResList = new ArrayList<>();
 
@@ -50,8 +46,6 @@ public class ReviewService {
     public int createReview(PostReviewReq postReviewReq, User user) {
         Review review = new Review();
 
-        //Portfolio portfolio = portfolioRepository.findById(postReviewReq.getPortfolio_id());
-        //review.setPortfolio(portfolio);
         review.setTitle(postReviewReq.getTitle());
         review.setContent(postReviewReq.getContent());
         review.setBook_name(postReviewReq.getBook_name());
@@ -64,6 +58,7 @@ public class ReviewService {
     @Transactional
     public String updateReview(PostReviewReq postReviewReq, int review_id, User user) {
         Review origin_review = reviewRepository.findById(review_id);
+
         if (origin_review.getUser().getId() == user.getId()) {
             origin_review.setTitle(postReviewReq.getTitle());
             origin_review.setContent(postReviewReq.getContent());
@@ -78,6 +73,7 @@ public class ReviewService {
     @Transactional
     public String deleteReview(User user, int review_id) {
         Review review = reviewRepository.findById(review_id);
+
         if (review.getUser().getId() == user.getId()) {
             reviewRepository.delete(review);
             return "서평 삭제 완료";
@@ -103,7 +99,6 @@ public class ReviewService {
 
             getCommunityResList.add(getCommunityRes);
         }
-
         return getCommunityResList;
     }
 

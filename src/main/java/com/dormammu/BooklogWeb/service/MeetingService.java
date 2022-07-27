@@ -115,11 +115,9 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public GetOneMeetingRes oneMeeting(int meeting_id, User user){
+    public GetOneMeetingRes oneMeeting(int meeting_id){
         GetOneMeetingRes getOneMeetingRes = new GetOneMeetingRes();
         Meeting meeting = meetingRepository.findById(meeting_id);
-
-        // 로그인되고, 모임 가입 승인된 사용자만 개별 조회 api 접속 가능
 
         getOneMeetingRes.setId(meeting.getId());
         getOneMeetingRes.setInfo(meeting.getInfo());
@@ -127,7 +125,6 @@ public class MeetingService {
         getOneMeetingRes.setMax_num(meeting.getMax_num());
         getOneMeetingRes.setCur_num(meeting.getCur_num());
         getOneMeetingRes.setImage(meeting.getImage());
-        getOneMeetingRes.setEmail(user.getEmail());
         getOneMeetingRes.setName(meeting.getName());
         getOneMeetingRes.setNotice(meeting.getNotice());
         getOneMeetingRes.setOnoff(meeting.isOnoff());
@@ -438,18 +435,17 @@ public class MeetingService {
 
     @Transactional(readOnly = true)
     public int check(int meeting_id, User user){
-        System.out.println("$$$$$$$$$$$$$$$$$$$$" + meeting_id);
-//        MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
         Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
-//        System.out.println("optional 실행");
-//        System.out.println(meetingUser);
+
         if (!meetingUser.isPresent()){
             return 0;
-        }else {
-
-            if (meetingUser.get().getStatus().equals("승인") || meetingUser.get().getStatus().equals("모임장")) {
+        } else {
+            if (meetingUser.get().getStatus().equals("승인")) {
                 return 2;
-            } else {
+            } else if (meetingUser.get().getStatus().equals("모임장")) {
+                return 3;
+            }
+            else {
                 return 1;
             }
         }

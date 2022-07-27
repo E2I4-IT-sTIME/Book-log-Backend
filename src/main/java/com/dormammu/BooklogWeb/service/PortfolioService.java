@@ -7,11 +7,9 @@ import com.dormammu.BooklogWeb.domain.portfolio.PortfolioRepository;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.expression.spel.ast.PropertyOrFieldReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sound.sampled.Port;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +34,6 @@ public class PortfolioService {
 
             getPortfolioListResList.add(getPortfolioListRes);
         }
-
         return getPortfolioListResList;
     }
 
@@ -79,7 +76,6 @@ public class PortfolioService {
     @Transactional
     public GetPortfolioRes onePortfolio(int user_id, int portfolio_id) {
         Portfolio portfolio = portfolioRepository.findById(portfolio_id);
-        User user = userRepository.findById(user_id);
 
         List<Review> reviews = portfolio.getReviews();
 
