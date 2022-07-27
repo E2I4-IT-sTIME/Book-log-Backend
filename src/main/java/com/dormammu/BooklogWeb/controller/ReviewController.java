@@ -1,12 +1,9 @@
 package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
-import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
-import com.dormammu.BooklogWeb.service.PortfolioService;
 import com.dormammu.BooklogWeb.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -56,7 +53,6 @@ public class ReviewController {
         reviewService.deleteReview(principalDetails.getUser(), review_id);
 
         return "서평 삭제 완료";
-
     }
 
     // 커뮤니티 전체 페이지 (모든 사람들의 서평 리스트)
