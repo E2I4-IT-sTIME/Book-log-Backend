@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("join")  // 회원가입 API (+이미지)
     public String join(@RequestPart(value = "image") MultipartFile multipartFile, @RequestParam(name = "username") String username, @RequestParam(name = "password") String password,
-        @RequestParam(name = "email") String email, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job, @RequestParam(name = "active") Boolean active) throws IOException {
+        @RequestParam(name = "email") String email, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job) throws IOException {
 
         User user = User.builder()
                 .username(username)
@@ -30,7 +30,7 @@ public class UserController {
                 .email(email)
                 .birthday(birthday)
                 .job(job)
-                .active(active)
+                .active(true)
                 .roles("ROLE_USER").build();
         System.out.println("유저");
         userService.joinUser(user);
