@@ -184,11 +184,9 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public GetOneMeetingRes oneMeeting(int meeting_id, User user){
+    public GetOneMeetingRes oneMeeting(int meeting_id){
         GetOneMeetingRes getOneMeetingRes = new GetOneMeetingRes();
         Meeting meeting = meetingRepository.findById(meeting_id);
-
-        // 로그인되고, 모임 가입 승인된 사용자만 개별 조회 api 접속 가능
 
         getOneMeetingRes.setId(meeting.getId());
         getOneMeetingRes.setInfo(meeting.getInfo());
@@ -196,7 +194,6 @@ public class MeetingService {
         getOneMeetingRes.setMax_num(meeting.getMax_num());
         getOneMeetingRes.setCur_num(meeting.getCur_num());
         getOneMeetingRes.setImage(meeting.getImage());
-        getOneMeetingRes.setEmail(user.getEmail());
         getOneMeetingRes.setName(meeting.getName());
         getOneMeetingRes.setNotice(meeting.getNotice());
         getOneMeetingRes.setOnoff(meeting.isOnoff());
