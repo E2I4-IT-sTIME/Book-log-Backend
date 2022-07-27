@@ -1,6 +1,5 @@
 package com.dormammu.BooklogWeb.service;
 
-import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnARepository;
 import com.dormammu.BooklogWeb.domain.QnA.UserQnA;
@@ -12,8 +11,6 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,75 +34,8 @@ public class MeetingService {
     private final MeetingDateRepository meetingDateRepository;
     private final S3Uploader s3Uploader;
 
-
-//    @Transactional
-//    public String createMeeting(User user, MultipartFile multipartFile, PostMeetingReq postMeetingReq) throws IOException {
-//        //        return meetingService.createMeeting(user, multipartFile, name, info, ment, image, max_num, onoff, questions, hashtags);
-//        Meeting meeting = new Meeting();
-//        meeting.setName(postMeetingReq.getName());
-//        meeting.setInfo(postMeetingReq.getInfo());
-//        meeting.setMent(postMeetingReq.getMent());
-////        meeting.setImage(postMeetingReq.getImage());
-//        meeting.setUserId(user.getId());
-//        meeting.setCur_num(1);
-//        meeting.setMax_num(postMeetingReq.getMax_num());
-//        meeting.setOnoff(postMeetingReq.getOnoff());
-//
-//        AdminQnA adminQnA = new AdminQnA();
-//        adminQnA.setMeeting(meeting);
-//        System.out.println(postMeetingReq.getQuestions());
-//        adminQnA.setQ1(postMeetingReq.getQuestions().get(0));
-//        adminQnA.setQ2(postMeetingReq.getQuestions().get(1));
-//        adminQnA.setQ3(postMeetingReq.getQuestions().get(2));
-//        adminQnA.setQ4(postMeetingReq.getQuestions().get(3));
-//        adminQnA.setQ5(postMeetingReq.getQuestions().get(4));
-//
-////        adminQnA.setQ1(postMeetingReq.getQ1());
-////        adminQnA.setQ2(postMeetingReq.getQ2());
-////        adminQnA.setQ3(postMeetingReq.getQ3());
-////        adminQnA.setQ4(postMeetingReq.getQ4());
-////        adminQnA.setQ5(postMeetingReq.getQ5());
-//
-//
-//        HashTag hashTag = new HashTag();
-//        hashTag.setMeeting(meeting);
-//        hashTag.setTag1(postMeetingReq.getHashtags().get(0));
-//        hashTag.setTag2(postMeetingReq.getHashtags().get(1));
-//        hashTag.setTag3(postMeetingReq.getHashtags().get(2));
-//        hashTag.setTag4(postMeetingReq.getHashtags().get(3));
-//        hashTag.setTag5(postMeetingReq.getHashtags().get(4));
-//
-//
-////        hashTag.setTag1(postMeetingReq.getH1());
-////        hashTag.setTag2(postMeetingReq.getH2());
-////        hashTag.setTag3(postMeetingReq.getH3());
-////        hashTag.setTag4(postMeetingReq.getH4());
-////        hashTag.setTag5(postMeetingReq.getH5());
-//
-//
-//        MeetingUser meetingUser = new MeetingUser();
-//        meetingUser.setMeeting(meeting);
-//        meetingUser.setStatus("모임장");
-//        meetingUser.setUser(user);
-//        meetingUserRepository.save(meetingUser);
-//        adminQnARepository.save(adminQnA);
-//        hashTagRepository.save(hashTag);
-//        meetingRepository.save(meeting);
-//        AdminQnA adminQnA1 = adminQnARepository.findById(adminQnA.getId());
-//        HashTag hashTag1 = hashTagRepository.findById(hashTag.getId());
-//
-//        meeting.setHashTag(hashTag1);
-//        meeting.setAdminQnA(adminQnA1);
-//
-//        String r = s3Uploader.upload(meeting.getId(), multipartFile, "static");
-//        System.out.println(r);
-//        return "모임 생성 완료";
-//    }
-
-
     @Transactional
     public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, String max_num, String onoff, List<String> questions, List<String> hashtags) throws IOException {
-        //        return meetingService.createMeeting(user, multipartFile, name, info, ment, image, max_num, onoff, questions, hashtags);
         Meeting meeting = new Meeting();
         meeting.setName(name);
         meeting.setInfo(info);
@@ -148,7 +78,7 @@ public class MeetingService {
         meeting.setHashTag(hashTag1);
         meeting.setAdminQnA(adminQnA1);
 
-        String r = s3Uploader.upload(meeting.getId(), multipartFile, "static");
+        String r = s3Uploader.upload(meeting.getId(), multipartFile, "meeting");
         System.out.println(r);
         return "모임 생성 완료";
     }
@@ -270,12 +200,6 @@ public class MeetingService {
         meetingUserRepository.save(meetingUser);
 
         UserQnA userQnA = new UserQnA();
-//
-//        userQnA.setA1(postAnswerReq.getA1());
-//        userQnA.setA2(postAnswerReq.getA2());
-//        userQnA.setA3(postAnswerReq.getA3());
-//        userQnA.setA4(postAnswerReq.getA4());
-//        userQnA.setA5(postAnswerReq.getA5());
         userQnA.setA1(postAnswerReq.getAnswers().get(0));
         userQnA.setA2(postAnswerReq.getAnswers().get(1));
         userQnA.setA3(postAnswerReq.getAnswers().get(2));
@@ -346,64 +270,6 @@ public class MeetingService {
                 .questions(questionList).build();
         return meetingRes;
     }
-
-//    @Transactional
-//    public String createAnswer(User user, int id, PostAnswerReq postAnswerReq){
-//        UserQnA userQnA = new UserQnA();
-//
-//        userQnA.setA1(postAnswerReq.getA1());
-//        userQnA.setA2(postAnswerReq.getA2());
-//        userQnA.setA3(postAnswerReq.getA3());
-//        userQnA.setA4(postAnswerReq.getA4());
-//        userQnA.setA5(postAnswerReq.getA5());
-//        userQnA.setUserId(user.getId());
-//
-//        // 모임 id
-//        AdminQnA adminQnA = adminQnARepository.findByMeetingId(id);
-//        userQnA.setAdminQnA(adminQnA);
-//        userQnARepository.save(userQnA);
-//        return "답변 생성 완료";
-//    }
-
-
-//    @Transactional
-//    public String createAnswer(User user, int meeting_id, PostAnswerListReq postAnswerListReq){
-//        System.out.println("서비스 들어옴");
-//        UserQnA userQnA = new UserQnA();
-//
-//        List<PostAnswerReq> postAnswerReqList = new ArrayList<>();
-//        PostAnswerReq post1 = postAnswerListReq.getPostAnswerReqs().get(0);
-//        System.out.println("get");
-//        postAnswerReqList.add(post1);
-//
-//        PostAnswerReq postAnswerReq = new PostAnswerReq();
-//
-//        postAnswerReq.setA1(postAnswerListReq.getPostAnswerReqs().get(0).getA1());
-//        postAnswerReq.setA2(postAnswerListReq.getPostAnswerReqs().get(0).getA2());
-//        postAnswerReq.setA3(postAnswerListReq.getPostAnswerReqs().get(0).getA3());
-//        postAnswerReq.setA4(postAnswerListReq.getPostAnswerReqs().get(0).getA4());
-//        postAnswerReq.setA5(postAnswerListReq.getPostAnswerReqs().get(0).getA5());
-//
-//        System.out.println("==========================");
-//        userQnA.setA1(postAnswerReq.getA1());
-//        userQnA.setA2(postAnswerReq.getA2());
-//        userQnA.setA3(postAnswerReq.getA3());
-//        userQnA.setA4(postAnswerReq.getA4());
-//        userQnA.setA5(postAnswerReq.getA5());
-//        userQnA.setUserId(user.getId());
-//        userQnARepository.save(userQnA);
-//
-//        // 모임 id
-//        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting_id);
-//        userQnA.setAdminQnA(adminQnA);
-//        userQnARepository.save(userQnA);
-//
-//        System.out.println("=================저장");
-//        System.out.println("postAnswerListReq : " + postAnswerListReq);
-//
-//        return "모임 답변 생성 완료";
-//
-//    }
 
     @Transactional
     public String createNotice(int meeting_id, User user, PostNoticeReq postNoticeReq){
