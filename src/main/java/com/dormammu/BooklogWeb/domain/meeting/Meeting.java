@@ -1,6 +1,7 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
+import com.dormammu.BooklogWeb.domain.comment.Comment;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
@@ -67,5 +68,4 @@ public class Meeting {
 
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<MeetingDate> meetingDate;
-
 }

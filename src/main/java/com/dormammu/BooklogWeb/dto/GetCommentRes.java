@@ -1,6 +1,5 @@
 package com.dormammu.BooklogWeb.dto;
 
-import com.dormammu.BooklogWeb.domain.user.User;
 import lombok.*;
 
 @Getter
@@ -8,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentRes {
+public class GetCommentRes {
     private int comment_id;
     private String content;
     private String username;

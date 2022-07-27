@@ -1,8 +1,6 @@
 package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.dto.CommentListRes;
-import com.dormammu.BooklogWeb.dto.CommentRes;
 import com.dormammu.BooklogWeb.dto.PostCommentReq;
 import com.dormammu.BooklogWeb.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +28,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/auth/meeting/{meeting_id}/comment/{comment_id}")  // 댓글 삭제 api
-    public String deleteComment(@PathVariable int meeting_id, @PathVariable int comment_id, Authentication authentication){
+    public String deleteComment(@PathVariable int meeting_id, @PathVariable int comment_id, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         commentService.deleteComment(principalDetails.getUser(), comment_id);
         return "댓글 삭제 완료";
-    }
-
-    @GetMapping("/auth/meeting/{meeting_id}/comment")  // 공지 댓글 리스트 조회 API
-    public CommentListRes commentList(@PathVariable int meeting_id, Authentication authentication){
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("정상 실행");
-        return commentService.commentsList(meeting_id);
     }
 }

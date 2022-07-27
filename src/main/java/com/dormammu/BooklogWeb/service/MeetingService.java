@@ -4,6 +4,8 @@ import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnARepository;
 import com.dormammu.BooklogWeb.domain.QnA.UserQnA;
 import com.dormammu.BooklogWeb.domain.QnA.UserQnARepository;
+import com.dormammu.BooklogWeb.domain.comment.Comment;
+import com.dormammu.BooklogWeb.domain.comment.CommentRepository;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.dormammu.BooklogWeb.domain.hastag.HashTagRepository;
 import com.dormammu.BooklogWeb.domain.meeting.*;
@@ -30,8 +32,8 @@ public class MeetingService {
     private final HashTagRepository hashTagRepository;
     private final MeetingUserRepository meetingUserRepository;
     private final UserQnARepository userQnARepository;
-
     private final MeetingDateRepository meetingDateRepository;
+    private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
 
     @Transactional
@@ -467,5 +469,30 @@ public class MeetingService {
         else {
             return "모임장만 출석 완료를 체크할 수 있습니다.";
         }
+    }
+
+    @Transactional(readOnly = true)
+    public GetNoticeRes notice(int meeting_id){
+
+        Meeting meeting = meetingRepository.findById(meeting_id);
+
+        List<Comment> commentList = commentRepository.findByMeetingId(meeting_id);
+
+        List<GetCommentRes> getCommentResList = new ArrayList<>();
+
+        for (Comment cm: commentList){
+            GetCommentRes getCommentRes = GetCommentRes.builder()
+                    .content(cm.getContent())
+                    .comment_id(cm.getId())
+                    .username(cm.getUser().getUsername())
+                    .email(cm.getUser().getEmail())
+                    .build();
+            getCommentResList.add(getCommentRes);
+        }
+
+        GetNoticeRes getNoticeRes = GetNoticeRes.builder()
+                .notice(meeting.getNotice())
+                .getCommentResList(getCommentResList).build();
+        return getNoticeRes;
     }
 }
