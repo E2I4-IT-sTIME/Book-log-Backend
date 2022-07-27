@@ -64,9 +64,11 @@ public class MeetingController {
         return meetingService.meetingList();
     }
 
-    @GetMapping("/meetings/{meeting_id}")  // 모임 개별 조회 API
-    public GetOneMeetingRes oneMeeting(@PathVariable int meeting_id){
-        return meetingService.oneMeeting(meeting_id);
+    @GetMapping("/auth/meetings/{meeting_id}")  // 모임 개별 조회 API
+    public GetOneMeetingRes oneMeeting(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        return meetingService.oneMeeting(meeting_id, principalDetails.getUser());
     }
 
     @GetMapping("/auth/user/{id}/meetings")  // 내 모임 조회 API

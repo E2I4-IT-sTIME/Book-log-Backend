@@ -23,4 +23,5 @@ public class GetOneMeetingRes {
     private boolean onoff;
 
     List<String> tags;
+    List<String> dates;
 }
