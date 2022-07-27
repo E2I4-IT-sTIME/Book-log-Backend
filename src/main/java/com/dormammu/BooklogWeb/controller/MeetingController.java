@@ -208,7 +208,7 @@ public class MeetingController {
         return "공지 삭제 완료";
     }
 
-    @GetMapping("/auth/meeting/{meeting_id}/check")
+    @GetMapping("/auth/meeting/{meeting_id}/check") // 모임 가입 여부 api
     public String check(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.check(meeting_id, principalDetails.getUser());

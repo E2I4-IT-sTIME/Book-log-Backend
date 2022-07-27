@@ -220,27 +220,29 @@ public class MeetingService {
         List<GetMeetingRes> myMeetingList = new ArrayList<>();
 
         for (MeetingUser mt: meetingUsers){
-            List<String> tag = new ArrayList<>();
-            tag.add(mt.getMeeting().getHashTag().getTag1());
-            tag.add(mt.getMeeting().getHashTag().getTag2());
-            tag.add(mt.getMeeting().getHashTag().getTag3());
-            tag.add(mt.getMeeting().getHashTag().getTag4());
-            tag.add(mt.getMeeting().getHashTag().getTag5());
-            User user1 = userRepository.findById(mt.getMeeting().getUserId());
+            if (mt.getStatus().equals("승인") || mt.getStatus().equals("모임장")) {
+                List<String> tag = new ArrayList<>();
+                tag.add(mt.getMeeting().getHashTag().getTag1());
+                tag.add(mt.getMeeting().getHashTag().getTag2());
+                tag.add(mt.getMeeting().getHashTag().getTag3());
+                tag.add(mt.getMeeting().getHashTag().getTag4());
+                tag.add(mt.getMeeting().getHashTag().getTag5());
+                User user1 = userRepository.findById(mt.getMeeting().getUserId());
 
-            GetMeetingRes getMeetingRes = GetMeetingRes.builder()
-                    .id(mt.getMeeting().getId())
-                    .info(mt.getMeeting().getInfo())
-                    .image(mt.getMeeting().getImage())
-                    .name(mt.getMeeting().getName())
-                    .max_num(mt.getMeeting().getMax_num())
-                    .cur_num(mt.getMeeting().getCur_num())
-                    .onoff(mt.getMeeting().isOnoff())
-                    .username(user.getUsername())
-                    .email(user1.getEmail())
-                    .tags(tag)
-                    .build();
-            myMeetingList.add(getMeetingRes);
+                GetMeetingRes getMeetingRes = GetMeetingRes.builder()
+                        .id(mt.getMeeting().getId())
+                        .info(mt.getMeeting().getInfo())
+                        .image(mt.getMeeting().getImage())
+                        .name(mt.getMeeting().getName())
+                        .max_num(mt.getMeeting().getMax_num())
+                        .cur_num(mt.getMeeting().getCur_num())
+                        .onoff(mt.getMeeting().isOnoff())
+                        .username(user.getUsername())
+                        .email(user1.getEmail())
+                        .tags(tag)
+                        .build();
+                myMeetingList.add(getMeetingRes);
+            }
         }
 
         return myMeetingList;
@@ -539,7 +541,9 @@ public class MeetingService {
 
     @Transactional(readOnly = true)
     public String check(int meeting_id, User user){
+        System.out.println("$$$$$$$$$$$$$$$$$$$$" + meeting_id);
         MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" + meetingUser);
         if (meetingUser.getStatus().equals("승인") || meetingUser.getStatus().equals("모임장")) {
             return "가입";
         }else{
