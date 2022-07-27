@@ -142,14 +142,8 @@ public class MeetingController {
     @GetMapping("/auth/meetings/{meeting_id}/answers")  // 모임 답변 전체 조회 api
     public List<GetAnswerRes> answerList(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Meeting meeting = meetingRepository.findById(meeting_id);
-        User user = userRepository.findById(principalDetails.getUser().getId());
 
-        // 접근한 사람이 모임 관리자인지 확인
-        if (user.getId() == meeting.getUserId()) {
-            return meetingService.answerList(meeting_id);
-        }
-        return null;
+        return meetingService.answerList(meeting_id, principalDetails.getUser());
     }
 
 
