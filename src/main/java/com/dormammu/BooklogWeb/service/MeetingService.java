@@ -569,18 +569,17 @@ public class MeetingService {
 
     @Transactional(readOnly = true)
     public int check(int meeting_id, User user){
-        System.out.println("$$$$$$$$$$$$$$$$$$$$" + meeting_id);
-//        MeetingUser meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
         Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
-//        System.out.println("optional 실행");
-//        System.out.println(meetingUser);
+
         if (!meetingUser.isPresent()){
             return 0;
-        }else {
-
-            if (meetingUser.get().getStatus().equals("승인") || meetingUser.get().getStatus().equals("모임장")) {
+        } else {
+            if (meetingUser.get().getStatus().equals("승인")) {
                 return 2;
-            } else {
+            } else if (meetingUser.get().getStatus().equals("모임장")) {
+                return 3;
+            }
+            else {
                 return 1;
             }
         }

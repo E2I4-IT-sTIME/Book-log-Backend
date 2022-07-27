@@ -40,11 +40,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    //@JsonBackReference
     private User user;
-
-//    @DateTimeFormat(pattern = "yyyy-mm-dd")
-//    private LocalDate createDate;
 
     @CreationTimestamp
     private Timestamp createDate;

@@ -1,7 +1,6 @@
 package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
-import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.GetPortfolioListRes;
@@ -47,7 +46,6 @@ public class PortfolioController {
         portfolioService.updatePortfolio(principalDetails.getUser(), postPortfolioReq, p_id);
 
         return "포트폴리오 수정 완료";
-
     }
 
     // 포트폴리오 삭제
@@ -57,7 +55,6 @@ public class PortfolioController {
         portfolioService.deletePortfolio(principalDetails.getUser(), p_id);
 
         return "포트폴리오 삭제 완료";
-
     }
 
     // 포트폴리오 조회 (개별)
