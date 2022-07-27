@@ -65,4 +65,7 @@ public class Meeting {
     @CreationTimestamp
     private Timestamp createDate;
 
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
+    private List<MeetingDate> meetingDate;
+
 }

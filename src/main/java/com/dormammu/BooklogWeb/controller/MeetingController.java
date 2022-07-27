@@ -213,4 +213,12 @@ public class MeetingController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.check(meeting_id, principalDetails.getUser());
     }
+
+    @PostMapping("/auth/meeting/{meeting_id}/attendance")  // 출석 완료 api
+    public String attendance(@PathVariable int meeting_id, @RequestParam("date") String date, Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        return meetingService.attendance(meeting_id, date, principalDetails.getUser());
+
+    }
 }
