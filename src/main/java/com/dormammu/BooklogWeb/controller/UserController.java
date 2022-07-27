@@ -1,8 +1,10 @@
 package com.dormammu.BooklogWeb.controller;
 
+import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.service.S3Uploader;
 import com.dormammu.BooklogWeb.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,20 +26,33 @@ public class UserController {
     public String join(@RequestPart(value = "image") MultipartFile multipartFile, @RequestParam(name = "username") String username, @RequestParam(name = "password") String password,
         @RequestParam(name = "email") String email, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job) throws IOException {
 
-        User user = User.builder()
-                .username(username)
-                .password(bCryptPasswordEncoder.encode(password))
-                .email(email)
-                .birthday(birthday)
-                .job(job)
-                .active(true)
-                .roles("ROLE_USER").build();
-        System.out.println("유저");
-        userService.joinUser(user);
+        if (userService.checkEmailDuplication(email)) {
+            User user = User.builder()
+                    .username(username)
+                    .password(bCryptPasswordEncoder.encode(password))
+                    .email(email)
+                    .birthday(birthday)
+                    .job(job)
+                    .active(true)
+                    .roles("ROLE_USER").build();
+            System.out.println("유저");
+            userService.joinUser(user);
 
-        String r = s3Uploader.uploadProfile(user.getId(), multipartFile, "user");
-        System.out.println(r);
-        return "회원가입완료";
+            String r = s3Uploader.uploadProfile(user.getId(), multipartFile, "user");
+            System.out.println(r);
+            return "회원가입완료";
+        }
+        return "회원가입실패";
+    }
+
+    @PatchMapping("/auth/user/{id}")  // 회원정보 수정 api
+    public String updateUser(@PathVariable int id, @RequestParam(name = "username") String username, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job, Authentication authentication) throws IOException {
+
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        userService.updateUser(id, username, birthday, job, principalDetails.getUser());
+
+        return "회원수정완료";
     }
 
 //    @PostMapping("join")

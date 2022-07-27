@@ -30,7 +30,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -42,15 +42,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    private String imgHome;
     private String imgPath;
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
     private String job;
-
-    private String area;
 
     private boolean active = true;
 

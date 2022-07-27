@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,16 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void updateUser(int id, String username, Date birthday, String job, User loginUser) {
+        User user = userRepository.findById(id);
+        if (loginUser.getId() == user.getId()) {
+            user.setUsername(username);
+            user.setBirthday(birthday);
+            user.setJob(job);
+            userRepository.save(user);
+        }
+    }
+
     public void deleteUser(int id) {
         User user = userRepository.findById(id);
         user.setActive(false);
@@ -62,10 +73,12 @@ public class UserService {
     /* 이메일 중복 여부 확인 */
 
     @Transactional
-    public void checkEmailDuplication(JoinRequestDto dto) {
-        boolean emailDuplicate = userRepository.existsByEmail(dto.getEmail());
+    public Boolean checkEmailDuplication(String email) {
+        boolean emailDuplicate = userRepository.existsByEmail(email);
         if (emailDuplicate) {
             throw new IllegalStateException("이미 존재하는 이메일입니다.");
+        } else {
+            return true;
         }
     }
 }
