@@ -92,9 +92,7 @@ public class ReviewService {
 
             getCommunityRes.setTitle(r.getTitle());
             getCommunityRes.setContent(r.getContent());
-            getCommunityRes.setWriter("작가");
-            getCommunityRes.setPublisher("출판사");
-            getCommunityRes.setImg("img123");
+            getCommunityRes.setBook_name(r.getBook_name());
             getCommunityRes.setUsername(r.getUser().getUsername());
 
             getCommunityResList.add(getCommunityRes);
@@ -108,9 +106,7 @@ public class ReviewService {
         GetCommunityRes getCommunityRes = new GetCommunityRes();
 
         getCommunityRes.setTitle(review.getTitle());
-        getCommunityRes.setWriter("작가(더미데이터)");
-        getCommunityRes.setPublisher("출판사(더미데이터");
-        getCommunityRes.setImg("img123(더미데이터)");
+        getCommunityRes.setBook_name(review.getBook_name());
         getCommunityRes.setUsername(review.getUser().getUsername());
         getCommunityRes.setContent(review.getContent());
 

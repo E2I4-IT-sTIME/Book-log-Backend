@@ -12,11 +12,7 @@ import java.util.List;
 @Builder
 public class GetCommunityRes {
     private String title;
-    private String img;
-    private String writer;
-    private String publisher;
-    private String username;
-
-    @Nullable
     private String content;
+    private String book_name;
+    private String username;
 }
