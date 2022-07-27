@@ -41,9 +41,6 @@ public class S3Uploader {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
-//        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
-//        multipartFile.transferTo(filepath);
-//        return upload(multipartFile, dirName);
         return upload(meetingId, uploadFile, dirName);
     }
 
@@ -61,17 +58,12 @@ public class S3Uploader {
     public String uploadProfile(int userId, MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-
-
-        Path filepath = Paths.get(dirName.toString(), multipartFile.getOriginalFilename());
-        multipartFile.transferTo(filepath);
-//        return upload(multipartFile, dirName);
-//
         return uploadProfile(userId, uploadFile, dirName);
     }
 
     // s3로 파일 업로드하기
     private String uploadProfile(int userId, File uploadFile, String dirName) {
+//        System.out.println("uploadProfile 들어옴");
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         User user = userRepository.findById(userId);
@@ -115,8 +107,11 @@ public class S3Uploader {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
         File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
+
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
+
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+
                 fos.write(file.getBytes());
             }
             return Optional.of(convertFile);
