@@ -1,15 +1,13 @@
 package com.dormammu.BooklogWeb.service;
 
+import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnA;
 import com.dormammu.BooklogWeb.domain.QnA.AdminQnARepository;
 import com.dormammu.BooklogWeb.domain.QnA.UserQnA;
 import com.dormammu.BooklogWeb.domain.QnA.UserQnARepository;
 import com.dormammu.BooklogWeb.domain.hastag.HashTag;
 import com.dormammu.BooklogWeb.domain.hastag.HashTagRepository;
-import com.dormammu.BooklogWeb.domain.meeting.Meeting;
-import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
-import com.dormammu.BooklogWeb.domain.meeting.MeetingUser;
-import com.dormammu.BooklogWeb.domain.meeting.MeetingUserRepository;
+import com.dormammu.BooklogWeb.domain.meeting.*;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
@@ -32,6 +30,8 @@ public class MeetingService {
     private final HashTagRepository hashTagRepository;
     private final MeetingUserRepository meetingUserRepository;
     private final UserQnARepository userQnARepository;
+
+    private final MeetingDateRepository meetingDateRepository;
     private final S3Uploader s3Uploader;
 
 
@@ -548,6 +548,24 @@ public class MeetingService {
             return "가입";
         }else{
             return "미가입";
+        }
+    }
+
+    @Transactional(readOnly = false)
+    public String attendance(int meeting_id, String date, User user){
+        Meeting meeting = meetingRepository.findById(meeting_id);
+
+        if (meeting.getUserId() == user.getId()) {
+            MeetingDate meetingDate = new MeetingDate();
+            meetingDate.setMeeting(meeting);
+            meetingDate.setDate(date);
+
+            meetingDateRepository.save(meetingDate);
+
+            return "출석 완료";
+        }
+        else {
+            return "모임장만 출석 완료를 체크할 수 있습니다.";
         }
     }
 }
