@@ -12,6 +12,8 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -432,46 +434,62 @@ public class MeetingService {
 
 
     @Transactional(readOnly = true)
-    public List<GetAnswerRes> answerList(int meeting_id){  // 모임 답변 전체 조회 api
-        System.out.println("서비스 들어옴");
+    public List<GetAnswerRes> answerList(int meeting_id, User loginUser) {  // 모임 답변 전체 조회 api
+
         Meeting meeting = meetingRepository.findById(meeting_id);
 
-        List<UserQnA> userQnAList =  userQnARepository.findByAdminQnAId(meeting.getAdminQnA().getId());
-//        List<AdminQnA> adminQnAList = adminQnARepository.findByMeetingId2(meeting_id);
-        AdminQnA adminQnA = adminQnARepository.findById(meeting.getAdminQnA().getId());
+        // 접근한 사람이 모임 관리자인지 확인
+        if (loginUser.getId() == meeting.getUserId()) {
 
-        List<GetAnswerRes> getAnswerResList =  new ArrayList<>();
+            List<MeetingUser> meetingUsers = meetingUserRepository.findByMeetingId(meeting_id);
 
-        for (UserQnA userqna : userQnAList){
-            GetAnswerRes getAnswerRes = new GetAnswerRes();
+            List<GetAnswerRes> getAnswerResList = new ArrayList<>();
 
+            for (MeetingUser meetingUser : meetingUsers) {
+                if (meetingUser.getStatus().equals("수락 대기")) {
 
-            User user = userRepository.findById(userqna.getUserId());
-            getAnswerRes.setUsername(user.getUsername());
-            getAnswerRes.setUser_id(user.getId());
-            getAnswerRes.setEmail(user.getEmail());
-            // 질문 배열
-            List<String> qnaList = new ArrayList<>();
-            qnaList.add(adminQnA.getQ1());
-            qnaList.add(adminQnA.getQ2());
-            qnaList.add(adminQnA.getQ3());
-            qnaList.add(adminQnA.getQ4());
-            qnaList.add(adminQnA.getQ5());
+                    List<UserQnA> userQnAList = userQnARepository.findByAdminQnAIdAndUserId(meeting.getAdminQnA().getId(), meetingUser.getUser().getId());
+                    AdminQnA adminQnA = adminQnARepository.findByMeetingId(meetingUser.getMeeting().getId());
 
-            getAnswerRes.setQuestions(qnaList);
-            // 답변 배열
-            List<String> answerList = new ArrayList<>();
-            answerList.add(userqna.getA1());
-            answerList.add(userqna.getA2());
-            answerList.add(userqna.getA3());
-            answerList.add(userqna.getA4());
-            answerList.add(userqna.getA5());
+                    for (UserQnA userqna : userQnAList) {
+                        GetAnswerRes getAnswerRes = new GetAnswerRes();
 
-            getAnswerRes.setAnswers(answerList);
+                        User user = userRepository.findById(userqna.getUserId());
 
-            getAnswerResList.add(getAnswerRes);
+                        getAnswerRes.setUsername(user.getUsername());
+                        getAnswerRes.setUser_id(user.getId());
+                        getAnswerRes.setEmail(user.getEmail());
+
+                        // 질문 배열
+                        List<String> qnaList = new ArrayList<>();
+                        qnaList.add(adminQnA.getQ1());
+                        qnaList.add(adminQnA.getQ2());
+                        qnaList.add(adminQnA.getQ3());
+                        qnaList.add(adminQnA.getQ4());
+                        qnaList.add(adminQnA.getQ5());
+
+                        getAnswerRes.setQuestions(qnaList);
+
+                        // 답변 배열
+                        List<String> answerList = new ArrayList<>();
+                        answerList.add(userqna.getA1());
+                        answerList.add(userqna.getA2());
+                        answerList.add(userqna.getA3());
+                        answerList.add(userqna.getA4());
+                        answerList.add(userqna.getA5());
+
+                        getAnswerRes.setAnswers(answerList);
+
+                        getAnswerResList.add(getAnswerRes);
+                    }
+
+                }
+            }
+            return getAnswerResList;
         }
-        return getAnswerResList;
+        else {
+            return null;
+        }
     }
 
 
