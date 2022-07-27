@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentListRes {
-    List<CommentRes> commentResList;
+public class GetNoticeRes {
+    private String notice;
+    private List<GetCommentRes> getCommentResList;
 }

@@ -194,4 +194,10 @@ public class MeetingController {
         return meetingService.attendance(meeting_id, date, principalDetails.getUser());
 
     }
+
+    @GetMapping("/auth/meeting/{meeting_id}/notice")  // 모임 공지 조회 api
+    public GetNoticeRes notice(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return meetingService.notice(meeting_id);
+    }
 }
