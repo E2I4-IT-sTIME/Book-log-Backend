@@ -18,7 +18,6 @@ public class GetOneMeetingRes {
     private int cur_num;
     private String image;
     private String name;
-    private String email;
     private String notice;
     private boolean onoff;
 
