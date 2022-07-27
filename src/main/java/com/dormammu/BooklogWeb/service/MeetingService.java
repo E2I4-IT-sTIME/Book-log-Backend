@@ -182,10 +182,11 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public GetOneMeetingRes oneMeeting(int meeting_id){
+    public GetOneMeetingRes oneMeeting(int meeting_id, User user){
         GetOneMeetingRes getOneMeetingRes = new GetOneMeetingRes();
         Meeting meeting = meetingRepository.findById(meeting_id);
-        User user = userRepository.findById(meeting.getUserId());
+
+        // 로그인되고, 모임 가입 승인된 사용자만 개별 조회 api 접속 가능
 
         getOneMeetingRes.setId(meeting.getId());
         getOneMeetingRes.setInfo(meeting.getInfo());
@@ -198,6 +199,7 @@ public class MeetingService {
         getOneMeetingRes.setNotice(meeting.getNotice());
         getOneMeetingRes.setOnoff(meeting.isOnoff());
 
+        // 해시태그
         HashTag hashTag = hashTagRepository.findById(meeting.getHashTag().getId());
         List<String> tags = new ArrayList<>();
         System.out.println(hashTag.toString()); // hashTag.toString()
@@ -208,6 +210,16 @@ public class MeetingService {
         tags.add(hashTag.getTag5());
 
         getOneMeetingRes.setTags(tags);
+
+        // 날짜
+        List<MeetingDate> meetingDate = meetingDateRepository.findByMeetingId(meeting_id);
+
+        List<String> dates = new ArrayList<>();
+        for (MeetingDate md : meetingDate) {
+            dates.add(md.getDate());
+        }
+        getOneMeetingRes.setDates(dates);
+
         return getOneMeetingRes;
     }
 
