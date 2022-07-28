@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.service;
 
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
+import com.dormammu.BooklogWeb.dto.GetUserRes;
 import com.dormammu.BooklogWeb.dto.JoinRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,24 @@ public class UserService {
         User user = userRepository.findById(id);
         user.setActive(false);
         userRepository.save(user);
+    }
+
+    public GetUserRes myPage(int id, User loginUser) {
+
+        if (loginUser.getId() == id) {
+            User user = userRepository.findById(id);
+            GetUserRes getUserRes = new GetUserRes();
+
+            getUserRes.setId(user.getId());
+            getUserRes.setImage(user.getImgPath());
+            getUserRes.setUsername(user.getUsername());
+            getUserRes.setEmail(user.getEmail());
+            getUserRes.setBirthday(user.getBirthday());
+            getUserRes.setJob(user.getJob());
+
+            return getUserRes;
+        }
+        return null;
     }
 
     /* 회원가입 시, 유효성 체크 */

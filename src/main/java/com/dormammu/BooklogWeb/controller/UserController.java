@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.user.User;
+import com.dormammu.BooklogWeb.dto.GetUserRes;
 import com.dormammu.BooklogWeb.service.S3Uploader;
 import com.dormammu.BooklogWeb.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -52,6 +53,14 @@ public class UserController {
         userService.updateUser(multipartFile, id, username, birthday, job, principalDetails.getUser());
 
         return "회원수정완료";
+    }
+
+    @GetMapping("/auth/user/{id}")  // 마이페이지 api
+    public GetUserRes myPage(@PathVariable int id, Authentication authentication) throws IOException {
+
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        return userService.myPage(id, principalDetails.getUser());
     }
 
 //    @PostMapping("join")
