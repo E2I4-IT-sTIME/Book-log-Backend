@@ -322,6 +322,7 @@ public class MeetingService {
 
                         User user = userRepository.findById(userqna.getUserId());
 
+                        getAnswerRes.setId(userqna.getId());
                         getAnswerRes.setUsername(user.getUsername());
                         getAnswerRes.setUser_id(user.getId());
                         getAnswerRes.setEmail(user.getEmail());

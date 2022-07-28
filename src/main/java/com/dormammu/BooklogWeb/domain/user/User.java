@@ -42,6 +42,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Lob
     private String imgPath;
 
     @DateTimeFormat(pattern="yyyy-MM-dd")

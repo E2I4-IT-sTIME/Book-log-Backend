@@ -3,6 +3,7 @@ package com.dormammu.BooklogWeb.service;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
@@ -66,12 +67,48 @@ public class S3Uploader {
 //        System.out.println("uploadProfile 들어옴");
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+//        System.out.println("uploadImageUrl: " + uploadImageUrl);
+
         User user = userRepository.findById(userId);
         user.setImgPath(uploadImageUrl);
+//        user.setImgPath("사진사진");
+//        user.setImgPath();
+        System.out.println(user.getImgPath());
         removeNewFile(uploadFile);
 
         return "회원가입 및 유저 프로필 사진 등록 완료";
     }
+
+    // 유저 이미지 업데이트(삭제 -> 수정)
+    public String deleteProfileFile(int userId, MultipartFile multipartFile, String dirName) throws IOException {
+        User user = userRepository.findById(userId);
+        System.out.println(user.getImgPath());
+        System.out.println("deleteProfileFile 들어옴");
+        String ImageUrl = user.getImgPath();
+        System.out.println(ImageUrl);
+//        DeleteObjectRequest request = new DeleteObjectRequest(bucket, ImageUrl);  // 삭제
+        amazonS3Client.deleteObject(bucket, ImageUrl);
+        System.out.println("삭제 완료");
+//        amazonS3Client.deleteObject(request);
+        return updateProfile(userId, multipartFile, dirName);
+
+    }
+
+    // 유저 이미지 업데이트(삭제 -> 수정)
+    public String updateProfile(int userId, MultipartFile multipartFile, String dirName) throws IOException{
+
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+
+        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        User user = userRepository.findById(userId);
+        user.setImgPath(uploadImageUrl);
+        removeNewFile(uploadFile);
+
+        return "사진 업데이트 완료";
+    }
+
 
     /*  사진 하나 업로드하기 */
 //    public FileUploadResponse upload(MultipartFile multipartFile, String dirName) throws IOException {
