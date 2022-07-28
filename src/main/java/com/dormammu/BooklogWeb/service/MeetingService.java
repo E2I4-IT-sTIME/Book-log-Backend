@@ -194,28 +194,36 @@ public class MeetingService {
 
     @Transactional
     public String addMeeting(User user, Meeting meeting, PostAnswerReq postAnswerReq){
-        MeetingUser meetingUser = new MeetingUser();
-        meetingUser.setUser(user);
-        meetingUser.setMeeting(meeting);
-        meetingUser.setStatus("수락 대기");
-        // meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
-        meetingUserRepository.save(meetingUser);
 
-        UserQnA userQnA = new UserQnA();
-        userQnA.setA1(postAnswerReq.getAnswers().get(0));
-        userQnA.setA2(postAnswerReq.getAnswers().get(1));
-        userQnA.setA3(postAnswerReq.getAnswers().get(2));
-        userQnA.setA4(postAnswerReq.getAnswers().get(3));
-        userQnA.setA5(postAnswerReq.getAnswers().get(4));
+        Optional<MeetingUser> meetingUser =  meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting.getId());
 
-        userQnA.setUserId(user.getId());
+        if (!meetingUser.isPresent()) {
+            MeetingUser newMeetingUser = new MeetingUser();
+            newMeetingUser.setUser(user);
+            newMeetingUser.setMeeting(meeting);
+            newMeetingUser.setStatus("수락 대기");
+            // meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
+            meetingUserRepository.save(newMeetingUser);
 
-        // 모임 id
-        AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting.getId());
-        userQnA.setAdminQnA(adminQnA);
-        userQnARepository.save(userQnA);
+            UserQnA userQnA = new UserQnA();
+            userQnA.setA1(postAnswerReq.getAnswers().get(0));
+            userQnA.setA2(postAnswerReq.getAnswers().get(1));
+            userQnA.setA3(postAnswerReq.getAnswers().get(2));
+            userQnA.setA4(postAnswerReq.getAnswers().get(3));
+            userQnA.setA5(postAnswerReq.getAnswers().get(4));
 
-        return "모임 가입 신청 완료";
+            userQnA.setUserId(user.getId());
+
+            // 모임 id
+            AdminQnA adminQnA = adminQnARepository.findByMeetingId(meeting.getId());
+            userQnA.setAdminQnA(adminQnA);
+            userQnARepository.save(userQnA);
+
+            return "모임 가입 신청 완료";
+        } else {
+            return "이미 가입 신청한 유저입니다.";
+        }
+
     }
 
     @Transactional
