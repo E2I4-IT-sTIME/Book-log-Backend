@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public class GetAnswerRes {
 
-    private int id;
+    private int qna_id;
     private int user_id;
     private String username;
     private String email;
