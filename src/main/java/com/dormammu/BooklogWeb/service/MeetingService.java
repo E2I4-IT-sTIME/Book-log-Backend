@@ -440,7 +440,7 @@ public class MeetingService {
     public int check(int meeting_id, User user){
         Optional<MeetingUser> meetingUser = meetingUserRepository.findByUserIdAndMeetingId(user.getId(), meeting_id);
 
-        if (!meetingUser.isPresent()){
+        if (!meetingUser.isPresent() || meetingUser.get().getStatus().equals("거절")){
             return 0;
         } else {
             if (meetingUser.get().getStatus().equals("승인")) {

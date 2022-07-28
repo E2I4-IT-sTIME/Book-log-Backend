@@ -40,6 +40,7 @@ public class UserService {
 //        System.out.println(r);
 //    }
 
+    @Transactional
     public void joinUser(User user) {
 
         userRepository.save(user);

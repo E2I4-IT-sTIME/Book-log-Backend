@@ -74,6 +74,7 @@ public class S3Uploader {
 //        user.setImgPath("사진사진");
 //        user.setImgPath();
         System.out.println(user.getImgPath());
+        userRepository.save(user);
         removeNewFile(uploadFile);
 
         return "회원가입 및 유저 프로필 사진 등록 완료";
