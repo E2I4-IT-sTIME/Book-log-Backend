@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +20,7 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final S3Uploader s3Uploader;
 
 //    public void joinUser(JoinRequestDto joinRequestDto, MultipartFile multipartFile) throws IOException {
 //        User user = new User();
@@ -42,12 +45,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateUser(int id, String username, Date birthday, String job, User loginUser) {
+    public void updateUser(MultipartFile multipartFile, int id, String username, Date birthday, String job, User loginUser) throws IOException {
         User user = userRepository.findById(id);
         if (loginUser.getId() == user.getId()) {
             user.setUsername(username);
             user.setBirthday(birthday);
             user.setJob(job);
+            s3Uploader.deleteProfileFile(id, multipartFile, "user");
             userRepository.save(user);
         }
     }

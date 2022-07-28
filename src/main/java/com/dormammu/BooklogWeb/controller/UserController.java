@@ -46,11 +46,10 @@ public class UserController {
     }
 
     @PatchMapping("/auth/user/{id}")  // 회원정보 수정 api
-    public String updateUser(@PathVariable int id, @RequestParam(name = "username") String username, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job, Authentication authentication) throws IOException {
+    public String updateUser(@RequestPart(value = "image", required = false) MultipartFile multipartFile, @PathVariable int id, @RequestParam(name = "username", required = false) String username, @RequestParam(name = "birthday", required = false) Date birthday, @RequestParam(name = "job", required = false) String job, Authentication authentication) throws IOException {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-
-        userService.updateUser(id, username, birthday, job, principalDetails.getUser());
+        userService.updateUser(multipartFile, id, username, birthday, job, principalDetails.getUser());
 
         return "회원수정완료";
     }
