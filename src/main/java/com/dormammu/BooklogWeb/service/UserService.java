@@ -53,7 +53,6 @@ public class UserService {
             user.setUsername(username);
             user.setBirthday(birthday);
             user.setJob(job);
-            s3Uploader.deleteProfileFile(id, multipartFile, "user");
             userRepository.save(user);
         }
     }
