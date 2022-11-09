@@ -24,3 +24,10 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
+
+      # yml 파일 생성
+      - name: Create Property
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{secrets.PROPERTIES}}" > ./application.yml
