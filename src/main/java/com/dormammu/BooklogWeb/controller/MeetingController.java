@@ -167,6 +167,12 @@ public class MeetingController {
         return null;
     }
 
+    @GetMapping("/auth/meeting/{meeting_id}")  // 독서 모임 상세페이지 api(유저 프로필사진 반환 & 해당 모임 정보)
+    public List<String> meetingMain(@PathVariable int meeting_id, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return meetingService.meetingMain(principalDetails.getUser(), meeting_id);
+    }
+
     @PatchMapping("/auth/meeting/{meeting_id}/notice")  // 모임 공지 생성 api
     public String createNotice(@PathVariable int meeting_id, @RequestBody PostNoticeReq postNoticeReq, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();

@@ -36,6 +36,16 @@ public class MeetingService {
     private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
 
+    @Transactional(readOnly = true)
+    public List<String> meetingMain(User user, int meeting_id){
+        List<MeetingUser> byMeetingId = meetingUserRepository.findByMeetingId(meeting_id);
+        List<String> userImage = new ArrayList<>();
+        for (MeetingUser mu: byMeetingId){
+            userImage.add(mu.getUser().getImgPath());
+        }
+        return userImage;
+    }
+
     @Transactional
     public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, String max_num, String onoff, List<String> questions, List<String> hashtags) throws IOException {
         Meeting meeting = new Meeting();
@@ -87,7 +97,7 @@ public class MeetingService {
 
     @Transactional
     public List<GetMeetingRes> meetingList(){
-        System.out.println("meetingList 들어옴");
+//        System.out.println("meetingList 들어옴");
         List<Meeting> meetingList = meetingRepository.findAll();
         List<GetMeetingRes> meetingResList = new ArrayList<>();
 
@@ -102,7 +112,6 @@ public class MeetingService {
             tags.add(hashTag.getTag5());
             GetMeetingRes getMeetingRes = GetMeetingRes.builder()
                     .id(mt.getId())
-                    .info(mt.getInfo())
                     .image(mt.getImage())
                     .name(mt.getName())
                     .max_num(mt.getMax_num())
@@ -175,14 +184,12 @@ public class MeetingService {
 
                 GetMeetingRes getMeetingRes = GetMeetingRes.builder()
                         .id(mt.getMeeting().getId())
-                        .info(mt.getMeeting().getInfo())
                         .image(mt.getMeeting().getImage())
                         .name(mt.getMeeting().getName())
                         .max_num(mt.getMeeting().getMax_num())
                         .cur_num(mt.getMeeting().getCur_num())
                         .onoff(mt.getMeeting().isOnoff())
                         .username(user.getUsername())
-                        .email(user1.getEmail())
                         .tags(tag)
                         .build();
                 myMeetingList.add(getMeetingRes);
@@ -491,6 +498,7 @@ public class MeetingService {
 
         for (Comment cm: commentList){
             GetCommentRes getCommentRes = GetCommentRes.builder()
+                    .createDate(cm.getCreatedDate())
                     .content(cm.getContent())
                     .comment_id(cm.getId())
                     .username(cm.getUser().getUsername())
@@ -500,6 +508,7 @@ public class MeetingService {
         }
 
         GetNoticeRes getNoticeRes = GetNoticeRes.builder()
+                .createDate(meeting.getCreateDate())
                 .notice(meeting.getNotice())
                 .getCommentResList(getCommentResList).build();
         return getNoticeRes;

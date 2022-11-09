@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.dto;
 
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -10,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetNoticeRes {
+    private Timestamp createDate;
     private String notice;
     private List<GetCommentRes> getCommentResList;
 }

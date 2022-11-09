@@ -34,6 +34,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+//	// swagger 의존성 설정
+//	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+//	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+//
+//	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+//	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
 	//spring-cloud-starter-aws
 	compileOnly 'org.springframework.cloud:spring-cloud-starter-aws:2.0.2.RELEASE'
 	implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
