@@ -17,9 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// JWT토큰이 유효한지 판단하는 필터
+// 로그인 정상 -> JWT생성 -> 이제 클라이언트가 요청할 때마다 JWT토큰 가지고 요청 -> 서버는 "JWT토큰이 유효한지 판단"
+
 // 시큐리티가 filter를 갖고 있는데, 그 중에 BasicAuthenticationFilter라는 얘가 있음
-// 권한이나 인증이 필요한 특정 주소를 요청하면, 위의 필터를 무조건 탄다
-// 권한이나 인증이 필요한 주소가 아니라면, 이필터를 타지X
 // 권한부여
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -31,7 +32,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.userRepository = userRepository;
     }
 
-    // 인증이나 권한이 필요한 주소요청이 있을때 해당 필터를 타게 됨.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -53,8 +53,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
                         .getClaim("email").asString();  // 토큰을 서명해서 username가져오기
 
-        // null이 아니면 서명이 정상적으로 됨
-        if (username != null){
+        // null이 아니면 서명이 정상적으로 되었다는 뜻
+       if (username != null){
 //            System.out.println("username 정상");
             User user = userRepository.findByEmail(username);
 
@@ -62,7 +62,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // 아래와 같이 토큰을 만들어서 Authentication 객체를 강제로 만들고 그걸 세션에 저장!
             PrincipalDetails principalDetails = new PrincipalDetails(user);
 
-            // JWT토큰 서명을 통해 서명이 정상이면 Authentication객체를 만든다
+            // JWT토큰 서명을 통해 서명이 정상이면 Authentication객체를 만든다 (로그인을 해서 만들어진 것이 아니라, 서명 검증이 완료되어 강제로 만들어진 세션)
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 

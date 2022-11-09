@@ -36,10 +36,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("JwtAuthenticationFilter : 로그인 시도중");
 
         // 1. username, password 받기
-        ObjectMapper om = new ObjectMapper();  // json데이터를 파싱해준다
+        ObjectMapper om = new ObjectMapper();  // json 데이터를 파싱해준다. 만약에 x-www-form-urlencoded 형태로 보내면 json 파싱 필요없음.
         LoginRequestDto loginRequestDto = null;
         try{
-            loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);  // User 객체에 있는 값을 담아준다
+            loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);  // request 에서 빼기 -> InputStream 안에 username, password 담겨있음
 
             System.out.println("JwtAuthenticationFilter : "+loginRequestDto);
         } catch(IOException e){
@@ -48,13 +48,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         System.out.println("JwtAuthenticationFilter의 attemptAuthentication() : "+loginRequestDto);
 
-        // 토큰 만들기
+        // 로그인 시도하기 위한 토큰 만들기
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
         System.out.println("JwtAuthenticationFilter : 토큰생성완료");
 
 
-        // PrincipalDetailsService의 loadUserByUsername()함수가 실행된다
+        // 아래 코드가 실행될 때, PrincipalDetailsService의 loadUserByUsername()함수가 실행된다
         // authentication에 내가 로그인한 정보가 담긴다
         // DB에 있는 username과 password가 일치한다
         Authentication authentication =
@@ -64,13 +64,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         System.out.println("로그인 완료됨 : " + principalDetails.getUser().getEmail());  // 로그인이 정상적으로 되었음
 
-        // 리턴의 이유는 권한관리를sercuriy가 대신 해주기에 편함.
+        // 리턴의 이유는 권한 관리를 security가 대신 해주기에 편함.
         // 굳이 JWT 토큰을 사용하면서 세션을 만들 필요가 없지만, 권한처리의 문제때문에 session에 넣어준다.
         return authentication;
     }
 
     // attemptAuthentication 실행 후, 인증이 정상적으로 되었으면 successfulAuthentication함수가 실행된다
-    // JWT토큰을 만들어서 request를 요청한 사용자에세 JWT토큰을 reponse해준다
+    // 여기서 JWT토큰을 만들어서 request를 요청한 사용자에세 JWT토큰을 reponse해준다
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
