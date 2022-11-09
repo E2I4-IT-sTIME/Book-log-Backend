@@ -22,12 +22,13 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build
         shell: bash
 
       # yml 파일 생성
       - name: Create Property
         run: |
+          mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
           echo "${{secrets.PROPERTIES}}" > ./application.yml
