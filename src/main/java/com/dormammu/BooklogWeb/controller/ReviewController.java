@@ -91,7 +91,7 @@ public class ReviewController {
 
         return true;
     }
-
+/*
     // 커뮤니티 전체 페이지 (모든 사람들의 서평 리스트)
     @GetMapping("/community")
     public List<GetCommunityRes> community(Authentication authentication) {
@@ -105,6 +105,8 @@ public class ReviewController {
         GetCommunityRes getCommunityRes = reviewService.communityDetail(review_id);
         return getCommunityRes;
     }
+
+ */
 
     // 서평 추가 버튼
     @PostMapping("/auth/user/{user_id}/portfolio/{portfolio_id}/review/{review_id}")

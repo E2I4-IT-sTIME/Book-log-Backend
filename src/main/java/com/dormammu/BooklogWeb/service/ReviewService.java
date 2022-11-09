@@ -81,6 +81,7 @@ public class ReviewService {
         }
     }
 
+    /*
     @Transactional
     public List<GetCommunityRes> community() {
         List<GetCommunityRes> getCommunityResList = new ArrayList<>();
@@ -110,6 +111,8 @@ public class ReviewService {
 
         return getCommunityRes;
     }
+
+     */
 
     @Transactional
     public String plusReviewToPortfolio(int portfolio_id, int review_id) {
