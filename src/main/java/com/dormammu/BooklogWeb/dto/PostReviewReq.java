@@ -20,7 +20,7 @@ public class PostReviewReq {
 
     private String content;
 
-    private String book_name;
+    private String isbn;
 
 //    @DateTimeFormat(pattern = "yyyy-mm-dd")
 //    private LocalDate createDate;

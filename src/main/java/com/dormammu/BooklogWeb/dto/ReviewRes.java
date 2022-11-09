@@ -15,12 +15,11 @@ import java.time.LocalDate;
 public class ReviewRes {
     private String title;
     private String content;
-    private String book_name;
+    private String isbn;
     private int review_id;
 
 //    @DateTimeFormat(pattern = "yyyy-mm-dd")
 //    private LocalDate createDate;
 
-    @CreationTimestamp
     private Timestamp createDate;
 }

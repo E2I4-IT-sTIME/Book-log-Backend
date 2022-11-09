@@ -14,6 +14,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,12 +32,11 @@ public class Review {
 
     private String content;
 
-    private String book_name;
+    //private String book_name;
+    private String isbn;
 
-    @ManyToOne
-    @JoinColumn(name = "portfolio_id")
-    @Nullable
-    private Portfolio portfolio;
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PortfolioReview> portfolio;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -1,5 +1,6 @@
 package com.dormammu.BooklogWeb.domain.portfolio;
 
+import com.dormammu.BooklogWeb.domain.review.PortfolioReview;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,8 +30,10 @@ public class Portfolio {
 
     private String content;
 
+    private String image;
+
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Review> reviews;
+    private List<PortfolioReview> reviews;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
