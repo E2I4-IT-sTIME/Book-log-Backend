@@ -95,7 +95,6 @@ public class UserService {
     }
 
     /* 이메일 중복 여부 확인 */
-
     @Transactional
     public Boolean checkEmailDuplication(String email) {
         boolean emailDuplicate = userRepository.existsByEmail(email);
@@ -103,6 +102,17 @@ public class UserService {
             throw new IllegalStateException("이미 존재하는 이메일입니다.");
         } else {
             return true;
+        }
+    }
+
+    /* id로 User 찾기 */
+    @Transactional
+    public User findUser(int user_id) {
+        try {
+            User user = userRepository.findById(user_id);
+            return user;
+        } catch (Exception e) {
+            return null;
         }
     }
 }

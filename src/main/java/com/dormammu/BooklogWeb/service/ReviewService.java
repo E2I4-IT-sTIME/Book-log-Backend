@@ -2,6 +2,8 @@ package com.dormammu.BooklogWeb.service;
 
 import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
 import com.dormammu.BooklogWeb.domain.portfolio.PortfolioRepository;
+import com.dormammu.BooklogWeb.domain.review.PortfolioReview;
+import com.dormammu.BooklogWeb.domain.review.PortfolioReviewRepository;
 import com.dormammu.BooklogWeb.domain.review.Review;
 import com.dormammu.BooklogWeb.domain.review.ReviewRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
@@ -18,28 +20,25 @@ import java.util.List;
 public class ReviewService {
     private final PortfolioRepository portfolioRepository;
     private final ReviewRepository reviewRepository;
+    private final PortfolioReviewRepository portfolioReviewRepository;
 
     @Transactional
-    public ReviewListRes myReviewList(User user) {
+    public List<ReviewRes> myReviewList(User user) {
         List<Review> reviewList = reviewRepository.findByUserId(user.getId());
 
         List<ReviewRes> reviewResList = new ArrayList<>();
 
-        for (Review rl : reviewList) {
+        for (Review r : reviewList) {
             ReviewRes reviewRes = ReviewRes.builder()
-                    .title(rl.getTitle())
-                    .content(rl.getContent())
-                    .review_id(rl.getId())
-                    .book_name(rl.getBook_name())
-                    .createDate(rl.getCreateDate()).build();
+                    .title(r.getTitle())
+                    .content(r.getContent())
+                    .review_id(r.getId())
+                    .isbn(r.getIsbn())
+                    .createDate(r.getCreateDate()).build();
             reviewResList.add(reviewRes);
         }
 
-        ReviewListRes reviewListRes = ReviewListRes.builder()
-                .userId(user.getId())
-                .username(user.getUsername())
-                .reviewResList(reviewResList).build();
-        return reviewListRes;
+        return reviewResList;
     }
 
     @Transactional
@@ -48,7 +47,7 @@ public class ReviewService {
 
         review.setTitle(postReviewReq.getTitle());
         review.setContent(postReviewReq.getContent());
-        review.setBook_name(postReviewReq.getBook_name());
+        review.setIsbn(postReviewReq.getIsbn());
         review.setUser(user);
         reviewRepository.save(review);
 
@@ -62,7 +61,6 @@ public class ReviewService {
         if (origin_review.getUser().getId() == user.getId()) {
             origin_review.setTitle(postReviewReq.getTitle());
             origin_review.setContent(postReviewReq.getContent());
-            origin_review.setBook_name(postReviewReq.getBook_name());
             return "서평 수정 완료";
         }
         else {
@@ -114,24 +112,28 @@ public class ReviewService {
     }
 
     @Transactional
-    public String plusReviewToPortfolio(int portfolio_id, int review_id, User user) {
+    public String plusReviewToPortfolio(int portfolio_id, int review_id) {
         Portfolio portfolio = portfolioRepository.findById(portfolio_id);
         Review review = reviewRepository.findById(review_id);
 
-        review.setPortfolio(portfolio);
+        PortfolioReview portfolioReview = new PortfolioReview();
+        portfolioReview.setPortfolio(portfolio);
+        portfolioReview.setReview(review);
+
+        portfolioReviewRepository.save(portfolioReview);
 
         return "포트폴리오에 서평 추가 완료";
     }
 
     @Transactional
-    public ReviewRes oneReview(int user_id, int review_id) {
+    public ReviewRes oneReview(User user, int review_id) {
         Review review = reviewRepository.findById(review_id);
 
         ReviewRes reviewRes = new ReviewRes();
 
         reviewRes.setTitle(review.getTitle());
         reviewRes.setContent(review.getContent());
-        reviewRes.setBook_name(review.getBook_name());
+        reviewRes.setIsbn(review.getIsbn());
         reviewRes.setReview_id(review.getId());
         reviewRes.setCreateDate(review.getCreateDate());
 
