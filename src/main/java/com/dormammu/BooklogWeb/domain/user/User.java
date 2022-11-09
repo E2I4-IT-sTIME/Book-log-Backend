@@ -50,7 +50,6 @@ public class User {
 
     private String job;
 
-    @Builder.Default
     private boolean active = true;
 
     private String roles;  // ROLE_USER, ROLE_ADMIN
@@ -71,7 +70,6 @@ public class User {
 //    @ManyToMany(mappedBy = "users")
 //    private List<Meeting> meetings;
 
-    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<MeetingUser> meetingUsers = new ArrayList<>();
 //
