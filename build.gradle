@@ -34,6 +34,9 @@ dependencies {
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+	// https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+	implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
 //	// swagger 의존성 설정
 //	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 //	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
