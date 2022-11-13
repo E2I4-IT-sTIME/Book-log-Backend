@@ -35,6 +35,7 @@ public class MeetingService {
     private final MeetingDateRepository meetingDateRepository;
     private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
+    private final EntityManagerQuery entityManagerQuery;
 
     @Transactional(readOnly = true)
     public GetMeetingDesRes meetingMain(User user, int meeting_id){
@@ -549,5 +550,11 @@ public class MeetingService {
                 .notice(meeting.getNotice())
                 .getCommentResList(getCommentResList).build();
         return getNoticeRes;
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetMeetingRes> searchMeeting(String name){
+        List<GetMeetingRes> getMeetingRes = entityManagerQuery.mfindBymName(name);
+        return getMeetingRes;
     }
 }

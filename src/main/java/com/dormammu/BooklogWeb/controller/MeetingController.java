@@ -167,7 +167,7 @@ public class MeetingController {
         return null;
     }
 
-    @GetMapping("/auth/meeting/{meeting_id}")  // 독서 모임 상세페이지 api(유저 프로필사진 반환 & 해당 모임 정보)
+    @GetMapping("/auth/meeting/{meeting_id}")  // 독서 모임 상세페이지 api
     public GetMeetingDesRes meetingMain(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.meetingMain(principalDetails.getUser(), meeting_id);
@@ -205,5 +205,11 @@ public class MeetingController {
     public GetNoticeRes notice(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.notice(meeting_id);
+    }
+
+    @GetMapping("/auth/meeting/")  // 독서모임명으로 검색 api
+    public List<GetMeetingRes> searchMeeting(@RequestParam("name") String name, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return meetingService.searchMeeting(name);
     }
 }
