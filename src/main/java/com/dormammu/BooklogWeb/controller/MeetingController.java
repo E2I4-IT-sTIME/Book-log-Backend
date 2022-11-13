@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Api(tags = {"모임관련 API"})  // Swagger 최상단 Controller 명칭
+@Api(tags = {"모임 API"})  // Swagger 최상단 Controller 명칭
 public class MeetingController {
 
     private final MeetingService meetingService;
