@@ -24,4 +24,12 @@ public class EntityManagerQuery {
         List<GetMeetingRes> getMeetingRes = result.list(query, GetMeetingRes.class);
         return getMeetingRes;
     }
+
+    public List<GetMeetingRes> mfindByCategory(String mName){
+        JpaResultMapper result = new JpaResultMapper();
+        Query query = entityManager.createNativeQuery("SELECT m.name as mName, m.image as image, m.onoff as onoff, m.cur_num as cur_num, m.max_num as max_num, m.tags as tags" +
+                "FROM meeting m WHERE ");  // 해당 태그가 있는지 확인하고, 포함되어있다면 반환하기
+        List<GetMeetingRes> getMeetingRes = result.list(query, GetMeetingRes.class);
+        return getMeetingRes;
+    }
 }
