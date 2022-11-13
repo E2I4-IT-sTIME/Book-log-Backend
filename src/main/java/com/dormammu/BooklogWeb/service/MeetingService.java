@@ -557,4 +557,10 @@ public class MeetingService {
         List<GetMeetingRes> getMeetingRes = entityManagerQuery.mfindBymName(name);
         return getMeetingRes;
     }
+
+    @Transactional(readOnly = true)
+    public List<GetMeetingRes> searchCategory(String category){
+        List<GetMeetingRes> getMeetingRes = entityManagerQuery.mfindByCategory(category);
+        return getMeetingRes;
+    }
 }

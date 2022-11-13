@@ -207,9 +207,15 @@ public class MeetingController {
         return meetingService.notice(meeting_id);
     }
 
-    @GetMapping("/auth/meeting/")  // 독서모임명으로 검색 api
+    @GetMapping("/auth/meeting/searchName")  // 독서모임명으로 검색 api
     public List<GetMeetingRes> searchMeeting(@RequestParam("name") String name, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.searchMeeting(name);
+    }
+
+    @GetMapping("/auth/meeting/searchCategory")  // 카테고리명으로 검색 api
+    public List<GetMeetingRes> searchCategory(@RequestParam("category") String category, Authentication authentication){
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return meetingService.searchCategory(category);
     }
 }
