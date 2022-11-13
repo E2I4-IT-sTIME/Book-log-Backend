@@ -37,13 +37,50 @@ public class MeetingService {
     private final S3Uploader s3Uploader;
 
     @Transactional(readOnly = true)
-    public List<String> meetingMain(User user, int meeting_id){
+    public GetMeetingDesRes meetingMain(User user, int meeting_id){
         List<MeetingUser> byMeetingId = meetingUserRepository.findByMeetingId(meeting_id);
+        Meeting meeting = meetingRepository.findById(meeting_id);
+        List<Comment> commentList = commentRepository.findByMeetingId(meeting_id);
+        List<GetCommentRes> getCommentResList = new ArrayList<>();
+
+        GetMeetingDesRes getMeetingDesRes = new GetMeetingDesRes();
+        for (Comment cm: commentList){
+            GetCommentRes getCommentRes = GetCommentRes.builder()
+                    .createDate(cm.getCreatedDate())
+                    .content(cm.getContent())
+                    .comment_id(cm.getId())
+                    .username(cm.getUser().getUsername())
+                    .email(cm.getUser().getEmail())
+                    .build();
+            getCommentResList.add(getCommentRes);
+        }
+
+        // 공지랑 댓글 리스트
+        GetNoticeRes getNoticeRes = GetNoticeRes.builder()
+                .createDate(meeting.getCreateDate())
+                .notice(meeting.getNotice())
+                .getCommentResList(getCommentResList).build();
+
         List<String> userImage = new ArrayList<>();
         for (MeetingUser mu: byMeetingId){
             userImage.add(mu.getUser().getImgPath());
         }
-        return userImage;
+
+        List<String> tags = new ArrayList<>();
+        tags.add(meeting.getHashTag().getTag1());
+        tags.add(meeting.getHashTag().getTag2());
+        tags.add(meeting.getHashTag().getTag3());
+        tags.add(meeting.getHashTag().getTag4());
+        tags.add(meeting.getHashTag().getTag5());
+
+        getMeetingDesRes.setUserImage(userImage);
+        getMeetingDesRes.setGetNoticeRes(getNoticeRes);
+        getMeetingDesRes.setName(meeting.getName());
+        getMeetingDesRes.setInfo(meeting.getInfo());
+        getMeetingDesRes.setOnoff(meeting.isOnoff());
+        getMeetingDesRes.setCur_num(meeting.getCur_num());
+        getMeetingDesRes.setTagList(tags);
+        return getMeetingDesRes;
     }
 
     @Transactional
