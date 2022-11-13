@@ -168,7 +168,7 @@ public class MeetingController {
     }
 
     @GetMapping("/auth/meeting/{meeting_id}")  // 독서 모임 상세페이지 api(유저 프로필사진 반환 & 해당 모임 정보)
-    public List<String> meetingMain(@PathVariable int meeting_id, Authentication authentication){
+    public GetMeetingDesRes meetingMain(@PathVariable int meeting_id, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.meetingMain(principalDetails.getUser(), meeting_id);
     }
