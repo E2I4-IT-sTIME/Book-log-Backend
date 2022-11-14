@@ -17,7 +17,7 @@ public class PostPortfolioReq {
     //private int userId;
 
     private String content;
-    private String image;
+    //private String image;
 
     private List<Integer> reviews_id;
 

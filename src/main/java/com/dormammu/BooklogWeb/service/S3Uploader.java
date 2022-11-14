@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.dormammu.BooklogWeb.domain.meeting.Meeting;
 import com.dormammu.BooklogWeb.domain.meeting.MeetingRepository;
+import com.dormammu.BooklogWeb.domain.portfolio.Portfolio;
+import com.dormammu.BooklogWeb.domain.portfolio.PortfolioRepository;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
 import com.dormammu.BooklogWeb.dto.FileUploadResponse;
@@ -34,6 +36,7 @@ public class S3Uploader {
     private final AmazonS3Client amazonS3Client;
     private final MeetingRepository meetingRepository;
     private final UserRepository userRepository;
+    private final PortfolioRepository portfolioRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -45,7 +48,7 @@ public class S3Uploader {
         return upload(meetingId, uploadFile, dirName);
     }
 
-    // s3로 파일 업로드하기
+    // s3로 파일 업로드하기 - meeting
     private String upload(int meetingId, File uploadFile, String dirName) {
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
@@ -55,6 +58,26 @@ public class S3Uploader {
 
         return "모임 생성 및 사진 저장 성공";
     }
+
+    // s3로 파일 업로드하기 - portfolio
+    /* --- */
+    public String uploadPortfolio(int portfolio_id, MultipartFile multipartFile, String dirName) throws IOException {
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
+
+        return uploadPortfolio(portfolio_id, uploadFile, dirName);
+    }
+
+    private String uploadPortfolio(int portfolio_id, File uploadFile, String dirName) {
+        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
+        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        Portfolio portfolio = portfolioRepository.findById(portfolio_id);
+        portfolio.setImage(uploadImageUrl);
+        removeNewFile(uploadFile);
+
+        return "포트폴리오 생성 및 사진 저장 성공";
+    }
+    /* --- */
 
     public String uploadProfile(int userId, MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)

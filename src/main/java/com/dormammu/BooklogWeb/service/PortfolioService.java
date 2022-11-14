@@ -12,7 +12,9 @@ import com.dormammu.BooklogWeb.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final ReviewRepository reviewRepository;
     private final PortfolioReviewRepository portfolioReviewRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public List<GetPortfolioListRes> myPortfolioList(User user) {
@@ -53,13 +56,15 @@ public class PortfolioService {
     }
 
     @Transactional
-    public int createPortfolio(User user, PostPortfolioReq portfolioReq) {
+    public int createPortfolio(User user, PostPortfolioReq portfolioReq, MultipartFile multipartFile) throws IOException {
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle(portfolioReq.getTitle());
         portfolio.setContent(portfolioReq.getContent());
-        portfolio.setImage(portfolioReq.getImage());
+        //portfolio.setImage(portfolioReq.getImage());
         portfolio.setUser(user);
         portfolioRepository.save(portfolio);
+
+        String s3_upload = s3Uploader.uploadPortfolio(portfolio.getId(), multipartFile, "meeting");
 
         if (portfolioReq.getReviews_id() != null) {
             for (int r : portfolioReq.getReviews_id()) {
@@ -80,7 +85,7 @@ public class PortfolioService {
         if (origin_portfolio.getUser().getId() == user.getId()) {
             origin_portfolio.setTitle(portfolioReq.getTitle());
             origin_portfolio.setContent(portfolioReq.getContent());
-            origin_portfolio.setImage(portfolioReq.getImage());
+            //origin_portfolio.setImage(portfolioReq.getImage());
 
             // 포트폴리오 내의 서평 id 모두 제거
             portfolioReviewRepository.deleteByPortfolioId(origin_portfolio.getId());
