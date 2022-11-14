@@ -276,7 +276,7 @@ public class MeetingController {
     }
 
     // 이거 아직X
-    @ApiOperation(value = "카테고리명 검색", notes = "카테고리명으로 검색 api")
+    @ApiOperation(value = "카테고리명 검색", notes = "카테고리명으로 검색 api(아직 구현X)")
     @GetMapping("/auth/meeting/searchCategory")  // 카테고리명으로 검색 api
     public List<GetMeetingRes> searchCategory(@RequestParam("category") String category, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();

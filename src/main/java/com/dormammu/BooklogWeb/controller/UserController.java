@@ -5,6 +5,10 @@ import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.dto.GetUserRes;
 import com.dormammu.BooklogWeb.service.S3Uploader;
 import com.dormammu.BooklogWeb.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +21,23 @@ import java.sql.Date;
 //@RequestMapping("api")
 @RestController
 @RequiredArgsConstructor
+@Api(tags = {"유저 API"})  // Swagger 최상단 Controller 명칭
 public class UserController {
     private final UserService userService;
 
     private final S3Uploader s3Uploader;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @ApiOperation(value = "회원가입", notes = "회원가입 API (+이미지)")
+    @ApiImplicitParams(
+            { @ApiImplicitParam(name = "image", value = "유저 프로필이미지"),
+                    @ApiImplicitParam(name = "username", value = "유저 이름"),
+                    @ApiImplicitParam(name = "password", value = "비밀번호"),
+                    @ApiImplicitParam(name = "email", value = "이메일"),
+                    @ApiImplicitParam(name = "birthday", value = "생일"),
+                    @ApiImplicitParam(name = "job", value = "직업")
+            }
+    )
     @PostMapping("join")  // 회원가입 API (+이미지)
     public String join(@RequestPart(value = "image") MultipartFile multipartFile, @RequestParam(name = "username") String username, @RequestParam(name = "password") String password,
         @RequestParam(name = "email") String email, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job) throws IOException {
@@ -46,6 +61,15 @@ public class UserController {
         return "회원가입실패";
     }
 
+    @ApiOperation(value = "회원 정보 수정", notes = "회원정보 수정 api")
+    @ApiImplicitParams(
+            { @ApiImplicitParam(name = "image", value = "유저 프로필이미지"),
+                    @ApiImplicitParam(name = "id", value = "유저 id값"),
+                    @ApiImplicitParam(name = "username", value = "유저 이름"),
+                    @ApiImplicitParam(name = "birthday", value = "생일"),
+                    @ApiImplicitParam(name = "job", value = "직업")
+            }
+    )
     @PatchMapping("/auth/user/{id}")  // 회원정보 수정 api
     public String updateUser(@RequestPart(value = "image", required = false) MultipartFile multipartFile, @PathVariable int id, @RequestParam(name = "username", required = false) String username, @RequestParam(name = "birthday", required = false) Date birthday, @RequestParam(name = "job", required = false) String job, Authentication authentication) throws IOException {
 
@@ -55,6 +79,8 @@ public class UserController {
         return "회원수정완료";
     }
 
+    @ApiOperation(value = "마이페이지", notes = "마이페이지 api")
+    @ApiImplicitParam(name = "id", value = "유저 id값")
     @GetMapping("/auth/user/{id}")  // 마이페이지 api
     public GetUserRes myPage(@PathVariable int id, Authentication authentication) throws IOException {
 
@@ -80,6 +106,8 @@ public class UserController {
 //    }
 
     // 회원 탈퇴
+    @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 api")
+    @ApiImplicitParam(name = "id", value = "유저 id값")
     @PatchMapping("/auth/user/delete/{id}")
     public String deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
