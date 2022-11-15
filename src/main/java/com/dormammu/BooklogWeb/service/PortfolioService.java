@@ -64,7 +64,7 @@ public class PortfolioService {
         portfolio.setUser(user);
         portfolioRepository.save(portfolio);
 
-        String s3_upload = s3Uploader.uploadPortfolio(portfolio.getId(), multipartFile, "meeting");
+        String s3_upload = s3Uploader.uploadPortfolio(portfolio.getId(), multipartFile, "portfolio");
 
         if (portfolioReq.getReviews_id() != null) {
             for (int r : portfolioReq.getReviews_id()) {
