@@ -135,7 +135,6 @@ public class MeetingService {
 
     @Transactional
     public List<GetMeetingRes> meetingList(){
-//        System.out.println("meetingList 들어옴");
         List<Meeting> meetingList = meetingRepository.findAll();
         List<GetMeetingRes> meetingResList = new ArrayList<>();
 
@@ -205,7 +204,6 @@ public class MeetingService {
     @Transactional(readOnly = true)
     public List<GetMeetingRes> myMeetingList(User user){
         System.out.println("myMeetingList 들어옴");
-//        List<Meeting> myMeetings = meetingRepository.findByUserId(user.getId());
         List<MeetingUser> meetingUsers = meetingUserRepository.findByUserId(user.getId());
 
         List<GetMeetingRes> myMeetingList = new ArrayList<>();
@@ -247,7 +245,6 @@ public class MeetingService {
             newMeetingUser.setUser(user);
             newMeetingUser.setMeeting(meeting);
             newMeetingUser.setStatus("수락 대기");
-            // meeting.setCur_num(meeting.getCur_num()+1);  // 인원 추가
             meetingUserRepository.save(newMeetingUser);
 
             UserQnA userQnA = new UserQnA();
@@ -285,7 +282,6 @@ public class MeetingService {
     @Transactional
     public String update(int id, PatchMeetingReq patchMeetingReq){
         Meeting meeting = meetingRepository.findById(id);
-//        System.out.println(meeting.getName() + "의 모임 정보를 수정합니다");
         meeting.setName(patchMeetingReq.getName());
         meeting.setInfo(patchMeetingReq.getInfo());
         meeting.setMent(patchMeetingReq.getMent());
@@ -302,7 +298,6 @@ public class MeetingService {
         meetingRepository.delete(meeting);
         System.out.println("모임 삭제됨");
 
-//        System.out.println("큐앤에이, 해시태그, 미팅유저 삭제됨");  // 모임 삭제 -> meetingUser전부, 해시태그, 큐앤에이
         return "모임 삭제 완료";
     }
 
@@ -318,7 +313,6 @@ public class MeetingService {
         questionList.add(question.getQ3());
         questionList.add(question.getQ4());
         questionList.add(question.getQ5());
-//        System.out.println("질문 리스트 출력 : " + questions);
 
         MeetingRes meetingRes = MeetingRes.builder()
                 .name(meeting.getName())
