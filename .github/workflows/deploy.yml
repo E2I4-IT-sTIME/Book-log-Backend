@@ -39,6 +39,7 @@ jobs:
       # yml 파일 생성
       - name: Create Property
         run: |
+          mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
           echo "${{secrets.PROPERTIES}}" > ./src/main/resources/application.yml
