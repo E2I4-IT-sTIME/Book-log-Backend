@@ -33,6 +33,8 @@ public class User {
     @Column(nullable = false)
     private String username;
 
+    private String kakao_username;
+
     @Column(nullable = false)
     private String password;
 
@@ -53,6 +55,8 @@ public class User {
     private boolean active = true;
 
     private String roles;  // ROLE_USER, ROLE_ADMIN
+
+    private Long kakao_id;
 
     @CreationTimestamp
     private Timestamp createDate;

@@ -28,16 +28,16 @@ public class UserController {
     private final S3Uploader s3Uploader;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @ApiOperation(value = "회원가입", notes = "회원가입 API (+이미지)")
-    @ApiImplicitParams(
-            { @ApiImplicitParam(name = "image", value = "유저 프로필이미지"),
-                    @ApiImplicitParam(name = "username", value = "유저 이름"),
-                    @ApiImplicitParam(name = "password", value = "비밀번호"),
-                    @ApiImplicitParam(name = "email", value = "이메일"),
-                    @ApiImplicitParam(name = "birthday", value = "생일"),
-                    @ApiImplicitParam(name = "job", value = "직업")
-            }
-    )
+//    @ApiOperation(value = "회원가입", notes = "회원가입 API (+이미지)")
+//    @ApiImplicitParams(
+//            { @ApiImplicitParam(name = "image", value = "유저 프로필이미지"),
+//                    @ApiImplicitParam(name = "username", value = "유저 이름"),
+//                    @ApiImplicitParam(name = "password", value = "비밀번호"),
+//                    @ApiImplicitParam(name = "email", value = "이메일"),
+//                    @ApiImplicitParam(name = "birthday", value = "생일"),
+//                    @ApiImplicitParam(name = "job", value = "직업")
+//            }
+//    )
     @PostMapping("join")  // 회원가입 API (+이미지)
     public String join(@RequestPart(value = "image") MultipartFile multipartFile, @RequestParam(name = "username") String username, @RequestParam(name = "password") String password,
         @RequestParam(name = "email") String email, @RequestParam(name = "birthday") Date birthday, @RequestParam(name = "job") String job) throws IOException {
@@ -61,15 +61,15 @@ public class UserController {
         return "회원가입실패";
     }
 
-    @ApiOperation(value = "회원 정보 수정", notes = "회원정보 수정 api")
-    @ApiImplicitParams(
-            { @ApiImplicitParam(name = "image", value = "유저 프로필이미지"),
-                    @ApiImplicitParam(name = "id", value = "유저 id값"),
-                    @ApiImplicitParam(name = "username", value = "유저 이름"),
-                    @ApiImplicitParam(name = "birthday", value = "생일"),
-                    @ApiImplicitParam(name = "job", value = "직업")
-            }
-    )
+//    @ApiOperation(value = "회원 정보 수정", notes = "회원정보 수정 api")
+//    @ApiImplicitParams(
+//            { @ApiImplicitParam(name = "image", value = "유저 프로필이미지"),
+//                    @ApiImplicitParam(name = "id", value = "유저 id값"),
+//                    @ApiImplicitParam(name = "username", value = "유저 이름"),
+//                    @ApiImplicitParam(name = "birthday", value = "생일"),
+//                    @ApiImplicitParam(name = "job", value = "직업")
+//            }
+//    )
     @PatchMapping("/auth/user/{id}")  // 회원정보 수정 api
     public String updateUser(@RequestPart(value = "image", required = false) MultipartFile multipartFile, @PathVariable int id, @RequestParam(name = "username", required = false) String username, @RequestParam(name = "birthday", required = false) Date birthday, @RequestParam(name = "job", required = false) String job, Authentication authentication) throws IOException {
 

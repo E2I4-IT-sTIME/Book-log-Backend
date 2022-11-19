@@ -3,7 +3,6 @@ package com.dormammu.BooklogWeb.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.dormammu.BooklogWeb.config.jwt.JwtProperties;
-import com.dormammu.BooklogWeb.config.oauth.AccessTokenRes;
 import com.dormammu.BooklogWeb.config.oauth.KakaoProfile;
 import com.dormammu.BooklogWeb.domain.user.User;
 import com.dormammu.BooklogWeb.domain.user.UserRepository;
@@ -21,9 +20,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,43 +43,6 @@ public class AuthService {
     @Value("${spring.jpa.security.oauth2.client.registration.kakao.redirect-uri}")
     String redirect_uri;
 
-    @Transactional
-    public AccessTokenRes getAccessToken(String code) {
-
-        RestTemplate rt = new RestTemplate();
-        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", client_id);
-        params.add("redirect_uri", redirect_uri);
-        params.add("code", code);
-        // params.add("client_secret", "{시크릿 키}"); // 우선 생략
-
-        HttpEntity<MultiValueMap<String, String>> accessTokenRequest =
-                new HttpEntity<>(params, headers);
-
-        ResponseEntity<String> accessTokenResponse = rt.exchange(
-                "https://kauth.kakao.com/oauth/token",
-                HttpMethod.POST,
-                accessTokenRequest,
-                String.class
-        );
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        AccessTokenRes accessTokenRes = null;
-        try {
-            accessTokenRes = objectMapper.readValue(accessTokenResponse.getBody(), AccessTokenRes.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return accessTokenRes;
-    }
-
     // accessToken 으로 회원정보 요청 후 DB에 저장
     @Transactional
     public LoginRes saveUser(String token) {
@@ -86,14 +51,16 @@ public class AuthService {
         // 카카오 서버로부터 회원정보 받아오기
         KakaoProfile profile = findProfile(token);
 
-        User user = userRepository.findByEmail(profile.getKakao_account().getEmail());
+        // User user = userRepository.findByEmail(profile.getKakao_account().getEmail());
+        User user = userRepository.findByKakao_id(profile.id);
 
         if(user == null) {
             isExist = false;
             user = User.builder()
-                    .username(profile.getKakao_account().getProfile().getNickname())
+                    .kakao_username(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
-                    .imgPath(profile.getKakao_account().getProfile().getProfile_image_url()).build();
+                    .imgPath(profile.getKakao_account().getProfile().getProfile_image_url())
+                    .kakao_id(profile.id).build();
 
             userRepository.save(user);
         }
@@ -135,11 +102,11 @@ public class AuthService {
     public LoginRes createToken(User user, Boolean isExist) {
 
         String jwtToken = JWT.create()
-                .withSubject(user.getEmail())
+                .withSubject(user.getKakao_id().toString())
                 .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
 
                 .withClaim("id", user.getId())
-                .withClaim("email", user.getEmail())
+                .withClaim("kakaoId", user.getKakao_id())
 
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
@@ -150,7 +117,9 @@ public class AuthService {
         return loginRes;
     }
 
-
-
-
+    @Transactional
+    public void addUsername(int id, String name){
+        User user = userRepository.findById(id);
+        user.setUsername(name);
+    }
 }
