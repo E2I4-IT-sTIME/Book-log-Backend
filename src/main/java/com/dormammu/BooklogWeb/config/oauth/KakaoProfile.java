@@ -7,13 +7,13 @@ public class KakaoProfile {
 
     public Long id;
     public String connected_at; // 서비스에 연결 완료된 시각
-    public Properties properties; // 사용자 프로퍼티(Property)
+//    public Properties properties; // 사용자 프로퍼티(Property)
     public KakaoAccount kakao_account; // 카카오계정 정보
 
-    @Data
-    public class Properties {
-        public String nickname;
-    }
+//    @Data
+//    public class Properties {
+//        public String nickname;
+//    }
 
     @Data
     public class KakaoAccount {
