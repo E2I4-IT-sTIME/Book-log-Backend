@@ -52,7 +52,7 @@ public class AuthService {
         KakaoProfile profile = findProfile(token);
 
         // User user = userRepository.findByEmail(profile.getKakao_account().getEmail());
-        User user = userRepository.findByKakao_id(profile.id);
+        User user = userRepository.findByKakaoId(profile.getId());
 
         if(user == null) {
             isExist = false;
@@ -60,7 +60,7 @@ public class AuthService {
                     .kakao_username(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
                     .imgPath(profile.getKakao_account().getProfile().getProfile_image_url())
-                    .kakao_id(profile.id).build();
+                    .kakao_id(profile.getId()).build();
 
             userRepository.save(user);
         }
