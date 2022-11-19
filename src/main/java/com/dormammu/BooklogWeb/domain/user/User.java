@@ -56,7 +56,7 @@ public class User {
 
     private String roles;  // ROLE_USER, ROLE_ADMIN
 
-    private Long kakao_id;
+    private Long kakaoId;
 
     @CreationTimestamp
     private Timestamp createDate;

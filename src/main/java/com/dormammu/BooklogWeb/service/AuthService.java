@@ -52,7 +52,7 @@ public class AuthService {
         KakaoProfile profile = findProfile(token);
 
         // User user = userRepository.findByEmail(profile.getKakao_account().getEmail());
-        User user = userRepository.findByKakao_id(profile.id);
+        User user = userRepository.findByKakaoId(profile.getId());
 
         if(user == null) {
             isExist = false;
@@ -60,7 +60,7 @@ public class AuthService {
                     .kakao_username(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
                     .imgPath(profile.getKakao_account().getProfile().getProfile_image_url())
-                    .kakao_id(profile.id).build();
+                    .kakaoId(profile.getId()).build();
 
             userRepository.save(user);
         }
@@ -102,11 +102,11 @@ public class AuthService {
     public LoginRes createToken(User user, Boolean isExist) {
 
         String jwtToken = JWT.create()
-                .withSubject(user.getKakao_id().toString())
+                .withSubject(user.getKakaoId().toString())
                 .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
 
                 .withClaim("id", user.getId())
-                .withClaim("kakaoId", user.getKakao_id())
+                .withClaim("kakaoId", user.getKakaoId())
 
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
