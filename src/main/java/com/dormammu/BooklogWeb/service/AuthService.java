@@ -57,9 +57,10 @@ public class AuthService {
         if(user == null) {
             isExist = false;
             user = User.builder()
+                    .username(null)
                     .kakao_username(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
-                    .imgPath(profile.getKakao_account().getProfile().getProfile_image_url())
+                    .imgPath(profile.getKakao_account().getProfile().getThumbnail_image_url())
                     .kakaoId(profile.getId()).build();
 
 

@@ -45,7 +45,6 @@ public class UserController {
         if (userService.checkEmailDuplication(email)) {
             User user = User.builder()
                     .username(username)
-                    .password(bCryptPasswordEncoder.encode(password))
                     .email(email)
                     .birthday(birthday)
                     .job(job)

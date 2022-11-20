@@ -40,7 +40,7 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return null;
     }
 
     @Override

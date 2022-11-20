@@ -29,13 +29,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String username;
 
     private String kakao_username;
 
-    @Column(nullable = false)
-    private String password;
+//    @Column(nullable = false)
+//    private String password;
 
 //    @Column(nullable = true)
 //    private String nickname = "닉네임"; // 나중에 db create해서 이 필드 지우기
