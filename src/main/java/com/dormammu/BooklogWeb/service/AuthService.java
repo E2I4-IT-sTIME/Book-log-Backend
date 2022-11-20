@@ -62,6 +62,7 @@ public class AuthService {
                     .imgPath(profile.getKakao_account().getProfile().getProfile_image_url())
                     .kakaoId(profile.getId()).build();
 
+
             userRepository.save(user);
         }
 
