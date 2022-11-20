@@ -3,6 +3,7 @@ package com.dormammu.BooklogWeb.controller;
 import com.dormammu.BooklogWeb.config.jwt.JwtProperties;
 import com.dormammu.BooklogWeb.dto.LoginRes;
 import com.dormammu.BooklogWeb.service.AuthService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
+@Api(tags = {"유저 API"})  // Swagger 최상단 Controller 명칭
 public class AuthController {
 
     private final AuthService authService;
