@@ -140,6 +140,7 @@ public class PortfolioService {
         GetPortfolioRes getPortfolioRes = GetPortfolioRes.builder()
                 .title(portfolio.getTitle())
                 .content(portfolio.getContent())
+                .image(portfolio.getImage())
                 .reviewResList(reviewResList).build();
 
         return getPortfolioRes;
