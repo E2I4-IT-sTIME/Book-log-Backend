@@ -26,7 +26,6 @@ import java.util.List;
 public class User {
 
     @Id  // Primary key
-    @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
