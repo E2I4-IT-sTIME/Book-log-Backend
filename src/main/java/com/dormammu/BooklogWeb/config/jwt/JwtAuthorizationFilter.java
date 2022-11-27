@@ -73,7 +73,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         request.setAttribute("id", userId);
-
         chain.doFilter(request, response);
 
     }

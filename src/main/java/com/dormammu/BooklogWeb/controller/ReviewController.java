@@ -33,15 +33,12 @@ public class ReviewController {
         if (user == null) {
             throw new Exception("존재하지 않는 유저 id 입니다.");
         }
-
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         if (user.getId() != principalDetails.getUser().getId()) {
             throw new Exception("유저 id가 일치하지 않습니다.");
         }
-
         List<ReviewRes> reviewResList = reviewService.myReviewList(user);
-
         return reviewResList;
     }
 

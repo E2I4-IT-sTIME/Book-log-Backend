@@ -61,6 +61,7 @@ public class AuthService {
                     .kakao_username(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
                     .imgPath(profile.getKakao_account().getProfile().getThumbnail_image_url())
+                    .roles("ROLE_USER")
                     .kakaoId(profile.getId()).build();
 
 
