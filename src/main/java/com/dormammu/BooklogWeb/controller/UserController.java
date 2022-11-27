@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.controller;
 
 import com.dormammu.BooklogWeb.config.auth.PrincipalDetails;
 import com.dormammu.BooklogWeb.domain.user.User;
+import com.dormammu.BooklogWeb.dto.GetUserInfoRes;
 import com.dormammu.BooklogWeb.dto.GetUserRes;
 import com.dormammu.BooklogWeb.service.S3Uploader;
 import com.dormammu.BooklogWeb.service.UserService;
@@ -9,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
@@ -111,6 +114,24 @@ public class UserController {
     public String deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return "회원탈퇴완료";
+    }
+
+    // user_id 제공
+    @ApiOperation(value = "user id 제공", notes = "user id 제공 api")
+    @GetMapping("/auth/user")
+    public ResponseEntity<Integer> userId(Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(principalDetails.getUser().getId(), HttpStatus.OK);
+    }
+
+    // 이름, 프로필 사진 제공
+    @ApiOperation(value = "이름, 프로필 사진 제공", notes = "이름, 프로필 사진 제공 api")
+    @ApiImplicitParam(name = "id", value = "유저 id값")
+    @GetMapping("/auth/user")
+    public ResponseEntity<GetUserInfoRes> userInfo(Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        GetUserInfoRes getUserInfoRes = userService.userInfo(principalDetails.getUser());
+        return new ResponseEntity<>(getUserInfoRes, HttpStatus.OK);
     }
 
 }
