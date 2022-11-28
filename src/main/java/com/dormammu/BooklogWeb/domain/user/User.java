@@ -21,7 +21,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-//@ToString(exclude = "portfolios")
 @Table(name = "user")
 public class User {
 
@@ -34,26 +33,15 @@ public class User {
 
     private String kakao_username;
 
-//    @Column(nullable = false)
-//    private String password;
-
-//    @Column(nullable = true)
-//    private String nickname = "닉네임"; // 나중에 db create해서 이 필드 지우기
-
     @Column(nullable = false, unique = true)
     private String email;
 
     @Lob
     private String imgPath;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date birthday;
+    private boolean active;
 
-    private String job;
-
-    private boolean active = true;
-
-    private String roles;  // ROLE_USER, ROLE_ADMIN
+    private String roles;
 
     private Long kakaoId;
 
@@ -70,13 +58,7 @@ public class User {
     //@JsonManagedReference
     private List<Review> reviews;
 
-//    @ManyToMany(mappedBy = "users")
-//    private List<Meeting> meetings;
-
     @OneToMany(mappedBy = "user")
     private List<MeetingUser> meetingUsers = new ArrayList<>();
-//
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Comment> comments;
 
 }

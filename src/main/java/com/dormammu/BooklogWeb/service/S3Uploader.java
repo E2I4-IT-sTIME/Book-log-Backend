@@ -87,20 +87,12 @@ public class S3Uploader {
 
     // s3로 파일 업로드하기
     private String uploadProfile(int userId, File uploadFile, String dirName) {
-//        System.out.println("uploadProfile 들어옴");
         String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
-//        System.out.println("uploadImageUrl: " + uploadImageUrl);
 
-        User user = userRepository.findById(userId);
-        user.setImgPath(uploadImageUrl);
-//        user.setImgPath("사진사진");
-//        user.setImgPath();
-        System.out.println(user.getImgPath());
-        userRepository.save(user);
         removeNewFile(uploadFile);
 
-        return "회원가입 및 유저 프로필 사진 등록 완료";
+        return uploadImageUrl;
     }
 
     // 유저 이미지 업데이트(삭제 -> 수정)
@@ -133,24 +125,6 @@ public class S3Uploader {
         return "사진 업데이트 완료";
     }
 
-
-    /*  사진 하나 업로드하기 */
-//    public FileUploadResponse upload(MultipartFile multipartFile, String dirName) throws IOException {
-//        File uploadFile = convert(multipartFile)
-//                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-//
-//        return upload(uploadFile, dirName);
-//    }
-//
-//    private FileUploadResponse upload(File uploadFile, String dirName) {
-//        String fileName = dirName + "/" + uploadFile.getName();
-//        String uploadImageUrl = putS3(uploadFile, fileName);
-//        removeNewFile(uploadFile);
-//
-//        return new FileUploadResponse(fileName, uploadImageUrl);
-//    }
-
-
     // 업로드하기
     private String putS3(File uploadFile, String fileName){
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
@@ -170,9 +144,7 @@ public class S3Uploader {
         File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
 
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
-
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
-
                 fos.write(file.getBytes());
             }
             return Optional.of(convertFile);

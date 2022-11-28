@@ -24,36 +24,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
 
-//    public void joinUser(JoinRequestDto joinRequestDto, MultipartFile multipartFile) throws IOException {
-//        User user = new User();
-//        user.setUsername(joinRequestDto.getUsername());
-//        user.setPassword(joinRequestDto.getPassword());
-//        user.setEmail(joinRequestDto.getEmail());
-//        user.setImgHome(joinRequestDto.getImgHome());
-//        user.setImgPath(joinRequestDto.getImgPath());
-//        user.setBirthday(joinRequestDto.getBirthday());
-//        user.setJob(joinRequestDto.getJob());
-//        user.setArea(joinRequestDto.getArea());
-//        user.setActive(joinRequestDto.isActive());
-//        user.setRoles(joinRequestDto.getRoles());
-//        userRepository.save(user);
-//
-//        String r = s3Uploader.uploadProfile(user.getId(), multipartFile, "static");
-//        System.out.println(r);
-//    }
+    public void updateUser(MultipartFile multipartFile, int id, String username, User loginUser) throws IOException {
+        String uploadImageUrl = s3Uploader.uploadProfile(id, multipartFile, "user");
 
-    @Transactional
-    public void joinUser(User user) {
-
-        userRepository.save(user);
-    }
-
-    public void updateUser(MultipartFile multipartFile, int id, String username, Date birthday, String job, User loginUser) throws IOException {
         User user = userRepository.findById(id);
         if (loginUser.getId() == user.getId()) {
             user.setUsername(username);
-            user.setBirthday(birthday);
-            user.setJob(job);
+            user.setImgPath(uploadImageUrl);
             userRepository.save(user);
         }
     }
@@ -74,8 +51,6 @@ public class UserService {
             getUserRes.setImage(user.getImgPath());
             getUserRes.setUsername(user.getUsername());
             getUserRes.setEmail(user.getEmail());
-            getUserRes.setBirthday(user.getBirthday());
-            getUserRes.setJob(user.getJob());
 
             return getUserRes;
         }
@@ -93,18 +68,6 @@ public class UserService {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    /* 회원가입 시, 유효성 체크 */
-    @Transactional //(readOnly = true)
-    public Map<String, String> validateHandling(Errors errors) {
-        Map<String, String> validatorResult = new HashMap<>();
-        /* 유효성 검사에 실패한 필드 목록을 받음 */
-        for (FieldError error : errors.getFieldErrors()) {
-            String validKeyName = String.format("valid_%s", error.getField());
-            validatorResult.put(validKeyName, error.getDefaultMessage());
-        }
-        return validatorResult;
     }
 
     /* 이메일 중복 여부 확인 */

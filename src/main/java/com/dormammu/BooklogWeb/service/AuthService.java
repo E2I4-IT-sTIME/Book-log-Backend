@@ -51,10 +51,9 @@ public class AuthService {
         // 카카오 서버로부터 회원정보 받아오기
         KakaoProfile profile = findProfile(token);
 
-        // User user = userRepository.findByEmail(profile.getKakao_account().getEmail());
         User user = userRepository.findByKakaoId(profile.getId());
 
-        if(user == null) {
+        if(user == null || !user.isActive()) {
             isExist = false;
             user = User.builder()
                     .username(null)
@@ -62,6 +61,7 @@ public class AuthService {
                     .email(profile.getKakao_account().getEmail())
                     .imgPath(profile.getKakao_account().getProfile().getThumbnail_image_url())
                     .roles("ROLE_USER")
+                    .active(true)
                     .kakaoId(profile.getId()).build();
 
 
