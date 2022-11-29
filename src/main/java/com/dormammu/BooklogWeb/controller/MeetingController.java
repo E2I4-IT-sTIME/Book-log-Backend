@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -46,7 +47,7 @@ public class MeetingController {
     public String createMeeting(Authentication authentication,
                                 @RequestPart(value = "image") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("info") String info,
                                 @RequestParam("ment") String ment, @RequestParam("max_num") String max_num, @RequestParam("onoff") String onoff,
-                                @RequestParam("questions")List<String> questions, @RequestParam("hashtags")List<String> hashtags) throws IOException {
+                                @RequestParam("questions")ArrayList<String> questions, @RequestParam("hashtags") ArrayList<String> hashtags) throws IOException {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         User user = userRepository.findById(principalDetails.getUser().getId());
