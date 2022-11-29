@@ -26,9 +26,4 @@ public class GetUserRes {
     @ApiModelProperty(example = "유저 이메일")
     private String email;
 
-    @ApiModelProperty(example = "생일")
-    private Date birthday;
-
-    @ApiModelProperty(example = "직업")
-    private String job;
 }
