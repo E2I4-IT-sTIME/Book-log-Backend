@@ -85,12 +85,11 @@ public class MeetingService {
     }
 
     @Transactional
-    public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, String max_num, String onoff, List<String> questions, List<String> hashtags) throws IOException {
+    public String createMeeting(User user, MultipartFile multipartFile, String name, String info, String ment, String max_num, String onoff, ArrayList<String> questions, ArrayList<String> hashtags) throws IOException {
         Meeting meeting = new Meeting();
         meeting.setName(name);
         meeting.setInfo(info);
         meeting.setMent(ment);
-//        meeting.setImage(postMeetingReq.getImage());
         meeting.setUserId(user.getId());
         meeting.setCur_num(1);
         meeting.setMax_num(Integer.parseInt(max_num));
@@ -98,7 +97,11 @@ public class MeetingService {
 
         AdminQnA adminQnA = new AdminQnA();
         adminQnA.setMeeting(meeting);
-//        System.out.println(postMeetingReq.getQuestions());
+
+        while (questions.size() != 5){
+            questions.add(null);
+        }
+
         adminQnA.setQ1(questions.get(0));
         adminQnA.setQ2(questions.get(1));
         adminQnA.setQ3(questions.get(2));
@@ -107,6 +110,10 @@ public class MeetingService {
 
         HashTag hashTag = new HashTag();
         hashTag.setMeeting(meeting);
+
+        while (hashtags.size() != 5){
+            hashtags.add(null);
+        }
         hashTag.setTag1(hashtags.get(0));
         hashTag.setTag2(hashtags.get(1));
         hashTag.setTag3(hashtags.get(2));
