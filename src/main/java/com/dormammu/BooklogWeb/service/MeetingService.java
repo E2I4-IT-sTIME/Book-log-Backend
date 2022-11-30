@@ -150,10 +150,6 @@ public class MeetingService {
             List<String> tags = new ArrayList<>();
             System.out.println(hashTag.toString()); // hashTag.toString()
 
-            while (tags.size() != 5){
-                tags.add(null);
-            }
-
             tags.add(hashTag.getTag1());
             tags.add(hashTag.getTag2());
             tags.add(hashTag.getTag3());
@@ -239,6 +235,7 @@ public class MeetingService {
                         .cur_num(mt.getMeeting().getCur_num())
                         .onoff(mt.getMeeting().isOnoff())
                         .username(user.getUsername())
+                        .info(mt.getMeeting().getInfo())
                         .tags(tag)
                         .build();
                 myMeetingList.add(getMeetingRes);
