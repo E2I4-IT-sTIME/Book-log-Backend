@@ -49,9 +49,19 @@ public class PortfolioController {
 
     // 포트폴리오 생성 (+이미지)
     @ApiOperation(value = "포트폴리오 생성", notes = "포트폴리오 생성 API 입니다. 이미지(form-data), 제목+내용(json) 입니다.")
-    @ApiImplicitParam(name = "user_id", value = "포트폴리오를 조회하고자 하는 유저의 고유 id")
+    @ApiImplicitParams(
+            {@ApiImplicitParam(name = "user_id", value = "포트폴리오를 조회하고자 하는 유저의 고유 id"),
+                    @ApiImplicitParam(name = "image", value = "포트폴리오 이미지"),
+                    @ApiImplicitParam(name = "title", value = "포트폴리오 제목"),
+                    @ApiImplicitParam(name = "content", value = "포트폴리오 내용"),
+                    @ApiImplicitParam(name = "reviews_id", value = "포트폴리오에 들어가는 리뷰의 id 리스트"),
+
+            }
+    )
     @PostMapping("/auth/user/{user_id}/portfolio")
-    public Boolean createPortfolio(@PathVariable int user_id, @RequestPart(value = "image") MultipartFile multipartFile, @RequestBody PostPortfolioReq postPortfolioReq, Authentication authentication) throws Exception {
+    public Boolean createPortfolio(@PathVariable int user_id, @RequestPart(value = "image") MultipartFile multipartFile,
+                                   @RequestParam("title") String title, @RequestParam("content") String content, @RequestParam("reviews_id") List<Integer> reviews_id,
+                                   Authentication authentication) throws Exception {
         User user = userService.findUser(user_id);
         if (user == null) {
             throw new Exception("존재하지 않는 유저 id 입니다.");
@@ -63,7 +73,7 @@ public class PortfolioController {
             throw new Exception("유저 id가 일치하지 않습니다.");
         }
 
-        portfolioService.createPortfolio(user, postPortfolioReq, multipartFile);
+        portfolioService.createPortfolio(user, multipartFile, title, content, reviews_id);
 
         return true;
     }

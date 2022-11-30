@@ -56,18 +56,18 @@ public class PortfolioService {
     }
 
     @Transactional
-    public int createPortfolio(User user, PostPortfolioReq portfolioReq, MultipartFile multipartFile) throws IOException {
+    public int createPortfolio(User user, MultipartFile multipartFile, String title, String content, List<Integer> reviews_id) throws IOException {
         Portfolio portfolio = new Portfolio();
-        portfolio.setTitle(portfolioReq.getTitle());
-        portfolio.setContent(portfolioReq.getContent());
+        portfolio.setTitle(title);
+        portfolio.setContent(content);
         //portfolio.setImage(portfolioReq.getImage());
         portfolio.setUser(user);
         portfolioRepository.save(portfolio);
 
         String s3_upload = s3Uploader.uploadPortfolio(portfolio.getId(), multipartFile, "portfolio");
 
-        if (portfolioReq.getReviews_id() != null) {
-            for (int r : portfolioReq.getReviews_id()) {
+        if (reviews_id != null) {
+            for (int r : reviews_id) {
                 Review review = reviewRepository.findById(r);
                 PortfolioReview portfolioReview = new PortfolioReview();
                 portfolioReview.setPortfolio(portfolio);
