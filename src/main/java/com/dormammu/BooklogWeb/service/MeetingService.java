@@ -559,6 +559,19 @@ public class MeetingService {
     @Transactional(readOnly = true)
     public List<GetMeetingRes> searchMeeting(String name){
         List<GetMeetingRes> getMeetingRes = entityManagerQuery.mfindBymName(name);
+        for (GetMeetingRes gm: getMeetingRes){
+            Meeting meeting = meetingRepository.findById(gm.getId());
+            HashTag tag = hashTagRepository.findById(meeting.getHashTag().getId());
+            List<String> tags = new ArrayList<>();
+            tags.add(tag.getTag1());
+            tags.add(tag.getTag2());
+            tags.add(tag.getTag3());
+            tags.add(tag.getTag4());
+            tags.add(tag.getTag5());
+
+            gm.setTags(tags);
+        }
+
         return getMeetingRes;
     }
 
