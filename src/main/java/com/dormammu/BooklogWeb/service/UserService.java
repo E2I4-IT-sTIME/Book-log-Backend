@@ -24,13 +24,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
 
-    public void updateUser(MultipartFile multipartFile, int id, String username, User loginUser) throws IOException {
-        String uploadImageUrl = s3Uploader.uploadProfile(id, multipartFile, "user");
+    public void updateUser(int id, String username, User loginUser) throws IOException {
 
         User user = userRepository.findById(id);
         if (loginUser.getId() == user.getId()) {
             user.setUsername(username);
-            user.setImgPath(uploadImageUrl);
             userRepository.save(user);
         }
     }
