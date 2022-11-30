@@ -28,10 +28,10 @@ public class UserController {
     private final UserService userService;
 
     @PatchMapping("/auth/user/{id}")  // 회원정보 수정 api
-    public String updateUser(@RequestPart(value = "image", required = false) MultipartFile multipartFile, @PathVariable int id, @RequestParam(name = "username", required = false) String username, Authentication authentication) throws IOException {
+    public String updateUser(@PathVariable int id, @RequestParam(name = "username", required = false) String username, Authentication authentication) throws IOException {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        userService.updateUser(multipartFile, id, username, principalDetails.getUser());
+        userService.updateUser(id, username, principalDetails.getUser());
 
         return "회원수정완료";
     }
