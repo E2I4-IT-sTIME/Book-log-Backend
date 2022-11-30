@@ -40,4 +40,7 @@ public class GetMeetingRes {
 
     @ApiModelProperty(example = "해시태그")
     List<String> tags;
+
+    @ApiModelProperty(example = "모임 소개글")
+    private String info;
 }
