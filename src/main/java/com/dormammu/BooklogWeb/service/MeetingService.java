@@ -235,6 +235,7 @@ public class MeetingService {
                         .cur_num(mt.getMeeting().getCur_num())
                         .onoff(mt.getMeeting().isOnoff())
                         .username(user.getUsername())
+                        .info(mt.getMeeting().getInfo())
                         .tags(tag)
                         .build();
                 myMeetingList.add(getMeetingRes);
