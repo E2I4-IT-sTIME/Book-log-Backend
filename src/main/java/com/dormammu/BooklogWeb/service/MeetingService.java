@@ -576,8 +576,8 @@ public class MeetingService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetMeetingRes> searchCategory(String category){
-        List<GetMeetingRes> getMeetingRes = entityManagerQuery.mfindByCategory(category);
+    public List<GetMeetingRes> searchCategory(String tagName){
+        List<GetMeetingRes> getMeetingRes = entityManagerQuery.mfindByCategory(tagName);
         return getMeetingRes;
     }
 }
