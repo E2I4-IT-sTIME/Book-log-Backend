@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -11,7 +12,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
 
     private static final String API_NAME = "Booklog";
@@ -21,6 +21,8 @@ public class SwaggerConfig {
     @Bean
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(true) // Swagger 에서 제공해주는 기본 응답 코드 (200, 401, 403, 404) 등의 노출 여부
+                .apiInfo(apiInfo()) // Swagger UI 로 노출할 정보
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.dormammu.BooklogWeb"))  // Swagger를 적용할 클래스의 package명
                 .paths(PathSelectors.any())  // 해당 package하위에 있는 모든 url에 적용

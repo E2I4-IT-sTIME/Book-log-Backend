@@ -19,7 +19,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @ApiOperation(value = "댓글 생성", notes = "댓글 생성 api")
-    @ApiImplicitParam(name = "meeting_id", value = "모임 id값")
+    //@ApiImplicitParam(name = "meeting_id", value = "모임 id값", dataTypeClass = Integer.class)
     @PostMapping("/auth/meeting/{meeting_id}/comment")  // 댓글 생성 api
     public String createComment(@PathVariable int meeting_id, Authentication authentication, @RequestBody PostCommentReq postCommentReq){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -28,7 +28,7 @@ public class CommentController {
     }
 
     @ApiOperation(value = "댓글 수정", notes = "댓글 수정 api")
-    @ApiImplicitParam(name = "meeting_id", value = "모임 id값")
+    //@ApiImplicitParam(name = "meeting_id", value = "모임 id값", dataTypeClass = Integer.class)
     @PatchMapping("/auth/meeting/{meeting_id}/comment/{comment_id}")  // 댓글 수정 api
     public String updateComment(@PathVariable int meeting_id, @PathVariable int comment_id, Authentication authentication, @RequestBody PostCommentReq postCommentReq){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -37,11 +37,11 @@ public class CommentController {
     }
 
     @ApiOperation(value = "댓글 삭제", notes = "댓글 삭제 api")
-    @ApiImplicitParams(
-                { @ApiImplicitParam(name = "meeting_id", value = "모임 id값"),
-                        @ApiImplicitParam(name = "comment_id", value = "댓글 id값")
-                }
-            )
+//    @ApiImplicitParams(
+//                { @ApiImplicitParam(name = "meeting_id", value = "모임 id값", paramType = "int"),
+//                        @ApiImplicitParam(name = "comment_id", value = "댓글 id값", paramType = "int")
+//                }
+//            )
     @DeleteMapping("/auth/meeting/{meeting_id}/comment/{comment_id}")  // 댓글 삭제 api
     public String deleteComment(@PathVariable int meeting_id, @PathVariable int comment_id, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();

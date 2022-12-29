@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "마이페이지", notes = "마이페이지 api")
-    @ApiImplicitParam(name = "id", value = "유저 id값")
+    //@ApiImplicitParam(name = "id", value = "유저 id값", dataTypeClass = Integer.class)
     @GetMapping("/auth/user/{id}")  // 마이페이지 api
     public GetUserRes myPage(@PathVariable int id, Authentication authentication) throws IOException {
 
@@ -48,7 +48,7 @@ public class UserController {
 
     // 회원 탈퇴
     @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 api")
-    @ApiImplicitParam(name = "id", value = "유저 id값")
+    //@ApiImplicitParam(name = "id", value = "유저 id값", dataTypeClass = Integer.class)
     @PatchMapping("/auth/user/delete/{id}")
     public String deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
@@ -65,7 +65,7 @@ public class UserController {
 
     // 이름, 프로필 사진 제공
     @ApiOperation(value = "이름, 프로필 사진 제공", notes = "이름, 프로필 사진 제공 api")
-    @ApiImplicitParam(name = "id", value = "유저 id값")
+    //@ApiImplicitParam(name = "id", value = "유저 id값", dataTypeClass = Integer.class)
     @GetMapping("/auth/userinfo")
     public ResponseEntity<GetUserInfoRes> userInfo(Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
