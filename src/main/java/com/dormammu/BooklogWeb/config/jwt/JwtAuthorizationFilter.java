@@ -46,6 +46,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         // header가 있는지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)){
+            System.out.println("들어와?");
             chain.doFilter(request, response);
             return;
         }
@@ -58,7 +59,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .getClaim("id").asInt();  // 토큰 서명해서 userId 가져오기
             Optional<User> user = userRepository.findById(userId);
             PrincipalDetails principalDetails = new PrincipalDetails(user.get());
-
 
             // JWT토큰 서명을 통해 서명이 정상이면 Authentication 객체 생성
             Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
