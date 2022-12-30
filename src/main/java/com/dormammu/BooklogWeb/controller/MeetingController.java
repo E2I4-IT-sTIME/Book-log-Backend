@@ -271,7 +271,7 @@ public class MeetingController {
 
     @ApiOperation(value = "독서 모임명 검색", notes = "독서 모임명으로 검색 api")
     @GetMapping("/auth/meeting/searchName")  // 독서 모임명으로 검색 api
-    public List<GetMeetingRes> searchMeeting(@RequestParam("name") String name, Authentication authentication){
+    public List<GetmNameRes> searchMeeting(@RequestParam("name") String name, Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         return meetingService.searchMeeting(name);
     }
