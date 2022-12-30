@@ -260,6 +260,10 @@ public class MeetingService {
             meetingUserRepository.save(newMeetingUser);
 
             UserQnA userQnA = new UserQnA();
+
+            while (postAnswerReq.getAnswers().size() != 5){
+                postAnswerReq.getAnswers().add(null);
+            }
             userQnA.setA1(postAnswerReq.getAnswers().get(0));
             userQnA.setA2(postAnswerReq.getAnswers().get(1));
             userQnA.setA3(postAnswerReq.getAnswers().get(2));
@@ -337,8 +341,8 @@ public class MeetingService {
 
         Meeting meeting = meetingRepository.findById(meeting_id);
         if (meeting.getUserId() == user.getId()) {
-            System.out.println(meeting.getName());
-            System.out.println(postNoticeReq.getNotice());
+//            System.out.println(meeting.getName());
+//            System.out.println(postNoticeReq.getNotice());
 
             meeting.setNotice(postNoticeReq.getNotice());
             meetingRepository.save(meeting);
