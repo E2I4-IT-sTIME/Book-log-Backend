@@ -64,12 +64,8 @@ public class ReviewController {
         return "review_id : " + review_id;
     }
 
-    // 서평 수정
+    // 서평 수정 - postReviewReq에서 isbn은 보내지않아도 ok
     @ApiOperation(value = "서평 수정", notes = "서평을 수정하는 API 입니다.")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "user_id", value = "서평을 수정하고자 하는 유저의 고유 id", dataTypeClass = Integer.class),
-//            @ApiImplicitParam(name = "review_id", value = "수정하고자 하는 서평의 고유 id", dataTypeClass = Integer.class),
-//            @ApiImplicitParam(name = "postReviewReq", value = "서평 수정 json DTO", dataTypeClass = PostReviewReq.class)})
     @PatchMapping("/auth/user/{user_id}/review/{review_id}")
     public Boolean updateReview(@PathVariable int user_id, @RequestBody PostReviewReq postReviewReq, Authentication authentication, @PathVariable int review_id) throws Exception {
         User user = userService.findUser(user_id);

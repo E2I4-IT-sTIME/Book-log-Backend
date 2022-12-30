@@ -39,12 +39,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .mvcMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/**", "/v2/api-docs")
-                .anyRequest();
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring()
+//                .mvcMatchers("/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/**", "/v2/api-docs")
+//                .anyRequest();
+//    }
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

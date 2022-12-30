@@ -13,12 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 public class PostPortfolioReq {
     private String title;
-
-    //private int userId;
-
     private String content;
-    //private String image;
-
+    private String image;
     private List<Integer> reviews_id;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")

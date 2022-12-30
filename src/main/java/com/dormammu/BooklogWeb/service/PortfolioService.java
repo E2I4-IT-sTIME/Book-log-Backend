@@ -36,10 +36,11 @@ public class PortfolioService {
 
         for (Portfolio pf : portfolioList) {
 
-            List<Review> reviews = reviewRepository.findByPortfolioId(pf.getId());
             List<String> review_isbn = new ArrayList<>();
+            List<PortfolioReview> portfolioReviews = portfolioReviewRepository.findByPortfolioId(pf.getId());
 
-            for (Review r : reviews) {
+            for (PortfolioReview pr : portfolioReviews) {
+                Review r = pr.getReview();
                 review_isbn.add(r.getIsbn());
             }
 
@@ -79,19 +80,19 @@ public class PortfolioService {
     }
 
     @Transactional
-    public String updatePortfolio(User user, PostPortfolioReq portfolioReq, int portfolio_id) {
+    public String updatePortfolio(User user, MultipartFile multipartFile, String title, String content, List<Integer> reviews_id, int portfolio_id) throws IOException {
         Portfolio origin_portfolio = portfolioRepository.findById(portfolio_id);
 
         if (origin_portfolio.getUser().getId() == user.getId()) {
-            origin_portfolio.setTitle(portfolioReq.getTitle());
-            origin_portfolio.setContent(portfolioReq.getContent());
-            //origin_portfolio.setImage(portfolioReq.getImage());
+            origin_portfolio.setTitle(title);
+            origin_portfolio.setContent(content);
+
+            String s3_upload = s3Uploader.uploadPortfolio(origin_portfolio.getId(), multipartFile, "portfolio");
 
             // 포트폴리오 내의 서평 id 모두 제거
             portfolioReviewRepository.deleteByPortfolioId(origin_portfolio.getId());
 
             // 전체 다시 등록
-            List<Integer> reviews_id = portfolioReq.getReviews_id();
             for (int ri : reviews_id) {
                 PortfolioReview portfolioReview = new PortfolioReview();
                 portfolioReview.setPortfolio(origin_portfolio);
@@ -123,11 +124,11 @@ public class PortfolioService {
     public GetPortfolioRes onePortfolio(User user, int portfolio_id) {
         Portfolio portfolio = portfolioRepository.findById(portfolio_id);
 
-        List<Review> reviews = reviewRepository.findByPortfolioId(portfolio_id);
-
+        List<PortfolioReview> portfolioReviews = portfolioReviewRepository.findByPortfolioId(portfolio.getId());
         List<ReviewRes> reviewResList = new ArrayList<>();
 
-        for (Review r : reviews) {
+        for (PortfolioReview pr : portfolioReviews) {
+            Review r = pr.getReview();
             ReviewRes reviewRes = ReviewRes.builder()
                     .title(r.getTitle())
                     .review_id(r.getId())
