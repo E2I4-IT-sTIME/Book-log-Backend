@@ -29,7 +29,7 @@ public class EntityManagerQuery {
     public List<GetCategoryRes> mfindByCategory(String tagName){
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery("SELECT m.id as id, m.name as name, m.image as image, m.onoff as onoff, m.max_num as max_num, m.cur_num as cur_num, \n" +
-                        "m.info as info, m.hashTag_id as hashTag_id\n" +
+                        "m.info as info, m.hashTag_id as hashTag_id,  h.tag1 as tag1, h.tag2 as tag2, h.tag3 as tag3, h.tag4 as tag4, h.tag5 as tag5\n" +
                         "FROM meeting m left outer join hastag h on h.id = m.hashTag_id\n" +
                         "WHERE h.tag1 like :tagName1 OR\n" +
                         "h.tag2 like :tagName2 OR\n" +

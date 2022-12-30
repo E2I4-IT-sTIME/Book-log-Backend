@@ -35,4 +35,19 @@ public class GetCategoryRes {
 
     @ApiModelProperty(example = "해시태그 id")
     private int hashTag_id;
+
+    @ApiModelProperty(example = "해시태그1")
+    private String tag1;
+
+    @ApiModelProperty(example = "해시태그2")
+    private String tag2;
+
+    @ApiModelProperty(example = "해시태그3")
+    private String tag3;
+
+    @ApiModelProperty(example = "해시태그4")
+    private String tag4;
+
+    @ApiModelProperty(example = "해시태그5")
+    private String tag5;
 }
