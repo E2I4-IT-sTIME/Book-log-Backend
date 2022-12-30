@@ -29,8 +29,8 @@ public class EntityManagerQuery {
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery("SELECT \n" +
                 "m.id as id, m.name as name, m.image as image, m.onoff as onoff,\n" +
-                "m.max_num as max_num, m.cur_num as cur_num, m.info as info, m.hashTag_id as hashTag_id\n" +
-                "FROM meeting m left outer join hastag h on h.id = m.hashTag_id\n" +
+                "m.max_num as max_num, m.cur_num as cur_num, m.info as info, m.hashTag_id as hashTag_id, h.tag1 as tag1, h.tag2 as tag2, h.tag3 as tag3, h.tag4 as tag4, h.tag5 as tag5 \n" +
+                        "FROM meeting m left outer join hastag h on h.id = m.hashTag_id\n" +
                 "WHERE h.tag1 like :tagName OR h.tag2 like :tagName OR h.tag3 like :tagName OR h.tag4 like :tagName OR h.tag5 like :tagName")
                 .setParameter("tagName", tagName);  // 해당 태그가 있는지 확인하고, 포함되어있다면 반환하기
         List<GetMeetingRes> getMeetingRes = result.list(query, GetMeetingRes.class);

@@ -276,7 +276,6 @@ public class MeetingController {
         return meetingService.searchMeeting(name);
     }
 
-    // 이거 아직X
     @ApiOperation(value = "카테고리명 검색", notes = "카테고리명으로 검색 api(해시태그 검색 기능)")
     @GetMapping("/auth/meeting/searchCategory")  // 카테고리명으로 검색 api
     public List<GetMeetingRes> searchCategory(@RequestParam("tagName") String tagName, Authentication authentication){
