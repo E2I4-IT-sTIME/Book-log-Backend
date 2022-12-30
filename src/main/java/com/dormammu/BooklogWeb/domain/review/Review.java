@@ -30,6 +30,7 @@ public class Review {
 
     private String title;
 
+    @Lob
     private String content;
 
     //private String book_name;
