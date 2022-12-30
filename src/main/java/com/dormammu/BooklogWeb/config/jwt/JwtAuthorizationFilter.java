@@ -46,10 +46,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         // header가 있는지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)){
-            System.out.println("들어와?");
             chain.doFilter(request, response);
             return;
         }
+
         // JWT토큰을 검증해서 정상적인 사용자인지 확인
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");  // 앞에 Bearer을 공백으로 치환(토큰만 남겨주기)
 

@@ -68,6 +68,7 @@ public class UserController {
     //@ApiImplicitParam(name = "id", value = "유저 id값", dataTypeClass = Integer.class)
     @GetMapping("/auth/userinfo")
     public ResponseEntity<GetUserInfoRes> userInfo(Authentication authentication) {
+        System.out.println("authentication: " + authentication);
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         GetUserInfoRes getUserInfoRes = userService.userInfo(principalDetails.getUser());
         return new ResponseEntity<>(getUserInfoRes, HttpStatus.OK);

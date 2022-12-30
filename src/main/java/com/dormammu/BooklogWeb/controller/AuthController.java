@@ -47,4 +47,10 @@ public class AuthController {
     public void addInfoName(@PathVariable int id, @RequestParam("name") String name) {
         authService.addUsername(id, name);
     }
+
+    // jwt 토큰을 위한 일반 로그인 임시 생성
+    @PostMapping("/login")
+    public LoginRes login(@RequestParam("username") String username, @RequestParam("kakaoId") Long kakaoId) {
+        return authService.login(username, kakaoId);
+    }
 }

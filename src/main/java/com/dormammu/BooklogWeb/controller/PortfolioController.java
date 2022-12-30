@@ -79,12 +79,13 @@ public class PortfolioController {
     }
 
     // 포트폴리오 수정
-    @ApiOperation(value = "포트폴리오 수정 (아직 작업 중입니다)", notes = "포트폴리오 수정 API 입니다.")
+    @ApiOperation(value = "포트폴리오 수정", notes = "포트폴리오 수정 API 입니다.")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "user_id", value = "포트폴리오를 조회하고자 하는 유저의 고유 id", dataTypeClass = Integer.class),
 //            @ApiImplicitParam(name= "portfolio_id", value = "수정하고자 하는 포트폴리오의 고유 id", dataTypeClass = Integer.class)})
     @PatchMapping("/auth/user/{user_id}/portfolio/{portfolio_id}")
-    public Boolean updatePortfolio(@RequestBody PostPortfolioReq postPortfolioReq, Authentication authentication, @PathVariable int user_id, @PathVariable int portfolio_id) throws Exception {
+    public Boolean updatePortfolio(@RequestPart(value = "image") MultipartFile multipartFile,
+                                   @RequestParam("title") String title, @RequestParam("content") String content, @RequestParam("reviews_id") List<Integer> reviews_id, Authentication authentication, @PathVariable int user_id, @PathVariable int portfolio_id) throws Exception {
         User user = userService.findUser(user_id);
         if (user == null) {
             throw new Exception("존재하지 않는 유저 id 입니다.");
@@ -96,7 +97,7 @@ public class PortfolioController {
             throw new Exception("유저 id가 일치하지 않습니다.");
         }
 
-        portfolioService.updatePortfolio(user, postPortfolioReq, portfolio_id);
+        portfolioService.updatePortfolio(user, multipartFile, title, content, reviews_id, portfolio_id);
 
         return true;
     }

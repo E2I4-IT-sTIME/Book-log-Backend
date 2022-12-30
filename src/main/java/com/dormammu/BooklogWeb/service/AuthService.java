@@ -75,6 +75,7 @@ public class AuthService {
     public KakaoProfile findProfile(String token) {
 
         RestTemplate rt = new RestTemplate();
+        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + token);
@@ -124,5 +125,10 @@ public class AuthService {
     public void addUsername(int id, String name){
         User user = userRepository.findById(id);
         user.setUsername(name);
+    }
+
+    public LoginRes login(String username, Long kakaoId) {
+        User user = userRepository.findByKakaoId(kakaoId);
+        return createToken(user, true);
     }
 }
