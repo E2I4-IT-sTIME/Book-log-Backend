@@ -2,6 +2,7 @@ package com.dormammu.BooklogWeb.domain.meeting;
 
 import com.dormammu.BooklogWeb.dto.GetCategoryRes;
 import com.dormammu.BooklogWeb.dto.GetMeetingRes;
+import com.dormammu.BooklogWeb.dto.GetmNameRes;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +18,13 @@ public class EntityManagerQuery {
     private EntityManager entityManager;
 
     // 모임이름, onoff, cur_num, max_num, 해시태그, image
-    public List<GetMeetingRes> mfindBymName(String mName){
+    public List<GetmNameRes> mfindBymName(String mName){
         JpaResultMapper result = new JpaResultMapper();
-        Query query = entityManager.createNativeQuery("SELECT m.name as name, m.image as image, m.onoff as onoff, m.cur_num as cur_num, m.max_num as max_num" +
-                        " FROM meeting m WHERE m.name like :mName")
+        Query query = entityManager.createNativeQuery("SELECT m.id as id, m.name as name, m.image as image, m.onoff as onoff, m.cur_num as cur_num, m.max_num as max_num, h.tag1 as tag1, h.tag2 as tag2, h.tag3 as tag3, h.tag4 as tag4, h.tag5 as tag5" +
+                        " FROM meeting m left outer join hastag h on h.id = m.hashTag_id WHERE m.name like :mName")
                 .setParameter("mName", "%"+mName+"%");
-        List<GetMeetingRes> getMeetingRes = result.list(query, GetMeetingRes.class);
-        return getMeetingRes;
+        List<GetmNameRes> getmNameRes = result.list(query, GetmNameRes.class);
+        return getmNameRes;
     }
 
     public List<GetCategoryRes> mfindByCategory(String tagName){
