@@ -26,6 +26,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -55,8 +56,11 @@ public class AuthService {
 
         if(user == null || !user.isActive()) {
             isExist = false;
+            UUID uuid = UUID.randomUUID();
+            String username = "booklog" + "_" + uuid;
+
             user = User.builder()
-                    .username(null)
+                    .username(username)
                     .kakao_username(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
                     .imgPath(profile.getKakao_account().getProfile().getThumbnail_image_url())
