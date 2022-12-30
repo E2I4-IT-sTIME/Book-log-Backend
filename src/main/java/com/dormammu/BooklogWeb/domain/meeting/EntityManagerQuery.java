@@ -1,5 +1,6 @@
 package com.dormammu.BooklogWeb.domain.meeting;
 
+import com.dormammu.BooklogWeb.dto.GetCategoryRes;
 import com.dormammu.BooklogWeb.dto.GetMeetingRes;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Repository;
@@ -25,15 +26,23 @@ public class EntityManagerQuery {
         return getMeetingRes;
     }
 
-    public List<GetMeetingRes> mfindByCategory(String tagName){
+    public List<GetCategoryRes> mfindByCategory(String tagName){
         JpaResultMapper result = new JpaResultMapper();
-        Query query = entityManager.createNativeQuery("SELECT \n" +
-                "m.id as id, m.name as name, m.image as image, m.onoff as onoff,\n" +
-                "m.max_num as max_num, m.cur_num as cur_num, m.info as info, m.hashTag_id as hashTag_id\n" +
-                "FROM meeting m left outer join hastag h on h.id = m.hashTag_id\n" +
-                "WHERE h.tag1 like :tagName OR h.tag2 like :tagName OR h.tag3 like :tagName OR h.tag4 like :tagName OR h.tag5 like :tagName")
-                .setParameter("tagName", tagName);  // 해당 태그가 있는지 확인하고, 포함되어있다면 반환하기
-        List<GetMeetingRes> getMeetingRes = result.list(query, GetMeetingRes.class);
-        return getMeetingRes;
+        Query query = entityManager.createNativeQuery("SELECT m.id as id, m.name as name, m.image as image, m.onoff as onoff, m.max_num as max_num, m.cur_num as cur_num, \n" +
+                        "m.info as info, m.hashTag_id as hashTag_id\n" +
+                        "FROM meeting m left outer join hastag h on h.id = m.hashTag_id\n" +
+                        "WHERE h.tag1 like :tagName1 OR\n" +
+                        "h.tag2 like :tagName2 OR\n" +
+                        "h.tag3 like :tagName3 OR\n" +
+                        "h.tag4 like :tagName4 OR\n" +
+                        "h.tag5 like :tagName5")
+                .setParameter("tagName1", "%"+tagName+"%")
+                .setParameter("tagName2", "%"+tagName+"%")
+                .setParameter("tagName3", "%"+tagName+"%")
+                .setParameter("tagName4", "%"+tagName+"%")
+                .setParameter("tagName5", "%"+tagName+"%");  // 해당 태그가 있는지 확인하고, 포함되어있다면 반환하기
+        System.out.println("query 끝");
+        List<GetCategoryRes> getCategoryRes = result.list(query, GetCategoryRes.class);
+        return getCategoryRes;
     }
 }
