@@ -148,6 +148,7 @@ public class MeetingService {
         for (Meeting mt: meetingList){
             HashTag hashTag = hashTagRepository.findById(mt.getHashTag().getId());
             List<String> tags = new ArrayList<>();
+            User userEntity = userRepository.findById(mt.getUserId());
             System.out.println(hashTag.toString()); // hashTag.toString()
 
             tags.add(hashTag.getTag1());
@@ -162,6 +163,7 @@ public class MeetingService {
                     .max_num(mt.getMax_num())
                     .cur_num(mt.getCur_num())
                     .onoff(mt.isOnoff())
+                    .username(userEntity.getUsername())
                     .tags(tags)
                     .info(mt.getInfo())
                     .build();
