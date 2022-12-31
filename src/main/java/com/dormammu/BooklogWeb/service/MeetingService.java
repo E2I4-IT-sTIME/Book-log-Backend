@@ -64,7 +64,7 @@ public class MeetingService {
 
         List<String> userImage = new ArrayList<>();
         for (MeetingUser mu: byMeetingId){
-            if (mu.getStatus().equals("승인")){
+            if (mu.getStatus().equals("승인") || mu.getStatus().equals("모임장")){
                 userImage.add(mu.getUser().getImgPath());
             }
         }
