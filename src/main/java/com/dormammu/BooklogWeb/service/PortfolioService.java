@@ -84,22 +84,29 @@ public class PortfolioService {
         Portfolio origin_portfolio = portfolioRepository.findById(portfolio_id);
 
         if (origin_portfolio.getUser().getId() == user.getId()) {
-            origin_portfolio.setTitle(title);
-            origin_portfolio.setContent(content);
-
-            String s3_upload = s3Uploader.uploadPortfolio(origin_portfolio.getId(), multipartFile, "portfolio");
-
-            // 포트폴리오 내의 서평 id 모두 제거
-            portfolioReviewRepository.deleteByPortfolioId(origin_portfolio.getId());
-
-            // 전체 다시 등록
-            for (int ri : reviews_id) {
-                PortfolioReview portfolioReview = new PortfolioReview();
-                portfolioReview.setPortfolio(origin_portfolio);
-                portfolioReview.setReview(reviewRepository.findById(ri));
-
-                portfolioReviewRepository.save(portfolioReview);
+            if (multipartFile != null) {
+                String s3_upload = s3Uploader.uploadPortfolio(origin_portfolio.getId(), multipartFile, "portfolio");
             }
+            if (title != null) {
+                origin_portfolio.setTitle(title);
+            }
+            if (content != null) {
+                origin_portfolio.setContent(content);
+            }
+            if (reviews_id != null) {
+                // 포트폴리오 내의 서평 id 모두 제거
+                portfolioReviewRepository.deleteByPortfolioId(origin_portfolio.getId());
+
+                // 전체 다시 등록
+                for (int ri : reviews_id) {
+                    PortfolioReview portfolioReview = new PortfolioReview();
+                    portfolioReview.setPortfolio(origin_portfolio);
+                    portfolioReview.setReview(reviewRepository.findById(ri));
+
+                    portfolioReviewRepository.save(portfolioReview);
+                }
+            }
+            portfolioRepository.save(origin_portfolio);
             return "포트폴리오 수정 완료";
         }
         else {

@@ -84,8 +84,8 @@ public class PortfolioController {
 //            @ApiImplicitParam(name = "user_id", value = "포트폴리오를 조회하고자 하는 유저의 고유 id", dataTypeClass = Integer.class),
 //            @ApiImplicitParam(name= "portfolio_id", value = "수정하고자 하는 포트폴리오의 고유 id", dataTypeClass = Integer.class)})
     @PatchMapping("/auth/user/{user_id}/portfolio/{portfolio_id}")
-    public Boolean updatePortfolio(@RequestPart(value = "image") MultipartFile multipartFile,
-                                   @RequestParam("title") String title, @RequestParam("content") String content, @RequestParam("reviews_id") List<Integer> reviews_id, Authentication authentication, @PathVariable int user_id, @PathVariable int portfolio_id) throws Exception {
+    public Boolean updatePortfolio(@RequestPart(value = "image", required = false) MultipartFile multipartFile,
+                                   @RequestParam(value = "title", required = false) String title, @RequestParam(value = "content", required = false) String content, @RequestParam(value = "reviews_id", required = false) List<Integer> reviews_id, Authentication authentication, @PathVariable int user_id, @PathVariable int portfolio_id) throws Exception {
         User user = userService.findUser(user_id);
         if (user == null) {
             throw new Exception("존재하지 않는 유저 id 입니다.");
