@@ -130,17 +130,11 @@ public class PortfolioController {
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "user_id", value = "포트폴리오를 조회하고자 하는 유저의 고유 id", dataTypeClass = Integer.class),
 //            @ApiImplicitParam(name= "portfolio_id", value = "조회하고자 하는 포트폴리오의 고유 id", dataTypeClass = Integer.class)})
-    @GetMapping("/auth/user/{user_id}/portfolios/{portfolio_id}")
-    public GetPortfolioRes onePortfolio(Authentication authentication, @PathVariable int user_id, @PathVariable int portfolio_id) throws Exception {
+    @GetMapping("/user/{user_id}/portfolios/{portfolio_id}")
+    public GetPortfolioRes onePortfolio(@PathVariable int user_id, @PathVariable int portfolio_id) throws Exception {
         User user = userService.findUser(user_id);
         if (user == null) {
             throw new Exception("존재하지 않는 유저 id 입니다.");
-        }
-
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-
-        if (user.getId() != principalDetails.getUser().getId()) {
-            throw new Exception("유저 id가 일치하지 않습니다.");
         }
 
         GetPortfolioRes getPortfolioRes = portfolioService.onePortfolio(user, portfolio_id);

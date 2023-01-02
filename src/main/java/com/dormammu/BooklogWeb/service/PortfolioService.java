@@ -145,12 +145,10 @@ public class PortfolioService {
             reviewResList.add(reviewRes);
         }
 
-        GetPortfolioRes getPortfolioRes = GetPortfolioRes.builder()
+        return GetPortfolioRes.builder()
                 .title(portfolio.getTitle())
                 .content(portfolio.getContent())
                 .image(portfolio.getImage())
                 .reviewResList(reviewResList).build();
-
-        return getPortfolioRes;
     }
 }
