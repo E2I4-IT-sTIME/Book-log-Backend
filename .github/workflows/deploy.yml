@@ -16,8 +16,10 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout
@@ -39,11 +41,12 @@ jobs:
       # yml 파일 생성
       - name: Create Property
         run: |
-#          mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
           echo "${{secrets.PROPERTIES}}" > ./application.yml
 
+      - name: Run chomod to make gradlew executable
+        run: chmod +x ./gradlew
 
       # AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
       - name: Configure AWS credentials
