@@ -11,6 +11,13 @@ jobs:
     runs-on: ubuntu-latest # (3).OS환경
 
     steps:
+      # application.yml 추가
+      - name: application.yml Add
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{secrets.PROPERTIES}}" > ./application.yml
+
       - name: Checkout
         uses: actions/checkout@v2 # (4).코드 check out
 
@@ -58,10 +65,3 @@ jobs:
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
           wait_for_environment_recovery: 180
-
-      # application.yml 추가
-      - name: application.yml Add
-        run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{secrets.PROPERTIES}}" > ./application.yml
