@@ -32,7 +32,7 @@ jobs:
         id: current-time
         with:
           format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00"작 # (8).build 시점의 시간확보
+          utcOffset: "+09:00" # (8).build 시점의 시간확보
 
       - name: Show Current Time
         run: echo "CurrentTime=$"
