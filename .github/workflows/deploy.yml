@@ -35,7 +35,7 @@ jobs:
           utcOffset: "+09:00" # (8).build 시점의 시간확보
 
       - name: Show Current Time
-        run: echo "CurrentTime=$"
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
         shell: bash # (9).확보한 시간 보여주기
 
       - name: Generate deployment package
