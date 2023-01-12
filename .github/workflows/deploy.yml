@@ -11,13 +11,6 @@ jobs:
     runs-on: ubuntu-latest # (3).OS환경
 
     steps:
-      # application.yml 추가
-      - name: application.yml Add
-        run: |
-          echo "PROPERTIES=$PROPERTIES" >> ./src/main/resources/application.yml
-        env:
-          PROPERTIES: ${{ secrets.PROPERTIES }}
-
       - name: Checkout
         uses: actions/checkout@v2 # (4).코드 check out
 
@@ -29,6 +22,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash # (6).권한 부여
+
+      # application.yml 추가
+      - name: application.yml Add
+        run: |
+          echo "PROPERTIES=$PROPERTIES" >> ./src/main/resources/application.yml
+        env:
+          PROPERTIES: ${{ secrets.PROPERTIES }}
 
       - name: Build with Gradle
         run: ./gradlew clean build
