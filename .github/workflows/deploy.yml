@@ -34,13 +34,6 @@ jobs:
         run: ./gradlew clean build
         shell: bash # (7).build 시작
 
-      # application.yml 추가
-      - name: application.yml Add
-        run: |
-          echo "PROPERTIES=$PROPERTIES" >> ./src/main/resources/application.yml
-        env:
-          PROPERTIES: ${{ secrets.PROPERTIES }}
-
       - name: Get current time
         uses: 1466587594/get-current-time@v2
         id: current-time
