@@ -14,9 +14,9 @@ jobs:
       # application.yml 추가
       - name: application.yml Add
         run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{secrets.PROPERTIES}}" > ./application.yml
+          echo "PROPERTIES=$PROPERTIES" >> ./src/main/resources/application.yml
+        env:
+          PROPERTIES: ${{ secrets.PROPERTIES }}
 
       - name: Checkout
         uses: actions/checkout@v2 # (4).코드 check out
